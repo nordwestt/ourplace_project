@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
 
+from ourplace.models import Canvas
+
+
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
@@ -21,8 +24,10 @@ def index(request):
     context_dict['pages'] = page_list
     
     visitor_cookie_handler(request)
+
+    print("Entered index view!")
     
-    response = render(request, 'rango/index.html', context=context_dict)
+    response = render(request, 'ourplace/index.html', context=context_dict)
     return response
 
 
@@ -30,7 +35,7 @@ def about(request):
     context_dict = {}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    return render(request, 'rango/about.html', context=context_dict)
+    return render(request, 'ourplace/about.html', context=context_dict)
 
 def show_category(request, category_name_slug): 
     # Create a context dictionary which we can pass 
@@ -61,7 +66,7 @@ def show_category(request, category_name_slug):
         context_dict['pages'] = None
 
     # Go render the response and return it to the client. 
-    return render(request, 'rango/category.html', context=context_dict)
+    return render(request, 'ourplace/category.html', context=context_dict)
 
 @login_required
 def add_category(request):
@@ -77,7 +82,7 @@ def add_category(request):
             form.save(commit=True)
             # Now that the category is saved, we could confirm this.
             # For now, just redirect the user back to the index view.
-            return redirect('/rango/')
+            return redirect('/ourplace/')
         else:
             # The supplied form contained errors -
             # just print them to the terminal.
@@ -85,7 +90,7 @@ def add_category(request):
     
     # Will handle the bad form, new form, or no form supplied cases.
     # Render the form with error messages (if any).
-    return render(request, 'rango/add_category.html', {'form': form})
+    return render(request, 'ourplace/add_category.html', {'form': form})
 
 @login_required
 def add_page(request, category_name_slug): 
@@ -96,7 +101,7 @@ def add_page(request, category_name_slug):
     
     # You cannot add a page to a Category that does not exist... 
     if category is None: 
-        return redirect('/rango/')
+        return redirect('/ourplace/')
     
     form = PageForm()
     
@@ -110,13 +115,13 @@ def add_page(request, category_name_slug):
                 page.category = category 
                 page.views = 0 
                 page.save()
-                return redirect(reverse('rango:show_category', kwargs={'category_name_slug': category_name_slug}))
+                return redirect(reverse('ourplace:show_category', kwargs={'category_name_slug': category_name_slug}))
         
         else: 
             print(form.errors)
 
     context_dict = {'form': form, 'category': category} 
-    return render(request, 'rango/add_page.html', context=context_dict)
+    return render(request, 'ourplace/add_page.html', context=context_dict)
 
 def register(request): 
     # A boolean value for telling the template  
@@ -173,7 +178,7 @@ def register(request):
             
     # Render the template depending on the context. 
     return render(request, 
-        'rango/register.html',  
+        'ourplace/register.html',  
         context = {'user_form': user_form,  
                     'profile_form': profile_form, 
                     'registered': registered})
@@ -205,10 +210,10 @@ def user_login(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return redirect(reverse('rango:index'))
+                return redirect(reverse('ourplace:index'))
             else:
                 # An inactive account was used - no logging in!
-                return HttpResponse("Your Rango account is disabled.")
+                return HttpResponse("Your Ourplace account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
             print(f"Invalid login details: {username}, {password}")
@@ -219,11 +224,11 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'rango/login.html')
+        return render(request, 'ourplace/login.html')
 
 @login_required
 def restricted(request):
-    return render(request, 'rango/restricted.html')
+    return render(request, 'ourplace/restricted.html')
 
 # Use the login_required() decorator to ensure only those logged in can
 # access the view.
@@ -232,7 +237,7 @@ def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
     # Take the user back to the homepage.
-    return redirect(reverse('rango:index'))
+    return redirect(reverse('ourplace:index'))
 
 
 # A helper method
@@ -262,3 +267,31 @@ def visitor_cookie_handler(request):
     
     # Update/set the visits cookie
     request.session['visits'] = visits
+
+
+def show_canvas(request, canvas_name_slug): 
+    # Create a context dictionary which we can pass 
+    # # to the template rendering engine. 
+    context_dict = {}
+
+    try:
+        # Can we find a category name slug with the given name? 
+        # # If we can't, the .get() method raises a DoesNotExist exception. 
+        # # The .get() method returns one model instance or raises an exception. 
+        canvas = Canvas.objects.get(slug=canvas_name_slug)
+        
+        context_dict['canvas'] = canvas 
+    except Canvas.DoesNotExist: 
+        # We get here if we didn't find the specified category. 
+        # Don't do anything 
+        # the template will display the "no category" message for us. 
+        context_dict['canvas'] = None 
+
+    colours = [["rgb(255, 255, 255)","rgb(255, 255, 0)", "rgb(255, 102, 0)", "rgb(221, 0, 0)"], ["rgb(255, 0, 153)",
+    "rgb(51, 0, 153)","rgb(0, 0, 204)","rgb(0, 153, 255)"], ["rgb(0, 170, 0)", "rgb(0, 102, 0)","rgb(102, 51, 0)",
+    "rgb(153, 102, 51)"],["rgb(187, 187, 187)","rgb(136, 136, 136)","rgb(68, 68, 68)","rgb(0, 0, 0)"]]
+
+    context_dict['colours'] = colours
+
+    # Go render the response and return it to the client. 
+    return render(request, 'ourplace/canvas.html', context=context_dict)

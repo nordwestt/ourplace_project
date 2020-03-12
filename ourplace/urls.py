@@ -15,6 +15,9 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('restricted/', views.restricted, name='restricted'),
     path('logout/', views.user_logout, name='logout'),
+
+
+    path('canvas/<str:canvas_name_slug>/', views.show_canvas, name='show_canvas'),
 ]
 
 

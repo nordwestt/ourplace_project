@@ -40,6 +40,7 @@ class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance. 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
+    
     # The additional attributes we wish to include. 
     website = models.URLField(blank=True) 
     picture = models.ImageField(upload_to='profile_images', blank=True)
@@ -47,3 +48,18 @@ class UserProfile(models.Model):
     def __str__(self): 
         return self.user.username
 
+class Canvas(models.Model):
+    NAME_MAX_LENGTH = 128
+
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True) 
+    size = models.IntegerField(default=10)
+    url = models.URLField()
+
+    
+    # cooldown in number of seconds
+    cooldown = models.IntegerField(default=60)
+
+    def save(self, *args, **kwargs): 
+        self.slug = slugify(self.name) 
+        super(Canvas, self).save(*args, **kwargs)
