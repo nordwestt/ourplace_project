@@ -1,20 +1,17 @@
 
-from django.urls import path 
+from django.urls import path
 from ourplace import views
 
 app_name = 'ourplace'
 
-urlpatterns = [ 
-    path('', views.index, name='index'), 
+urlpatterns = [
+    path('', views.index, name='index'),
     path('about/', views.about, name='about'),
-    path('category/<slug:category_name_slug>/', 
-        views.show_category, name='show_category'),
-    path('add_category/', views.add_category, name='add_category'),
-    path('category/<slug:category_name_slug>/add_page/', views.add_page, name='add_page'),
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
-    path('restricted/', views.restricted, name='restricted'),
-    path('logout/', views.user_logout, name='logout'),
+    path('faq/', views.faq, name='faq'),
+    path('login/', views.login, name='login'),
+    path('account/', views.account, name='account'),
+    path('user/{username}/', views.user, name='user'),
+    path('place/', views.create_place, name='create_place'),
+    path('place/{place_name}/', views.view_place, name='view_place'),
+    path('search/', views.search, name='search')
 ]
-
-
