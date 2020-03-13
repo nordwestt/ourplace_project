@@ -1,4 +1,6 @@
 .vscode/
+.idea/
+Thumbs.db
 .DS_Store
 *.pyc
 *.sqlite3
