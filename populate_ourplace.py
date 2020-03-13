@@ -3,32 +3,33 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
 django.setup() 
-from ourplace.models import Category,Page
+from ourplace.models import Category,Page,Canvas
 def populate():
 # First, we will create lists of dictionaries containing the pages
 # we want to add into each category.
 # Then we will create a dictionary of dictionaries for our categories. # This might seem a little bit confusing, but it allows us to iterate # through each data structure, and add the data to our models.
     python_pages = [
-{'title': 'Official Python Tutorial',
+{'title': 'games',
 'url':'http://docs.python.org/3/tutorial/'}, 
-{'title':'How to Think like a Computer Scientist',
+{'title':'How ',
 'url':'http://www.greenteapress.com/thinkpython/'}, 
-{'title':'Learn Python in 10 Minutes',
+{'title':'Learn ',
 'url':'http://www.korokithakis.net/tutorials/python/'} ]
     django_pages = [
-{'title':'Official Django Tutorial', 
+{'title':'Offic', 
  'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/'},
-{'title':'Django Rocks', 
+{'title':'D', 
  'url':'http://www.djangorocks.com/'},
-{'title':'How to Tango with Django', 
+{'title':'Ho', 
  'url':'http://www.tangowithdjango.com/'} ]
     other_pages = [ {'title':'Bottle',
 'url':'http://bottlepy.org/docs/dev/'},
  {'title':'Flask',
 'url':'http://flask.pocoo.org'} ]
-    cats = {'Python': {'pages': python_pages},
-            'Django': {'pages': django_pages},
-            'Other Frameworks': {'pages': other_pages} }
+    cats = {'User': {'pages': python_pages},
+            'Name': {'pages': django_pages},
+            'Names': {'pages': other_pages} }
+    canvases = ['Age']
 # If you want to add more categories or pages, # add them to the dictionaries above.
 # The code below goes through the cats dictionary, then adds each category, # and then adds all the associated pages for that category.
     for cat, cat_data in cats.items():
@@ -39,14 +40,20 @@ def populate():
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):
             print(f'- {c}: {p}')
+
+    for canvas in canvases:
+        c = add_canvas(canvas)
+
 def add_page(cat,title,url,views=0):
     p = Page.objects.get_or_create(category=cat, title=title)[0] 
-    p.url=url
-    p.views=views
-    p.save()
+   
     return p
 def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0] 
+    c.save()
+    return c
+def add_canvas(name):
+    c = Canvas.objects.get_or_create(name=name)[0] 
     c.save()
     return c
 
@@ -54,4 +61,3 @@ def add_cat(name):
 if __name__=='__main__':
     print('Starting Ourplace population script...') 
     populate()
-
