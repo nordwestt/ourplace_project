@@ -1,43 +1,47 @@
 <!DOCTYPE html>
+
 {% load staticfiles %}
-{% load ourplace_template_tags %} 
 
 <html>
-	<head>
-		<title>
-			OurPlace -
-			{% block title_block %}
-				Collaborative digital canvases!
-			{% endblock %}
-		</title>
-	</head>
-	<body>
-		<div>
-		{% block body_block %}
-		{% endblock %}
-		</div>
-		<div>
-			{% block sidebar_block %}
-				{% get_category_list category%}
-			{% endblock %}
-		</div>
-		<hr />
-		<div>
-			<ul>
-				{% if user.is_authenticated %}
-					<!-- Show these links when the user is logged in -->
-					<li><a href="{% url 'ourplace:add_category' %}">Add New Category</a></li>
-					<li><a href="{% url 'ourplace:restricted' %}">Restricted Page</a></li>
-					<li><a href="{% url 'ourplace:logout' %}">Logout</a></li>
-				{% else %}
-					<!-- Show these links when the user is NOT logged in -->
-					<li><a href="{% url 'ourplace:register' %}">Sign Up</a></li>
-					<li><a href="{% url 'ourplace:login' %}">Login</a></li>
-				{% endif %}
-					<!-- Outside the conditional statements, ALWAYS show -->
-					<li><a href="{% url 'ourplace:about' %}">About</a></li>
-					<li><a href="{% url 'ourplace:index' %}">Index</a></li>
-			</ul>
-		</div>
-	</body>
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+      <title>{% block title_block %}Our Place{% endblock %}</title>
+  </head>
+
+  <body>
+      <div class='top-nav'>
+        <ul>
+          {% if signed_in %}
+            <div class='left-nav'>
+              <li><a href="{% url 'ourplace:index' %}">Our Place</a></li>
+              <li><a href="{% url 'ourplace:create_place' %}">Create</a></li>
+              <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
+            </div>
+            <div class='right-nav'>
+              <li><a href="{% url 'ourplace:login' %}">Sign Out</a></li>
+              <li><a href="{% url 'ourplace:account' %}">My Account</a></li>
+              <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
+            </div>
+          {% else %}
+            <div class='left-nav'>
+              <li><a href="{% url 'ourplace:index' %}">Our Place</a></li>
+              <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
+            </div>
+            <div class='right-nav'>
+              <li><a href="{% url 'ourplace:login' %}">Sign In</a></li>
+              <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
+            </div>
+          {% endif %}
+        </ul>
+      </div>
+      <div class='main'>
+        {% block body_block %}
+
+        {% endblock %}
+      </div>
+      <div class='footer'>
+          <p>Our Place, a group project for WAD2 | By Lab Group 1 Team B | <a href="{% url 'ourplace:about' %}">About</a> | <a href="{% url 'ourplace:faq' %}">FAQ</a> | <a href="">Site Map</a></p><p>2020</p>
+      </div>
+  </body>
 </html>

@@ -1,0 +1,72 @@
+body {
+  --black: #301b00;
+  --colour1: #2fb3fa;
+  --colour2: #107ab3;
+  --white: #e3f2fa;
+  --accent: #faa22f;
+
+  color: var(--white);
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+div.top-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--colour1);
+}
+
+div.top-nav div.left-nav li {
+  float: left;
+}
+
+div.top-nav div.right-nav li{
+  float: right;
+}
+
+div.top-nav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+div.top-nav li input {
+  background-color: var(--colour1);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-color: var(--white);
+  margin: 14px 16px;
+}
+
+div.top-nav li a:hover {
+  background-color: var(--colour2);
+}
+
+div.centre-textbox {
+  width: 60%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px 15px;
+  color: var(--black);
+}
+
+.footer {
+  background-color: var(--black);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.footer a:visited {
+  color: var(--white);
+}
