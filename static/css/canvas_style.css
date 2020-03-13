@@ -1,0 +1,143 @@
+html, body {
+  height: 100%;
+  padding:0;
+  margin:0;
+}
+
+div{
+  float:left;
+}
+
+#div_title {
+  margin-left: 400px;
+}
+
+#div_main {
+  clear: both;
+}
+
+#div_canvas {
+  box-shadow: 10px 10px 10px grey;
+  margin-top: 18px;
+  margin-left: 120px;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+
+.page_title {
+  color: cyan;
+  font-size: xx-large;
+  font-family: "Monospace, Serif";
+  float: none;
+  margin-left: auto;
+}
+
+#colour_box {
+  position: fixed;
+  width: 24vh;
+  height: 4vh;
+  margin-left: 2%;
+
+}
+
+.row{
+  height: 25%;
+  width: 100%;
+}
+
+.column{
+  width:25%;
+  height:100%;
+}
+
+#colour_string {
+  position: absolute;
+  margin: auto;
+  margin-left: 10%;
+  margin-top: 3%;
+  color: whitesmoke;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  outline-style:none;
+}
+
+#timer{
+  margin: auto;
+  float:right;
+  margin-top: 3%;
+  margin-right: 10%;
+  color: whitesmoke;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#selected_colour{
+  box-shadow: 10px 10px 10px grey;
+  background-color:whitesmoke;
+  border: 3px solid black;
+  width: 24vh;
+  margin-top: -19%;
+  height: 4vh;
+  border-radius: 8px 8px 8px 8px;
+  cursor: pointer;
+
+}
+
+#div_buttons {
+  position: absolute;
+  height: 24vh;
+  width: 24vh;
+  border-radius: 5%;
+  background-color:whitesmoke;
+  box-shadow: 10px 10px 10px grey;
+  border: 3px solid black;
+}
+
+
+
+
+.button {
+    border: none;
+    display: inline-block;
+    margin:auto;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    margin-left: 12%;
+    margin-right: 12%;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    width: 4vh;
+    height: 80%;
+    border-radius: 20%;
+    box-shadow: 3px 3px 6px grey,3px -3px 6px grey, -3px 3px 7px grey, -3px -3px 7px grey;
+  }
+
+.button:hover{
+    background-color: white; 
+    color: black;
+    border: 2px solid rgb(255, 255, 255);
+  }
+
+#greenBtn {background-color: rgb(38, 180, 61);} 
+#blueBtn {background-color: rgb(0, 140, 186);} 
+#redBtn {background-color: rgb(186, 0, 0);} 
+#purpleBtn {background-color: rgb(84, 85, 170);} 
+#blackBtn {background-color: rgb(43, 43, 43);}
+#whiteBtn {background-color: rgb(240, 240, 240);}
+#orangeBtn {background-color: rgb(245, 180, 0);}
+#yellowBtn {background-color: rgb(238, 255, 0);}
+#cyanBtn {background-color: rgb(0, 221, 192);}
+#pinkBtn {background-color: rgb(221, 0, 203);}
+#greyBtn {background-color: rgb(114, 114, 114);}
+
+
+
+
+
+
+
+
+
+
+
+
+
