@@ -5,61 +5,42 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Category(models.Model): 
-    NAME_MAX_LENGTH = 128
-
-    name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True) 
-    views = models.IntegerField(default=0) 
-    likes = models.IntegerField(default=0) 
-    slug = models.SlugField(unique=True)
-
-    def save(self, *args, **kwargs): 
-        self.slug = slugify(self.name) 
-        super(Category, self).save(*args, **kwargs)
-
-    class Meta: 
-        verbose_name_plural = 'categories'
-
-    def __str__(self): 
-        return self.name
-
-    
-class Page(models.Model):    
-    TITLE_MAX_LENGTH = 128
-
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    title = models.CharField(max_length=TITLE_MAX_LENGTH)
-    url = models.URLField()
-    views = models.IntegerField(default=0)
-        
-    def __str__(self):
-        return self.title
 
 
 class UserProfile(models.Model): 
-    # This line is required. Links UserProfile to a User model instance. 
+    EMAIL_MAX_LENGTH = 128
+    # Links UserProfile to a User model instance. 
+    # I think, (I hope) this handles username, password and email
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
-    
+    #add a slug field as a url to peoples profiles??
+
     # The additional attributes we wish to include. 
-    website = models.URLField(blank=True) 
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    
+
     def __str__(self): 
         return self.user.username
 
 class Canvas(models.Model):
-    NAME_MAX_LENGTH = 128
+    TITLE_MAX_LENGTH = 128
 
-    slug = models.SlugField(unique=True)
-    name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True) 
-    size = models.IntegerField(default=10)
+    #keep slugs in to use as urls???
+    #slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True) 
+    size = models.IntegerField(default=10) # (ARE WE MAKING THEM SQUARE OR SHOULD WE SEPARATE HEIGHT AND WIDTH)
+    owner = UserProfile # Get the user that's creating it somehow??
+    colour_palette =  models.IntegerField(default =0) #set to an integer for testing
     url = models.URLField()
-
+    canvas_image = models.ImageField(upload_to='canvas_images',blank=True) #Should open a blank canvas?
     
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 
-    def save(self, *args, **kwargs): 
-        self.slug = slugify(self.name) 
-        super(Canvas, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs): 
+    #     self.slug = slugify(self.name) 
+    #     super(Canvas, self).save(*args, **kwargs)
+
+class CanvasAccess(models.Model):
+    canvas = Canvas
+    user = UserProfile
+    placeTime = models.DateTimeField()
