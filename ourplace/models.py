@@ -17,6 +17,11 @@ class UserProfile(models.Model):
 
     # The additional attributes we wish to include. 
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    slug = models.SlugField(unique=True)
+    
+    def save(self, *args, **kwargs): 
+        self.slug = slugify(self.user) 
+        super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self): 
         return self.user.username
@@ -25,7 +30,7 @@ class Canvas(models.Model):
     TITLE_MAX_LENGTH = 128
 
     #keep slugs in to use as urls???
-    #slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True)
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True) 
     size = models.IntegerField(default=10) # (ARE WE MAKING THEM SQUARE OR SHOULD WE SEPARATE HEIGHT AND WIDTH)
     owner = UserProfile # Get the user that's creating it somehow??
@@ -36,9 +41,9 @@ class Canvas(models.Model):
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 
-    # def save(self, *args, **kwargs): 
-    #     self.slug = slugify(self.name) 
-    #     super(Canvas, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs): 
+        self.slug = slugify(self.title) 
+        super(Canvas, self).save(*args, **kwargs)
 
 class CanvasAccess(models.Model):
     canvas = Canvas
