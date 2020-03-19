@@ -19,7 +19,7 @@
               <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
             </div>
             <div class='right-nav'>
-              <li><a href="{% url 'ourplace:login' %}">Sign Out</a></li>
+              <li><a href="{% url 'auth_logout' %}">Sign Out</a></li>
               <li><a href="{% url 'ourplace:account' %}">My Account</a></li>
               <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
             </div>
@@ -29,7 +29,8 @@
               <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
             </div>
             <div class='right-nav'>
-              <li><a href="{% url 'ourplace:login' %}">Sign In</a></li>
+              <li><a href="{% url 'registration_register' %}">Sign Up</a></li>
+              <li><a href="{% url 'auth_login' %}">Sign In</a></li>
               <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
             </div>
           {% endif %}

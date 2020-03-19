@@ -5,7 +5,7 @@ from django.urls import reverse
 context_dict = {'signed_in': True}
 
 from ourplace.models import Canvas
-
+from ourplace.forms import CanvasForm
 
 def index(request):
     response = render(request, 'ourplace/index.html', context=context_dict)
@@ -27,6 +27,19 @@ def user(request):
     return render(request, 'ourplace/user.html', context=context_dict)
 
 def create_place(request):
+    form = CanvasForm()
+    context_dict['form'] = form
+
+    # do we have a http post
+    if request.method == 'POST':
+        form = CanvasForm(request.POST)
+
+        # is the form valid
+        if form.is_valid():
+            form.save(commit=True)  #
+            return redirect('/ourplace/')
+        else:
+            print(form.errors)
     return render(request, 'ourplace/create_place.html', context=context_dict)
 
 def view_place(request):
