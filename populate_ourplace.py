@@ -1,4 +1,7 @@
 import os 
+import numpy
+import pickle
+import base64
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
@@ -53,7 +56,10 @@ def add_cat(name):
     c.save()
     return c
 def add_canvas(name, size, cooldown):
-    c = Canvas.objects.get_or_create(name=name, size=size, cooldown=cooldown)[0] 
+    np_array = numpy.zeros((size, size), dtype=numpy.ushort)
+    np_bytes = pickle.dumps(np_array)
+    np_base64 = base64.b64encode(np_bytes)
+    c = Canvas.objects.get_or_create(name=name, size=size, cooldown=cooldown, bitmap=np_base64)[0] 
     c.save()
     return c
 

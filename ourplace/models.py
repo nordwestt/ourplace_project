@@ -55,7 +55,8 @@ class Canvas(models.Model):
     name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True) 
     size = models.IntegerField(default=10)
 
-    
+    bitmap = models.BinaryField(default=None, blank=True, null=True)
+
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 

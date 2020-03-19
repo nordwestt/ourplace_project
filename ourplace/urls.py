@@ -14,5 +14,6 @@ urlpatterns = [
     path('user/{username}/', views.user, name='user'),
     path('place/', views.create_place, name='create_place'),
     path('place/<str:place_name_slug>/', views.view_place, name='view_place'),
-    path('search/', views.search, name='search')
+    path('search/', views.search, name='search'),
+    path('bitmap/<str:place_name_slug>/', views.download_bitmap, name='download_bitmap')
 ]

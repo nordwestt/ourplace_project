@@ -10,8 +10,8 @@ canvasSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var x = data['x'];
     var y = data['y'];
-    var colour = data['colour'];
-    drawPixel(x,y,colour);
+    var colour_id = data['colour'];
+    drawUpdatePixel(x,y,colour_id);
 };
 
 canvasSocket.onclose = function(e) {

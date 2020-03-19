@@ -42,7 +42,8 @@ canvas.width = CANVAS_WIDTH;
 ctx.height = CANVAS_HEIGHT;
 ctx.width = CANVAS_WIDTH;
 
-var selectedColor = "rgb(38, 180, 61)";
+var colour_value = "rgb(0, 0, 0)";
+var colour_id = 16;
 
 
 function setupTimer(){
@@ -74,11 +75,6 @@ document.getElementById("timer").innerHTML = "0m 0s";
 
 
 
-function setColor(button){
-    var btn = document.getElementById(button.id);
-    selectedColor = "'"+btn.style.backgroundColor+"'";
-}
-
 var zoomedIn = false;
 
 function changeZoom(event){
@@ -93,16 +89,25 @@ function changeZoom(event){
     canvasZoom();
 }
 
+function drawUserPixel(x, y, colour){
+    drawPixel(x,y,colour);
+    SendUpdate(x,y,colour_id)
+    resetTimer();
+}
+
+function drawUpdatePixel(x, y, colour_id){
+    var colour = colourIdToVal(colour_id);
+    drawPixel(x,y, colour);
+}
 
 function drawPixel(x, y, colour){
-
-    SendUpdate(x/3,y/3,colour)
-
-
-    alert("You just painted "+x/3+', '+y/3)
-    resetTimer();
     ctx.fillStyle = colour;
-    ctx.fillRect(x, y,3,3);
+    ctx.fillRect(x*3, y*3,3,3);
+}
+
+function colourIdToVal(id){
+    var btn = document.getElementById(id);
+    return btn.style.backgroundColor;
 }
 
 function paintCanvas(x, y){
@@ -112,7 +117,7 @@ function paintCanvas(x, y){
 
     // check if inside border of canvas
     if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
-        drawPixel(x-(x%3),y-(y%3),selectedColor);
+        drawUserPixel((x-(x%3))/3,(y-(y%3))/3,colour_value);
     }
 }
 
@@ -128,6 +133,11 @@ function testCanvasDrawing(){
 }
 
 function createDrawingFromArray(imageArray, x, y){
+    var roomName = document.getElementById("room_name").innerHTML;
+    var URL = "http://"+window.location.host+'/bitmap/'+roomName+'/';
+    $.getJSON(URL, function(data){
+        alert("We got stuff! :"+data['bitmap'][0]);
+    })
     var imgData = ctx.createImageData(x, y);
     imgData.data = imageArray;
     ctx.putImageData(imgData, 20, 30);
@@ -196,9 +206,9 @@ $(document).ready(function(){
 
 
     $('button').click(function(){
-        var x = $(this).css('backgroundColor');
-        selectedColor = x;
-        $('#selected_colour').css("background-color", selectedColor);
+        colour_id =$(this).attr('id');
+        colour_value = $(this).css('backgroundColor');
+        $('#selected_colour').css("background-color", colour_value);
 
     });
     setupTimer();
