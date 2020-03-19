@@ -1,37 +1,24 @@
-from channels.generic.websocket import JsonWebsocketConsumer
+import json
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 
-class CanvasConsumer(JsonWebsocketConsumer):
-    groups = ["broadcast"]
+class CanvasConsumer(WebsocketConsumer):
+    #groups = ["broadcast"]
 
     def connect(self):
         self.accept()
 
 
-        if self.scope['user'].is_authenticated:
-            self.accept()
-        else:
-            self.close()
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        x, y = text_data_json['x'], text_data_json['y']
+        colour = text_data_json['colour']
 
-
-    def receive_json(self, content, **kwargs):
-
-        if content['command'] == "CHAT":
-            name = content['name']
-            data = self.load_conversation_contact(name)
-        else:
-            data = {"success": False, "errors": "no such command"}
-            self.send_json(data) # the error happens here
-
-
-        # Called with either text_data or bytes_data for each frame
-        # You can call:
-        self.send(text_data="Hello world!")
-        # Or, to send a binary frame:
-        self.send(bytes_data="Hello world!")
-        # Want to force-close the connection? Call:
-        self.close()
-        # Or add a custom WebSocket error code!
-        self.close(code=4123)
+        print("x, y: "+str(x)+', '+str(y))
+        print("colour: "+colour)
+#        self.send(text_data=json.dumps({
+ #           'message': message
+  #      }))
 
     def disconnect(self, close_code):
         # Called when the socket closes

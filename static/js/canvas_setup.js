@@ -5,13 +5,18 @@ var timer = 2*60*1000;
 
 var unlockTime = new Date().getTime();
 
-var CANVAS_HEIGHT = 300;
-var CANVAS_WIDTH  = 300;
+real_canvas_height = 100;
+real_canvas_width = 100;
+
+var CANVAS_HEIGHT = real_canvas_height*3;
+var CANVAS_WIDTH  = real_canvas_width*3;
 
 var ZOOM_IN = 20;
 var ZOOM_OUT = 2;
 
 var zoomScale = 2;
+
+var waiting = false;
 
 
 function findScales(){
@@ -89,12 +94,15 @@ function changeZoom(event){
 }
 
 
-function drawPixel(x, y, color){
-    if(timeLeft<=0){
-        resetTimer();
-        ctx.fillStyle = color;
-        ctx.fillRect(x-(x%3), y-(y%3),3,3);
-    }
+function drawPixel(x, y, colour){
+
+    SendUpdate(x/3,y/3,colour)
+
+
+    alert("You just painted "+x/3+', '+y/3)
+    resetTimer();
+    ctx.fillStyle = colour;
+    ctx.fillRect(x, y,3,3);
 }
 
 function paintCanvas(x, y){
@@ -102,8 +110,9 @@ function paintCanvas(x, y){
     x = x/zoomScale;
     y = y/zoomScale;
 
+    // check if inside border of canvas
     if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
-        drawPixel(x,y,selectedColor);
+        drawPixel(x-(x%3),y-(y%3),selectedColor);
     }
 }
 
@@ -130,18 +139,22 @@ var testCanvasData = Uint8ClampedArray.from([200,100,150,50]);
 //var imgData = ctx.createImageData(1,1);
 //imgData.data = testCavnasData;
 
-var waiting = false;
 var clicks = 0;
 
 function canvasClick(event){
     var x = event.pageX-this.offsetLeft;
     var y = event.pageY-this.offsetTop;
-
-    if(confirm("You are about to paint the canvas")){
-        paintCanvas(x, y);
+    if(timeLeft<=0){
+        if(confirm("You are about to paint the canvas")){
+            paintCanvas(x, y);
+        }
     }
-
+    else{
+        alert("Still waiting for countdown...");
+    }
 }
+
+
 
 testCanvasDrawing();
 
@@ -174,24 +187,23 @@ function canvasZoom(){
 }
 
 
+
 $(document).ready(function(){
     $('#div_canvas').css("height", CANVAS_HEIGHT);
     $('#div_canvas').css("widt", CANVAS_WIDTH);
 
     //$('#div_canvas').click(paintCanvas);
 
+
     $('button').click(function(){
         var x = $(this).css('backgroundColor');
         selectedColor = x;
         $('#selected_colour').css("background-color", selectedColor);
 
-        $('#txt1').val("Button clicked");
-
     });
     setupTimer();
 
     findScales();
-    //setupGrid();
     canvasZoom();
     
 

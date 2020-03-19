@@ -29,7 +29,6 @@ def populate():
     cats = {'Python': {'pages': python_pages},
             'Django': {'pages': django_pages},
             'Other Frameworks': {'pages': other_pages} }
-    canvases = ['Test']
 # If you want to add more categories or pages, # add them to the dictionaries above.
 # The code below goes through the cats dictionary, then adds each category, # and then adds all the associated pages for that category.
     for cat, cat_data in cats.items():
@@ -41,8 +40,7 @@ def populate():
         for p in Page.objects.filter(category=c):
             print(f'- {c}: {p}')
 
-    for canvas in canvases:
-        c = add_canvas(canvas)
+    add_canvas(name="my test", size=50, cooldown=120)
 
 def add_page(cat,title,url,views=0):
     p = Page.objects.get_or_create(category=cat, title=title)[0] 
@@ -54,8 +52,8 @@ def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0] 
     c.save()
     return c
-def add_canvas(name):
-    c = Canvas.objects.get_or_create(name=name)[0] 
+def add_canvas(name, size, cooldown):
+    c = Canvas.objects.get_or_create(name=name, size=size, cooldown=cooldown)[0] 
     c.save()
     return c
 
