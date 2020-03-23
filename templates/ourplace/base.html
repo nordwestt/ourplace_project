@@ -1,48 +1,69 @@
 <!DOCTYPE html>
 
 {% load staticfiles %}
+<html class="h-100" lang="en">
+<head>
+    <title>{% block page_title %}Our Place{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/bluestrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/supplement.css' %}" type="text/css">
+</head>
 
-<html>
-  <head>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
-      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-      <title>{% block title_block %}Our Place{% endblock %}</title>
-  </head>
+<body class="d-flex flex-column h-100">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <a class="navbar-brand" href="{% url 'ourplace:index' %}">Our Place</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#top-navbar" aria-controls="top-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <body>
-      <div class='top-nav'>
-        <ul>
-          {% if signed_in %}
-            <div class='left-nav'>
-              <li><a href="{% url 'ourplace:index' %}">Our Place</a></li>
-              <li><a href="{% url 'ourplace:create_place' %}">Create</a></li>
-              <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
-            </div>
-            <div class='right-nav'>
-              <li><a href="{% url 'auth_logout' %}">Sign Out</a></li>
-              <li><a href="{% url 'ourplace:account' %}">My Account</a></li>
-              <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
-            </div>
-          {% else %}
-            <div class='left-nav'>
-              <li><a href="{% url 'ourplace:index' %}">Our Place</a></li>
-              <li><a href="{% url 'ourplace:search' %}">Browse</a></li>
-            </div>
-            <div class='right-nav'>
-              <li><a href="{% url 'registration_register' %}">Sign Up</a></li>
-              <li><a href="{% url 'auth_login' %}">Sign In</a></li>
-              <li><form action="{% url 'ourplace:search' %}"><input type='text' name='search' placeholder='Search'></input></form></li>
-            </div>
-          {% endif %}
-        </ul>
-      </div>
-      <div class='main'>
-        {% block body_block %}
+    <div class="collapse navbar-collapse" id="top-navbar">
+      <ul class="navbar-nav mr-auto mt-lg-0">
+        {% if signed_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ourplace:create_place' %}">Create</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ourplace:search' %}">Browse</a>
+        </li>
+      </ul>
+      <form class="form-inline ml-auto my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search">
+      </form>
+      <ul class="navbar-nav">
+        {% if signed_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ourplace:account' %}">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ourplace:login' %}">Sign Out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ourplace:login' %}">Sign In</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
 
-        {% endblock %}
-      </div>
-      <div class='footer'>
-          <p>Our Place, a group project for WAD2 | By Lab Group 1 Team B | <a href="{% url 'ourplace:about' %}">About</a> | <a href="{% url 'ourplace:faq' %}">FAQ</a> | <a href="">Site Map</a></p><p>2020</p>
-      </div>
-  </body>
+  {% block body_block %}
+
+  {% endblock %}
+
+
+  <footer class="footer mt-auto py-3">
+    <div class="container">
+      <span class="text-muted">Our Place, a group project for WAD2 | By Lab Group 1 Team B | <a href="{% url 'ourplace:about' %}">About</a> | <a href="{% url 'ourplace:faq' %}">FAQ</a> | <a href="">Site Map</a></span>
+    </div>
+  </footer>
+
+  {% block extra_scripts %}
+    
+  {% endblock %}
+</body>
 </html>

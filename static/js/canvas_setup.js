@@ -5,13 +5,18 @@ var timer = 2*60*1000;
 
 var unlockTime = new Date().getTime();
 
-var CANVAS_HEIGHT = 300;
-var CANVAS_WIDTH  = 300;
+real_canvas_height = 100;
+real_canvas_width = 100;
+
+var CANVAS_HEIGHT = real_canvas_height*3;
+var CANVAS_WIDTH  = real_canvas_width*3;
 
 var ZOOM_IN = 20;
 var ZOOM_OUT = 2;
 
 var zoomScale = 2;
+
+var waiting = false;
 
 
 function findScales(){
@@ -37,7 +42,8 @@ canvas.width = CANVAS_WIDTH;
 ctx.height = CANVAS_HEIGHT;
 ctx.width = CANVAS_WIDTH;
 
-var selectedColor = "rgb(38, 180, 61)";
+var colour_value = "rgb(0, 0, 0)";
+var colour_id = 16;
 
 
 function setupTimer(){
@@ -69,11 +75,6 @@ document.getElementById("timer").innerHTML = "0m 0s";
 
 
 
-function setColor(button){
-    var btn = document.getElementById(button.id);
-    selectedColor = "'"+btn.style.backgroundColor+"'";
-}
-
 var zoomedIn = false;
 
 function changeZoom(event){
@@ -88,13 +89,25 @@ function changeZoom(event){
     canvasZoom();
 }
 
+function drawUserPixel(x, y, colour){
+    drawPixel(x,y,colour);
+    SendUpdate(x,y,colour_id)
+    resetTimer();
+}
 
-function drawPixel(x, y, color){
-    if(timeLeft<=0){
-        resetTimer();
-        ctx.fillStyle = color;
-        ctx.fillRect(x-(x%3), y-(y%3),3,3);
-    }
+function drawUpdatePixel(x, y, colour_id){
+    var colour = colourIdToVal(colour_id);
+    drawPixel(x,y, colour);
+}
+
+function drawPixel(x, y, colour){
+    ctx.fillStyle = colour;
+    ctx.fillRect(x*3, y*3,3,3);
+}
+
+function colourIdToVal(id){
+    var btn = document.getElementById(id);
+    return btn.style.backgroundColor;
 }
 
 function paintCanvas(x, y){
@@ -102,8 +115,9 @@ function paintCanvas(x, y){
     x = x/zoomScale;
     y = y/zoomScale;
 
+    // check if inside border of canvas
     if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
-        drawPixel(x,y,selectedColor);
+        drawUserPixel((x-(x%3))/3,(y-(y%3))/3,colour_value);
     }
 }
 
@@ -119,6 +133,11 @@ function testCanvasDrawing(){
 }
 
 function createDrawingFromArray(imageArray, x, y){
+    var roomName = document.getElementById("room_name").innerHTML;
+    var URL = "http://"+window.location.host+'/bitmap/'+roomName+'/';
+    $.getJSON(URL, function(data){
+        alert("We got stuff! :"+data['bitmap'][0]);
+    })
     var imgData = ctx.createImageData(x, y);
     imgData.data = imageArray;
     ctx.putImageData(imgData, 20, 30);
@@ -130,18 +149,22 @@ var testCanvasData = Uint8ClampedArray.from([200,100,150,50]);
 //var imgData = ctx.createImageData(1,1);
 //imgData.data = testCavnasData;
 
-var waiting = false;
 var clicks = 0;
 
 function canvasClick(event){
     var x = event.pageX-this.offsetLeft;
     var y = event.pageY-this.offsetTop;
-
-    if(confirm("You are about to paint the canvas")){
-        paintCanvas(x, y);
+    if(timeLeft<=0){
+        if(confirm("You are about to paint the canvas")){
+            paintCanvas(x, y);
+        }
     }
-
+    else{
+        alert("Still waiting for countdown...");
+    }
 }
+
+
 
 testCanvasDrawing();
 
@@ -174,24 +197,23 @@ function canvasZoom(){
 }
 
 
+
 $(document).ready(function(){
     $('#div_canvas').css("height", CANVAS_HEIGHT);
     $('#div_canvas').css("widt", CANVAS_WIDTH);
 
     //$('#div_canvas').click(paintCanvas);
 
-    $('button').click(function(){
-        var x = $(this).css('backgroundColor');
-        selectedColor = x;
-        $('#selected_colour').css("background-color", selectedColor);
 
-        $('#txt1').val("Button clicked");
+    $('button').click(function(){
+        colour_id =$(this).attr('id');
+        colour_value = $(this).css('backgroundColor');
+        $('#selected_colour').css("background-color", colour_value);
 
     });
     setupTimer();
 
     findScales();
-    //setupGrid();
     canvasZoom();
     
 

@@ -31,12 +31,14 @@ class Canvas(models.Model):
 
     #keep slugs in to use as urls???
     slug = models.SlugField(unique=True)
+
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True) 
     size = models.IntegerField(default=10) # (ARE WE MAKING THEM SQUARE OR SHOULD WE SEPARATE HEIGHT AND WIDTH)
     owner = UserProfile # Get the user that's creating it somehow??
     colour_palette =  models.IntegerField(default =0) #set to an integer for testing
     url = models.URLField()
     canvas_image = models.ImageField(upload_to='canvas_images',blank=True) #Should open a blank canvas?
+    bitmap = models.BinaryField(default=None, blank=True, null=True)
     
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
