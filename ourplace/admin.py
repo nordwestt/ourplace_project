@@ -1,8 +1,8 @@
 from django.contrib import admin
-from ourplace.models import Category, Page
+from ourplace.models import Canvas, UserProfile, CanvasAccess
 
 
-admin.site.register(Category) 
-admin.site.register(Page)
+admin.site.register(Canvas) 
+admin.site.register(CanvasAccess)
 
 
