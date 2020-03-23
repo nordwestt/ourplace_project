@@ -17,11 +17,10 @@ class UserProfileForm(forms.ModelForm):
 
 
 class CanvasForm(forms.ModelForm):
-    title = forms.CharField(max_length=Canvas.TITLE_MAX_LENGTH,help_text="Please enter the canvas title.")
-    owner = User
-    size = forms.IntegerField()
+    title = forms.CharField(max_length=Canvas.TITLE_MAX_LENGTH, label= "title")
     class Meta:
-        fields = ('title', 'colour_palette', )
+        model = Canvas
+        fields = ('colour_palette', 'size',  )
 
 
 # class CategoryForm(forms.ModelForm):

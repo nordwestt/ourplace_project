@@ -1,4 +1,7 @@
 import os 
+import numpy
+import pickle
+import base64
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
