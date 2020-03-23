@@ -54,9 +54,9 @@ class Canvas(models.Model):
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True) 
     size = models.IntegerField(default=10)
-    url = models.URLField()
 
-    
+    bitmap = models.BinaryField(default=None, blank=True, null=True)
+
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 

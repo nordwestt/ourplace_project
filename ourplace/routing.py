@@ -1,6 +1,6 @@
 
 # mysite/routing.py
-from django.urls import path
+from django.urls import re_path
 from channels.routing import ProtocolTypeRouter
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
@@ -11,7 +11,7 @@ application = ProtocolTypeRouter({
     # Route websockets
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            path(r'ws/chat/(?P<canvas_name>\w+)/$', consumers.CanvasConsumer)
+            re_path(r'^ws/place/(?P<place_name_slug>.+)/$', consumers.CanvasConsumer),
         ])
     ),
 })
