@@ -22,7 +22,7 @@
 
     <div class="collapse navbar-collapse" id="top-navbar">
       <ul class="navbar-nav mr-auto mt-lg-0">
-        {% if signed_in %}
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ourplace:create_place' %}">Create</a>
         </li>
@@ -35,7 +35,7 @@
         <input class="form-control mr-sm-2" type="search" placeholder="Search">
       </form>
       <ul class="navbar-nav">
-        {% if signed_in %}
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ourplace:account' %}">My Account</a>
         </li>
