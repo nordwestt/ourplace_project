@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 import static.constants.colours as palettes
 
@@ -20,15 +21,14 @@ def about(request):
 def faq(request):
     return render(request, 'ourplace/faq.html', context=context_dict)
 
-def login(request):
-    return render(request, 'ourplace/login.html', context=context_dict)
-
+@login_required
 def account(request):
     return render(request, 'ourplace/account.html', context=context_dict)
 
 def user(request):
     return render(request, 'ourplace/user.html', context=context_dict)
 
+@login_required
 def create_place(request):
     form = CanvasForm()
     context_dict['form'] = form
