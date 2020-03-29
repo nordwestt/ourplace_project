@@ -5,7 +5,7 @@ from django.http import Http404
 
 import static.constants.colours as palettes
 
-context_dict = {'signed_in': True}
+context_dict = {}
 
 from ourplace.models import Canvas
 from ourplace.forms import CanvasForm
@@ -40,7 +40,7 @@ def create_place(request):
         # is the form valid
         if form.is_valid():
             form.save(commit=True)  #
-            return redirect('/ourplace/')
+            return redirect(index)
         else:
             print(form.errors)
     return render(request, 'ourplace/create_place.html', context=context_dict)
@@ -51,14 +51,14 @@ def view_place(request, place_name_slug):
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
         context_dict['canvas'] = canvas
-    except Canvas.DoesNotExist: 
-        context_dict['canvas'] = None 
+    except Canvas.DoesNotExist:
+        context_dict['canvas'] = None
 
-    palette = palettes.palette1 
-    
+    palette = palettes.palette1
+
     context_dict['palette'] = palette
 
-    
+
 
     return render(request, 'ourplace/view_place.html', context=context_dict)
 
@@ -73,8 +73,7 @@ def download_bitmap(request, place_name_slug):
         bitmap_bytes = base64.b64decode(canvas.bitmap)
         bitmap_array = pickle.loads(bitmap_bytes)
         response['bitmap'] = bitmap_bytes
-    except Canvas.DoesNotExist: 
+    except Canvas.DoesNotExist:
         raise Http404("Place not found..")
-    
-    return HttpResponse(json.dumps(response), content_type="application/json")
 
+    return HttpResponse(json.dumps(response), content_type="application/json")
