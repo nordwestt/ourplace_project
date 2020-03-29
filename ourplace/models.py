@@ -33,7 +33,7 @@ class Canvas(models.Model):
 
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     size = models.IntegerField(default=10) # (ARE WE MAKING THEM SQUARE OR SHOULD WE SEPARATE HEIGHT AND WIDTH)
-    owner = UserProfile # Get the user that's creating it somehow??
+    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE) # Get the user that's creating it somehow??
     colour_palette =  models.IntegerField(default =0) #set to an integer for testing
     url = models.URLField()
     canvas_image = models.ImageField(upload_to='canvas_images',blank=True) #Should open a blank canvas?
@@ -45,8 +45,14 @@ class Canvas(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Canvas, self).save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name_plural = 'canvases'
 
 class CanvasAccess(models.Model):
-    canvas = Canvas
-    user = UserProfile
+    canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     placeTime = models.DateTimeField()
+    
+    class Meta:
+        verbose_name_plural = 'CanvasAccess'
