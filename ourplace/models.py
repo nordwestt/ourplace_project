@@ -19,7 +19,7 @@ class UserProfile(models.Model):
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.user)
+        self.slug = slugify(self.user.username)
         super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -37,7 +37,6 @@ class Canvas(models.Model):
 
     colour_palette =  models.IntegerField(default =0) #set to an integer for testing
     url = models.URLField()
-    canvas_image = models.ImageField(upload_to='canvas_images',blank=True) #Should open a blank canvas?
     bitmap = models.BinaryField(default=None, blank=True, null=True)
 
     # cooldown in number of seconds

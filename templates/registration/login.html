@@ -10,6 +10,14 @@ Login
   <div class="form-row justify-content-center">
       <div class="col-sm-5"><h1>Login</h1></div>
   </div>
+  {% if form.errors %}
+  <div class="form-row justify-content-center">
+    <div class="col-sm-5">
+      Errors:
+      {{ form.non_field_errors }}
+    </div>
+  </div>
+  {% endif %}
   <div class="form-row form-group justify-content-center">
     <div class="col-sm-5">
       <label for="id_username">Username</label>
@@ -27,11 +35,11 @@ Login
           <button type="submit" class="btn btn-primary">Login</button>
       </div>
   </div>
-  <div class="form-row justify-content-center">
-      <div class="col-sm-5">
-          <p class="mt-2">Not registered? <a href="{% url 'registration_register' %}">Register here!</a></p>
-      </div>
-  </div>
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
+<div class="form-row justify-content-center">
+    <div class="col-sm-5">
+        <p class="mt-2">Not registered? <a href="{% url 'registration_register' %}">Register here!</a></p>
+    </div>
+</div>
 {% endblock %}
