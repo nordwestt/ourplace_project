@@ -6,15 +6,16 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
 django.setup() 
-from ourplace.models import Canvas, UserProfile, CAnvasACcess
+from ourplace.models import Canvas, UserProfile, CanvasAccess
+from django.contrib.auth.models import User
 def populate():
     #Start by creating lists of dictionaries of each entry required
 
     users = [
-        {'username':'Christ', 'email':'jchrist@heaven.god'}, 
-        {'username':'Moses', 'email':'parting@water.god'},
-        {'username':'God', 'email':'bigdog@god.god'},
-        {'username':'John', 'email':'spreadingthe@word.god'}
+        {'username':'Christ', 'email':'jchrist@heaven.god', 'password':'imcross'}, 
+        {'username':'Moses', 'email':'parting@water.god', 'password':"watern't"},
+        {'username':'God', 'email':'god@god.god', 'password':'admin'},
+        {'username':'John', 'email':'spreadingthe@word.god', 'password':'disciple12'}
     ]
 
     canvases = [
@@ -24,17 +25,27 @@ def populate():
     ]
 
     canvasaccess = [
-        {'canvas':'The Long Table', 'user'='Christ'},
-        {'canvas':'The Long Table', 'user'='John'},
-        {'canvas':'The Long Table', 'user'='Moses'},
-        {'canvas':'Earth', 'user'='God'},
-        {'canvas':'Heaven', 'user'='God'},
-        {'canvas':'Heaven', 'user'='Christ'},
-        {'canvas':'Heaven', 'user'='Moses'},
-        {'canvas':'Heaven', 'user'='John'},
+        {'canvas':'The Long Table', 'user':'Christ'},
+        {'canvas':'The Long Table', 'user':'John'},
+        {'canvas':'The Long Table', 'user':'Moses'},
+        {'canvas':'Earth', 'user':'God'},
+        {'canvas':'Heaven', 'user':'God'},
+        {'canvas':'Heaven', 'user':'Christ'},
+        {'canvas':'Heaven', 'user':'Moses'},
+        {'canvas':'Heaven', 'user':'John'},
     ]
     
-    
+    # creating new user accounts, not going to bother with profile picture because profile pictures are effort
+    for o in UserProfile.objects.all():
+        print(o)
+    for o in UserProfile.objects.all():
+        o.user.delete()     
+    for i in users:
+        newUser = User.objects.create_user(i['username'], i['email'], i['password'])
+        newUserProfile = UserProfile(user =newUser)
+        newUserProfile.save()
+    for o in UserProfile.objects.all():
+        print(o)
 
 
 # # First, we will create lists of dictionaries containing the pages
@@ -42,18 +53,10 @@ def populate():
 # # Then we will create a dictionary of dictionaries for our categories. # This might seem a little bit confusing, but it allows us to iterate # through each data structure, and add the data to our models.
 #     python_pages = [
 # {'title': 'Official Python Tutorial',
-# 'url':'http://docs.python.org/3/tutorial/'}, 
-# {'title':'How to Think like a Computer Scientist',
-# 'url':'http://www.greenteapress.com/thinkpython/'}, 
-# {'title':'Learn Python in 10 Minutes',
-# 'url':'http://www.korokithakis.net/tutorials/python/'} ]
+# 'url':'http://docs.python.org/3/tutorial/'},  ]
 #     django_pages = [
 # {'title':'Official Django Tutorial', 
-#  'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/'},
-# {'title':'Django Rocks', 
-#  'url':'http://www.djangorocks.com/'},
-# {'title':'How to Tango with Django', 
-#  'url':'http://www.tangowithdjango.com/'} ]
+#  'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/'},]
 #     other_pages = [ {'title':'Bottle',
 # 'url':'http://bottlepy.org/docs/dev/'},
 #  {'title':'Flask',
@@ -72,8 +75,7 @@ def populate():
 #         for p in Page.objects.filter(category=c):
 #             print(f'- {c}: {p}')
 
-#     for canvas in canvases:
-#         c = add_canvas(canvas)
+
 
 # def add_page(cat,title,url,views=0):
 #     p = Page.objects.get_or_create(category=cat, title=title)[0] 
