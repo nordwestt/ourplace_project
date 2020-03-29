@@ -1,6 +1,12 @@
 
 from django.urls import path
 from ourplace import views
+from django.contrib.sitemaps.views import sitemap
+from .sitemap import StaticViewSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 app_name = 'ourplace'
 
@@ -14,5 +20,6 @@ urlpatterns = [
     path('place/', views.create_place, name='create_place'),
     path('place/<str:place_name_slug>/', views.view_place, name='view_place'),
     path('search/', views.search, name='search'),
-    path('bitmap/<str:place_name_slug>/', views.download_bitmap, name='download_bitmap')
+    path('bitmap/<str:place_name_slug>/', views.download_bitmap, name='download_bitmap'),
+    path('sitemap.xml', sitemap, {'sitemaps':sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
