@@ -19,7 +19,7 @@ class UserProfile(models.Model):
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.user)
+        self.slug = slugify(self.user.username)
         super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -33,10 +33,10 @@ class Canvas(models.Model):
 
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     size = models.IntegerField(default=10) # (ARE WE MAKING THEM SQUARE OR SHOULD WE SEPARATE HEIGHT AND WIDTH)
-    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE) # Get the user that's creating it somehow??
+    owner = models.ForeignKey(User, on_delete=models.CASCADE) # Get the user that's creating it somehow??
+
     colour_palette =  models.IntegerField(default =0) #set to an integer for testing
     url = models.URLField()
-    canvas_image = models.ImageField(upload_to='canvas_images',blank=True) #Should open a blank canvas?
     bitmap = models.BinaryField(default=None, blank=True, null=True)
 
     # cooldown in number of seconds
@@ -47,7 +47,7 @@ class Canvas(models.Model):
         super(Canvas, self).save(*args, **kwargs)
     
     class Meta:
-        verbose_name_plural = 'canvases'
+        verbose_name_plural = 'Canvases'
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)

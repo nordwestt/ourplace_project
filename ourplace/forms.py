@@ -17,10 +17,9 @@ class UserProfileForm(forms.ModelForm):
 
 
 class CanvasForm(forms.ModelForm):
-    title = forms.CharField(max_length=Canvas.TITLE_MAX_LENGTH, label= "title")
     class Meta:
         model = Canvas
-        fields = ('colour_palette', 'size',  )
+        exclude = ('slug', 'owner', 'url', )
 
 
 # class CategoryForm(forms.ModelForm):
