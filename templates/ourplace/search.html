@@ -1,1 +1,39 @@
 {% extends "ourplace/base.html" %}
+
+{# Required variables: list of users own canvas's - users_places, list of popular canvases - popular_places #}
+
+{% block body_block %}
+  {% if user.is_authenticated %}
+  <div class="row">
+      <div class="col">
+          <h1>Your Places</h1>
+      </div>
+  </div>
+  <div class="row">
+    {% for place in users_places %}
+      <div class="col-sm-4">
+        <a href="{{ place.url }}">
+          {{ place.title }}
+          {{ place.bitmap }} <!-- Will probably need extra processing -->
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="col">
+      <h1>Popular</h1>
+    </div>
+  </div>
+  <div class="row">
+      {% for place in popular_places %}
+        <div class="col-sm-4">
+          <a href="{{ place.url }}">
+            <h3>{{ place.title }}</h3>
+            <small class="text-muted">{{ place.owner }}</small>
+            <img src="{{ place.bitmap }}">
+          </a>
+        </div>
+      {% endfor %}
+  </div>
+{% endblock %}
