@@ -46,8 +46,14 @@ class Canvas(models.Model):
     def save(self, *args, **kwargs): 
         self.slug = slugify(self.title) 
         super(Canvas, self).save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name_plural = 'canvases'
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
-    user = models.ForeignKey(USerprofile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     placeTime = models.DateTimeField()
+    
+    class Meta:
+        verbose_name_plural = 'CanvasAccess'
