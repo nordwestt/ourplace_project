@@ -39,8 +39,10 @@ def create_place(request):
 
         # is the form valid
         if form.is_valid():
-            form.save(commit=True)  #
-            return redirect(index)
+            canvas = form.save(commit=False)
+            canvas.owner = request.user
+            canvas.save()
+            return redirect(reverse('ourplace:index'))
         else:
             print(form.errors)
     return render(request, 'ourplace/create_place.html', context=context_dict)
