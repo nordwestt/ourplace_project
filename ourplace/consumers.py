@@ -56,8 +56,8 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy[x][y] = 5
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
-            print("canvas updated!"+canvas.name)
-        except Canvas.DoesNotExist: 
+            print("canvas updated!"+canvas.title)
+        except Canvas.DoesNotExist:
             print("Canvas not found...")
 
         # Send message to WebSocket
@@ -88,7 +88,7 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_bytes = base64.b64decode(canvas.bitmap)
             bitmap_array = pickle.loads(bitmap_bytes)
             response['bitmap']   = bitmap_bytes
-        except Canvas.DoesNotExist: 
+        except Canvas.DoesNotExist:
             raise Http404("Place not found..")
 
         return HttpResponse(json.dumps(response), content_type="application/json")
