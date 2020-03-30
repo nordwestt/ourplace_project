@@ -20,8 +20,8 @@ def populate():
 
     canvases = [
         {'title':'The Long Table', 'size':50, 'owner':'Christ', 'colour_palette':1,},
-        {'title':'Earth', 'size':100, 'owner':'God', 'colour_pallete':2},
-        {'title':'Heaven', 'size':200, 'owner':'God','colour_pallete':0}
+        {'title':'Earth', 'size':100, 'owner':'God', 'colour_palette':2},
+        {'title':'Heaven', 'size':200, 'owner':'God','colour_palette':0}
     ]
 
     canvasaccess = [
@@ -46,6 +46,12 @@ def populate():
         newUserProfile.save()
     for o in UserProfile.objects.all():
         print(o)
+    for canvas in canvases:
+        u = User.objects.get_or_create(username=canvas['owner'])[0]
+        c = Canvas.objects.get_or_create(title=canvas['title'], owner=u)[0]
+        c.size = canvas['size']
+        c.colour_palette = canvas['colour_palette']
+        c.save()
 
 
 # # First, we will create lists of dictionaries containing the pages
