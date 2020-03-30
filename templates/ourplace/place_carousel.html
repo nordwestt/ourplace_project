@@ -1,6 +1,6 @@
 <div class="row">
   {% for place in place_list %}
-    <div class="col-sm-4">
+    <div class="col-md-4">
       <a href="{% url 'ourplace:view_place' place.slug %}">
         <h3>{{ place.title }}</h3>
         {% if include_author %}<div class="text-muted">{{ place.owner }}</div>{% endif %}

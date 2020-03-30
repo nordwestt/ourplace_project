@@ -42,7 +42,7 @@ def create_place(request):
             canvas = form.save(commit=False)
             canvas.owner = request.user
             canvas.save()
-            return redirect(reverse('ourplace:index'))
+            return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
         else:
             print(form.errors)
     return render(request, 'ourplace/create_place.html', context=context_dict)
