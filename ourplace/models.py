@@ -1,7 +1,13 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+<<<<<<< HEAD
 from datetime import datetime
+=======
+import pickle
+import base64
+import numpy
+>>>>>>> 29136415e9cb88bb404a0b0c68723e9904068010
 
 
 # Create your models here.
@@ -49,7 +55,12 @@ class Canvas(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        if self.bitmap is None:
+            arr = numpy.zeros((self.size, self.size), dtype=numpy.ushort)
+            bitmap_bytes = base64.b64encode(pickle.dumps(arr))
+            self.bitmap = bitmap_bytes
         super(Canvas, self).save(*args, **kwargs)
+        
     def __str__(self):
         return self.slug
     

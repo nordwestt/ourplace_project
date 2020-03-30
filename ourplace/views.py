@@ -91,6 +91,8 @@ def search(request):
     try:
         if (request.user.is_authenticated):
             context_dict['users_places'] = Canvas.objects.filter(owner=request.user)
+            context_dict['num_user_places'] = len(context_dict['users_places'])
+            
         context_dict['popular_places'] = Canvas.objects.order_by('-views')[:8]
     except Canvas.DoesNotExist:
         context_dict['user_places'] = {}
