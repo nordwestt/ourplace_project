@@ -37,22 +37,24 @@ def populate():
     
     # creating new user accounts, not going to bother with profile picture because profile pictures are effort
     for o in UserProfile.objects.all():
-        print(o)
-    for o in UserProfile.objects.all():
-        o.user.delete()     
+        o.user.delete()
+
     for i in users:
         newUser = User.objects.create_user(i['username'], i['email'], i['password'])
         newUserProfile = UserProfile(user =newUser)
         newUserProfile.save()
-    for o in UserProfile.objects.all():
-        print(o)
     for canvas in canvases:
         u = User.objects.get_or_create(username=canvas['owner'])[0]
         c = Canvas.objects.get_or_create(title=canvas['title'], owner=u)[0]
         c.size = canvas['size']
         c.colour_palette = canvas['colour_palette']
         c.save()
-
+    for i in canvasaccess:
+        u = User.objects.get(username=i['user'])
+        up = UserProfile.objects.get(user=u)
+        c = Canvas.objects.get(title=i['canvas'])
+        ca = CanvasAccess(user=up,canvas=c)
+        ca.save()
 
 # # First, we will create lists of dictionaries containing the pages
 # # we want to add into each category.

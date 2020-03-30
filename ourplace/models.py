@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 # Create your models here.
@@ -58,10 +59,10 @@ class Canvas(models.Model):
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    placeTime = models.DateTimeField()
+    placeTime = models.DateTimeField(default=datetime.now())
     
     class Meta:
         verbose_name_plural = 'CanvasAccess'
     
     def __str__(self):
-        return ("Canvas: " + self.canvas + ", User: " + self.user.username + ", Placetime: " + self.placeTime)
+        return ("Canvas: " + str(self.canvas) + ", User: " + str(self.user) + ", Placetime: " + str(self.placeTime))
