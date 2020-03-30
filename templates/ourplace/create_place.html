@@ -6,17 +6,29 @@
 </div>
 <form id="CanvasForm" method="post" action=".">
     {% csrf_token %}
-    {% for form_field in form %}
+    <div class="form-row justify-content-center">
+      <ul class="list-group">
+        {% for non_field_error in form.non_field_errors %}
+          <li class="list-group-item bg-danger text-white">{{ non_field_error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% for form_row in form %}
     <div class="form-group form-row justify-content-center">
-      <div class="col-sm-5">
+      {% for form_field in form_row %}
+      <div class="col-md-5">
         {{ form_field.label_tag }}
         {{ form_field }}
+        {% for field_error in form_field.errors %}
+          <span class="text-danger">{{ field_error }}</span>
+        {% endfor %}
       </div>
+      {% endfor %}
     </div>
     {% endfor %}
     <div class="form-group form-row justify-content-center">
-      <div class="col-sm-5">
-        <button type="submit" class="btn btn-primary">Create Place!</button>
+      <div class="col-md-10">
+        <button type="submit" class="btn btn-primary float-right">Create Place!</button>
       </div>
     </div>
 </form>

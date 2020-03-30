@@ -44,7 +44,6 @@ def user(request, username):
 def create_place(request):
     form = CanvasForm()
     context_dict = {}
-    context_dict['form'] = form
 
     # do we have a http post
     if request.method == 'POST':
@@ -56,8 +55,15 @@ def create_place(request):
             canvas.owner = request.user
             canvas.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
-        else:
-            print(form.errors)
+        # else:
+        #     print(form.errors)
+
+    # This is needed to allow the form to automagically display in two columns
+    if len(list(form)) % 2 == 1:
+        list(form).append(None)
+
+    context_dict['form'] = zip(*[iter(form)]*2)
+
     return render(request, 'ourplace/create_place.html', context=context_dict)
 
 def view_place(request, place_name_slug):
@@ -92,7 +98,7 @@ def search(request):
         if (request.user.is_authenticated):
             context_dict['users_places'] = Canvas.objects.filter(owner=request.user)
             context_dict['num_user_places'] = len(context_dict['users_places'])
-            
+
         context_dict['popular_places'] = Canvas.objects.order_by('-views')[:8]
     except Canvas.DoesNotExist:
         context_dict['user_places'] = {}
