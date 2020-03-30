@@ -2,6 +2,7 @@ from django import forms
 from ourplace.models import CanvasAccess, Canvas, UserProfile
 from django.contrib.auth.models import User 
 
+class_attrs = {'class':'form-control'}
 
 class UserForm(forms.ModelForm): 
     password = forms.CharField(widget=forms.PasswordInput())
@@ -17,6 +18,10 @@ class UserProfileForm(forms.ModelForm):
 
 
 class CanvasForm(forms.ModelForm):
+    title = forms.CharField(max_length=Canvas.TITLE_MAX_LENGTH, label = "Title", widget=forms.TextInput(attrs=class_attrs))
+    size = forms.IntegerField(initial=10, label="Size", widget=forms.NumberInput(attrs=class_attrs))
+    colour_palette = forms.IntegerField(initial=0, label="Colour Palette", widget=forms.NumberInput(attrs=class_attrs))
+    cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
     class Meta:
         model = Canvas
         exclude = ('slug', 'owner', 'url', 'views',)
