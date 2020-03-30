@@ -49,6 +49,8 @@ class Canvas(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Canvas, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.slug
     
     class Meta:
         verbose_name_plural = 'Canvases'
@@ -60,3 +62,6 @@ class CanvasAccess(models.Model):
     
     class Meta:
         verbose_name_plural = 'CanvasAccess'
+    
+    def __str__(self):
+        return ("Canvas: " + self.canvas + ", User: " + self.user.username + ", Placetime: " + self.placeTime)
