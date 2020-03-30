@@ -68,6 +68,21 @@ def view_place(request, place_name_slug):
 
 
 def search(request):
+    context_dict = {}
+
+    if request.GET.get('q', False):
+        search_string = request.GET['q']
+        context_dict['has_searched'] = True
+        context_dict['search_results'] = Canvas.objects.filter(title__contains=search_string)
+        context_dict['num_results'] = len(context_dict['search_results'])
+        context_dict['search_string'] = search_string
+
+    try:
+        if (request.user.is_authenticated):
+            context_dict['users_places'] = Canvas.objects.filter(owner=request.user)
+        context_dict['popular_places'] = Canvas.objects.order_by('views')[:8]
+    except Canvas.DoesNotExist:
+        context_dict['user_places'] = {}
     return render(request, 'ourplace/search.html', context=context_dict)
 
 def download_bitmap(request, place_name_slug):

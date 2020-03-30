@@ -31,8 +31,8 @@
           <a class="nav-link" href="{% url 'ourplace:search' %}">Browse</a>
         </li>
       </ul>
-      <form class="form-inline ml-auto my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search">
+      <form class="form-inline ml-auto my-2 my-lg-0" method="GET" action="{% url 'ourplace:search' %}">
+        <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search">
       </form>
       <ul class="navbar-nav">
         {% if user.is_authenticated %}

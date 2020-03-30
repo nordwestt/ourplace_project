@@ -1,0 +1,19 @@
+<div class="row">
+  {% for place in place_list %}
+    <div class="col-sm-4">
+      <a href="{% url 'ourplace:view_place' place.slug %}">
+        <h3>{{ place.title }}</h3>
+        {% if include_author %}<span class="text-muted">{{ place.owner }}</span>{% endif %}
+      </a>
+    </div>
+  {% endfor %}
+</div>
+<div class="row">
+  {% for place in place_list %}
+    <div class="col-sm-4">
+      <a href="{% url 'ourplace:view_place' place.slug %}">
+        <img src="{{ place.bitmap }}" />
+      </a>
+    </div>
+  {% endfor %}
+</div>
