@@ -4,13 +4,14 @@
 
 
 {% block body_block %}
+{% if canvas %}
 <div id="room_name">{{ canvas.slug }}</div>
 <div id="div_main">
     <div id="div_canvas">
         <canvas id="canvas"></canvas>
     </div>
-    
-    
+
+
 
     <div id="colour_box">
         <div id="selected_colour">
@@ -19,10 +20,10 @@
         </div>
         <div id="div_buttons">
 
-            
+
             {% for colour in palette %}
 
-                
+
                 {% if forloop.counter0|divisibleby:4  %}
                     {% if forloop.first %}
                         <div class="column">
@@ -30,7 +31,7 @@
                         </div><div class="column">
                     {% endif %}
                 {% endif %}
-                
+
                 <div class="row">
                     <button class="button" id="{{ forloop.counter0 }}" onclick="setColor(this)" style="background-color: {{ colour }};"></button>
                 </div>
@@ -39,7 +40,7 @@
                 {% if forloop.last %}</div>{% endif %}
             {% endfor %}
 
-            
+
         </div>
     </div>
 </div>
@@ -49,4 +50,7 @@
 <script type="text/javascript" src="{% static 'js/websocket_stuff.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/canvas_setup.js' %}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+{% else %}
+<h1>Canvas not found :(</h1>
+{% endif %}
 {% endblock %}
