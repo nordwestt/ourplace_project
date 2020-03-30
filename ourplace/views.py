@@ -56,8 +56,10 @@ def view_place(request, place_name_slug):
     except Canvas.DoesNotExist:
         context_dict['canvas'] = None
 
-    palette = palettes.palette1
+    #increase total views for this place
+    canvas.views=canvas.views+1
 
+    palette = palettes.palette1
     context_dict['palette'] = palette
 
 

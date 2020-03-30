@@ -19,7 +19,7 @@ class UserProfileForm(forms.ModelForm):
 class CanvasForm(forms.ModelForm):
     class Meta:
         model = Canvas
-        exclude = ('slug', 'owner', 'url', )
+        exclude = ('slug', 'owner', 'url', 'views',)
 
 
 # class CategoryForm(forms.ModelForm):

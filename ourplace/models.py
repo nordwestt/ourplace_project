@@ -42,6 +42,10 @@ class Canvas(models.Model):
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 
+    #for hit tracking 
+    views = models.IntegerField(default=0)
+
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Canvas, self).save(*args, **kwargs)
