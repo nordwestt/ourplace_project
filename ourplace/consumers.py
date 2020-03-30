@@ -5,6 +5,7 @@ import numpy
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from ourplace.models import Canvas
+import static.constants.colours as colours
 
 class CanvasConsumer(WebsocketConsumer):
     #groups = ["broadcast"]
@@ -54,6 +55,7 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = 5
+            #update_thumbnail(canvas, identical_copy)
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             print("canvas updated!"+canvas.name)
@@ -92,3 +94,8 @@ class CanvasConsumer(WebsocketConsumer):
             raise Http404("Place not found..")
 
         return HttpResponse(json.dumps(response), content_type="application/json")
+    
+    def update_thumbnail(self, canvas, bitmap_array):
+        print(canvas)
+        print(bitmap_array)
+

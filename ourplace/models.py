@@ -44,6 +44,9 @@ class Canvas(models.Model):
     #for hit tracking
     views = models.IntegerField(default=0)
 
+    #thumbnails:
+    thumbnail = models.IntegerField(upload_to='thumbnails')
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
