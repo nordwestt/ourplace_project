@@ -34,20 +34,24 @@ def populate():
         {'canvas':'Heaven', 'user':'Moses'},
         {'canvas':'Heaven', 'user':'John'},
     ]
-    
-    # creating new user accounts, not going to bother with profile picture because profile pictures are effort
+    # adding our new items in to the databases
+    # starting by deleting all the existing objets so we don't have any issues with unique fields
     for o in UserProfile.objects.all():
         o.user.delete()
-
-    for i in users:
+    #adding new users by creating new user objects, then using them to create new userprofile objects
+        for i in users:
         newUser = User.objects.create_user(i['username'], i['email'], i['password'])
         newUserProfile = UserProfile(user =newUser)
         newUserProfile.save()
+
+    #creating new blank canvases
     for canvas in canvases:
         u = User.objects.get_or_create(username=canvas['owner'])[0]
         c = Canvas.objects.get_or_create(title=canvas['title'], owner=u, size=canvas['size'])[0]
         c.colour_palette = canvas['colour_palette']
         c.save()
+
+    #setting up access rights by finding the correct canvas objects and the correct users then using them to create a new entry
     for i in canvasaccess:
         u = User.objects.get(username=i['user'])
         up = UserProfile.objects.get(user=u)
@@ -55,49 +59,15 @@ def populate():
         ca = CanvasAccess(user=up,canvas=c)
         ca.save()
 
-# # First, we will create lists of dictionaries containing the pages
-# # we want to add into each category.
-# # Then we will create a dictionary of dictionaries for our categories. # This might seem a little bit confusing, but it allows us to iterate # through each data structure, and add the data to our models.
-#     python_pages = [
-# {'title': 'Official Python Tutorial',
-# 'url':'http://docs.python.org/3/tutorial/'},  ]
-#     django_pages = [
-# {'title':'Official Django Tutorial', 
-#  'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/'},]
-#     other_pages = [ {'title':'Bottle',
-# 'url':'http://bottlepy.org/docs/dev/'},
-#  {'title':'Flask',
-# 'url':'http://flask.pocoo.org'} ]
-#     cats = {'Python': {'pages': python_pages},
-#             'Django': {'pages': django_pages},
-#             'Other Frameworks': {'pages': other_pages} }
-# # If you want to add more categories or pages, # add them to the dictionaries above.
-# # The code below goes through the cats dictionary, then adds each category, # and then adds all the associated pages for that category.
-#     for cat, cat_data in cats.items():
-#         c = add_cat(cat)
-#         for p in cat_data['pages']:
-#             add_page(c, p['title'], p['url'])
-# # Print out the categories we have added.
-#     for c in Category.objects.all():
-#         for p in Page.objects.filter(category=c):
-#             print(f'- {c}: {p}')
 
 
 
-# def add_page(cat,title,url,views=0):
-#     p = Page.objects.get_or_create(category=cat, title=title)[0] 
-#     p.url=url
-#     p.views=views
-#     p.save()
-#     return p
-# def add_cat(name):
-#     c = Category.objects.get_or_create(name=name)[0] 
-#     c.save()
-#     return c
-# def add_canvas(name):
-#     c = Canvas.objects.get_or_create(name=name)[0] 
-#     c.save()
-#     return c
+    for c in Canvas.objects.all():
+        print(str(c))
+    for ca in CanvasAcess.objects.all():
+        print(str(ca))
+    for u in UserProfile.objects.all():
+        print(str(u))
 
 #Startexecutionhere!
 if __name__=='__main__':

@@ -89,7 +89,7 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_bytes = base64.b64decode(canvas.bitmap)
             bitmap_array = pickle.loads(bitmap_bytes)
             response['bitmap']   = bitmap_bytes
-        except Canvas.DoesNotExist: 
+        except Canvas.DoesNotExist:
             raise Http404("Place not found..")
 
         return HttpResponse(json.dumps(response), content_type="application/json")

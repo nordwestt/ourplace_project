@@ -1,7 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from datetime import datetime
 import pickle
 import base64
 import numpy
@@ -64,7 +64,7 @@ class Canvas(models.Model):
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    placeTime = models.DateTimeField(default=datetime.now(tz=timezone.utc))
+    placeTime = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name_plural = 'CanvasAccess'
