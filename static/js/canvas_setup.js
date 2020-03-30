@@ -8,6 +8,11 @@ var unlockTime = new Date().getTime();
 real_canvas_height = 100;
 real_canvas_width = 100;
 
+var room_size = document.getElementById("room_size").innerHTML;
+
+real_canvas_height = room_size;
+real_canvas_width = room_size;
+
 var CANVAS_HEIGHT = real_canvas_height*3;
 var CANVAS_WIDTH  = real_canvas_width*3;
 
@@ -97,6 +102,7 @@ function drawUserPixel(x, y, colour){
 
 function drawUpdatePixel(x, y, colour_id){
     var colour = colourIdToVal(colour_id);
+    alert("x and y is "+x+", "+y);
     drawPixel(x,y, colour);
 }
 
@@ -112,6 +118,7 @@ function colourIdToVal(id){
 
 function paintCanvas(x, y){
 
+    
     x = x/zoomScale;
     y = y/zoomScale;
 
@@ -152,8 +159,14 @@ var testCanvasData = Uint8ClampedArray.from([200,100,150,50]);
 var clicks = 0;
 
 function canvasClick(event){
-    var x = event.pageX-this.offsetLeft;
-    var y = event.pageY-this.offsetTop;
+
+    var bounds = event.target.getBoundingClientRect();
+    alert("left and right: "+bounds.left+", "+bounds.top);
+    var x = event.pageX-div_canvas.offsetLeft;
+    var y = event.pageY-div_canvas.offsetTop;
+    alert("parent offset is.. "+this.offsetParent[0]);
+    alert("orig x and y is "+event.pageX+", "+event.pageY);
+
     if(timeLeft<=0){
         if(confirm("You are about to paint the canvas")){
             paintCanvas(x, y);
@@ -221,7 +234,6 @@ $(document).ready(function(){
         $("#div_buttons").slideToggle("slow");
     });
 
-    //$("#colour_box").css("transform","scale(1,1)")
 
 
     $(function() {

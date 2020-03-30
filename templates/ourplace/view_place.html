@@ -7,7 +7,8 @@
 {% if canvas %}
 <div class="row">
     <div class="col">
-        <h1 id="room_name">{{ canvas.title }}</h1>
+        <h1 id="room_name_slug" style="visibility: hidden;">{{ canvas.slug }}</h1>
+        <h1 id="room_size" style="visibility: hidden;">{{ canvas.size }}</h1>
     </div>
 </div>
 <div class="row">
@@ -32,14 +33,14 @@
 
                       {% if forloop.counter0|divisibleby:4  %}
                           {% if forloop.first %}
-                              <div class="row">
+                              <div class="rowx">
                           {% else %}
-                              </div><div class="row">
+                              </div><div class="rowx">
                           {% endif %}
                       {% endif %}
 
-                      <div class="column">
-                          <button class="button" id="{{ forloop.counter0 }}" onclick="setColor(this)" style="background-color: {{ colour }};"></button>
+                      <div class="columnx">
+                          <button class="button" id="{{ forloop.counter0 }}" style="background-color: {{ colour }};"></button>
                       </div>
 
 
@@ -59,7 +60,6 @@
 
 {% block extra_scripts %}
 <link rel="stylesheet" href="{% static 'css/canvas_style.css' %}">
-<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/websocket_stuff.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/canvas_setup.js' %}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
