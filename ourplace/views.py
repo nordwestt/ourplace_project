@@ -53,11 +53,9 @@ def view_place(request, place_name_slug):
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
         context_dict['canvas'] = canvas
+        Canvas.objects.filter(slug=place_name_slug).update(views=canvas.views+1)
     except Canvas.DoesNotExist:
         context_dict['canvas'] = None
-
-    #increase total views for this place
-    canvas.views=canvas.views+1
 
     palette = palettes.palette1
     context_dict['palette'] = palette
