@@ -13,7 +13,6 @@ app_name = 'ourplace'
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
-    ##path('canvas/<str:canvas_name_slug>/', views.show_canvas, name='show_canvas'),
     path('faq/', views.faq, name='faq'),
     path('account/', views.account, name='account'),
     path('user/<str:username>/', views.user, name='user'),
