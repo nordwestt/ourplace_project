@@ -50,6 +50,18 @@ ctx.width = CANVAS_WIDTH;
 var colour_value = "rgb(0, 0, 0)";
 var colour_id = 16;
 
+function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var data = JSON.parse(this.responseText);
+        var bitmap = data['bitmap'];
+       document.getElementById("demo").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "ajax_info.txt", true);
+    xhttp.send();
+  }
 
 function setupTimer(){
     
@@ -106,8 +118,10 @@ function drawUpdatePixel(x, y, colour_id){
 }
 
 function drawPixel(x, y, colour){
-    ctx.fillStyle = colour;
-    ctx.fillRect(x*3, y*3,3,3);
+    if(x>0&&y>0&&x<real_canvas_width-1&&y<real_canvas_height-1){
+        ctx.fillStyle = colour;
+        ctx.fillRect(x*3, y*3,3,3);
+    }
 }
 
 function colourIdToVal(id){
@@ -136,15 +150,22 @@ function testCanvasDrawing(){
     ctx.putImageData(imgData, 0, 0);
 }
 
-function createDrawingFromArray(imageArray, x, y){
-    var roomName = document.getElementById("room_name").innerHTML;
+function createDrawingFromArray(){
+    var roomName = document.getElementById("room_name_slug").innerHTML;
     var URL = "http://"+window.location.host+'/bitmap/'+roomName+'/';
     $.getJSON(URL, function(data){
-        alert("We got stuff! :"+data['bitmap'][0]);
+        var imageArray = data['bitmap'];
+        for(var x=0; x<imageArray.length;x++){
+            for(var y=0; y<imageArray[x].length; y++){
+                var colour_id = imageArray[x][y];
+                drawPixel(x,y,colourIdToVal(colour_id));
+            }
+        }
+
     })
-    var imgData = ctx.createImageData(x, y);
-    imgData.data = imageArray;
-    ctx.putImageData(imgData, 20, 30);
+    //var imgData = ctx.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+    //imgData.data = imageArray;
+    //ctx.putImageData(imgData, 20, 30);
 }
 
 
@@ -175,7 +196,7 @@ function canvasClick(event){
 
 
 
-testCanvasDrawing();
+//testCanvasDrawing();
 
 
 ctx.lineWidth = 5;
@@ -236,7 +257,7 @@ $(document).ready(function(){
         $("#colour_box").draggable({containment: "window", scroll: false });
      });
 
-
+    createDrawingFromArray();
 
    });
 //ctx.scale(2,2)

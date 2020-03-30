@@ -45,8 +45,7 @@ def populate():
         newUserProfile.save()
     for canvas in canvases:
         u = User.objects.get_or_create(username=canvas['owner'])[0]
-        c = Canvas.objects.get_or_create(title=canvas['title'], owner=u)[0]
-        c.size = canvas['size']
+        c = Canvas.objects.get_or_create(title=canvas['title'], owner=u, size=canvas['size'])[0]
         c.colour_palette = canvas['colour_palette']
         c.save()
     for i in canvasaccess:

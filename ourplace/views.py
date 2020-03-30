@@ -4,6 +4,10 @@ from django.urls import reverse
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+import pickle
+import base64
+import numpy
+import json
 
 import static.constants.colours as palettes
 
@@ -110,7 +114,7 @@ def download_bitmap(request, place_name_slug):
         canvas = Canvas.objects.get(slug=place_name_slug)
         bitmap_bytes = base64.b64decode(canvas.bitmap)
         bitmap_array = pickle.loads(bitmap_bytes)
-        response['bitmap'] = bitmap_bytes
+        response['bitmap'] = bitmap_array.tolist()
     except Canvas.DoesNotExist:
         raise Http404("Place not found..")
 
