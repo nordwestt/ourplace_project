@@ -56,6 +56,7 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy[x][y] = 5
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
+            print("canvas updated!"+canvas.name)
         except Canvas.DoesNotExist: 
             print("Canvas not found...")
 

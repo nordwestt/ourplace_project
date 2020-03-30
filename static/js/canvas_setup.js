@@ -102,7 +102,6 @@ function drawUserPixel(x, y, colour){
 
 function drawUpdatePixel(x, y, colour_id){
     var colour = colourIdToVal(colour_id);
-    alert("x and y is "+x+", "+y);
     drawPixel(x,y, colour);
 }
 
@@ -117,8 +116,6 @@ function colourIdToVal(id){
 }
 
 function paintCanvas(x, y){
-
-    
     x = x/zoomScale;
     y = y/zoomScale;
 
@@ -161,15 +158,14 @@ var clicks = 0;
 function canvasClick(event){
 
     var bounds = event.target.getBoundingClientRect();
-    alert("left and right: "+bounds.left+", "+bounds.top);
+    var coordX = event.clientX-bounds.left;
+    var coordY = event.clientY-bounds.top;
     var x = event.pageX-div_canvas.offsetLeft;
     var y = event.pageY-div_canvas.offsetTop;
-    alert("parent offset is.. "+this.offsetParent[0]);
-    alert("orig x and y is "+event.pageX+", "+event.pageY);
 
     if(timeLeft<=0){
         if(confirm("You are about to paint the canvas")){
-            paintCanvas(x, y);
+            paintCanvas(coordX, coordY);
         }
     }
     else{
