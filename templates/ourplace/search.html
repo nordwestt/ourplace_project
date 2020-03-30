@@ -25,7 +25,15 @@
           <h1>Your Places</h1>
       </div>
   </div>
-  {% display_carousel users_places False %}
+  {% if num_user_places > 0 %}
+    {% display_carousel users_places False %}
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h3>You have no places, <a href="{% url 'ourplace:create_place' %}">Create One?</a></h>
+        </div>
+    </div>
+  {% endif %}
   {% endif %}
   <div class="row">
     <div class="col">
