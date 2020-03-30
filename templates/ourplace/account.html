@@ -33,7 +33,15 @@
         <div class="card-body">
           <p class="card-text"><a href="{% url 'auth_password_change' %}">Change your password.</a></p>
         </div>
+      </div>
     </div>
-  </div>
+    <div class="col-sm-6">
+      <div class="card border-primary mb-3">
+        <div class="card-header">User Profile</div>
+        <div class="card-body">
+          <p class="card-text"><a href="{% url 'ourplace:user' user.username %}">View your profile page.</a></p>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
