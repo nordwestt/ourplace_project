@@ -1,5 +1,5 @@
 
-var roomName =  document.getElementById("room_name").innerHTML;
+var roomName =  document.getElementById("room_name_slug").innerHTML;
 testAddr = "ws://echo.websocket.org"
 
 realAddr = 'ws://' + window.location.host + '/ws/place/' + roomName + '/';

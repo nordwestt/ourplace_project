@@ -40,7 +40,7 @@ class CanvasConsumer(WebsocketConsumer):
         )
 
         print("x, y: "+str(x)+', '+str(y))
-        print("colour: "+colour)
+        print("colour: "+str(colour))
 
 
     def canvas_update(self, event):

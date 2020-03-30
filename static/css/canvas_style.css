@@ -1,5 +1,6 @@
 
 
+
 #div_main {
   float: left;
   clear: both;
@@ -7,8 +8,6 @@
 
 #div_canvas {
   box-shadow: 10px 10px 10px grey;
-  margin-top: 18px;
-  margin-left: 120px;
   image-rendering: -moz-crisp-edges; /* Firefox for android 4 < version < 65 */
   image-rendering: crisp-edges; /* Acts as fall back for when pixelated doesn't work. */
   image-rendering: pixelated;
@@ -34,14 +33,14 @@
 
 }
 
-.row{
+.rowx{
   float: left;
   height: 25%;
   width: 100%;
   margin:auto;
 }
 
-.column{
+.columnx{
   float: left;
   width:25%;
   height:100%;
