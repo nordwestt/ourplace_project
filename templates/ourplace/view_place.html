@@ -32,13 +32,13 @@
 
                       {% if forloop.counter0|divisibleby:4  %}
                           {% if forloop.first %}
-                              <div class="column">
+                              <div class="row">
                           {% else %}
-                              </div><div class="column">
+                              </div><div class="row">
                           {% endif %}
                       {% endif %}
 
-                      <div class="row">
+                      <div class="column">
                           <button class="button" id="{{ forloop.counter0 }}" onclick="setColor(this)" style="background-color: {{ colour }};"></button>
                       </div>
 
