@@ -1,6 +1,9 @@
 {% extends "ourplace/base.html" %}
 
 {% block body_block %}
+<div class="form-row justify-content-center">
+  <h1>Create a New Place!</h1>
+</div>
 <form id="CanvasForm" method="post" action=".">
     {% csrf_token %}
     {% for form_field in form %}

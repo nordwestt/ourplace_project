@@ -80,7 +80,7 @@ def search(request):
     try:
         if (request.user.is_authenticated):
             context_dict['users_places'] = Canvas.objects.filter(owner=request.user)
-        context_dict['popular_places'] = Canvas.objects.order_by('views')[:8]
+        context_dict['popular_places'] = Canvas.objects.order_by('-views')[:8]
     except Canvas.DoesNotExist:
         context_dict['user_places'] = {}
     return render(request, 'ourplace/search.html', context=context_dict)
