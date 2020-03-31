@@ -1,18 +1,18 @@
-import os 
+import os
 import numpy
 import pickle
 import base64
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
-django.setup() 
+django.setup()
 from ourplace.models import Canvas, UserProfile, CanvasAccess
 from django.contrib.auth.models import User
 def populate():
     #Start by creating lists of dictionaries of each entry required
 
     users = [
-        {'username':'Christ', 'email':'jchrist@heaven.god', 'password':'imcross'}, 
+        {'username':'Christ', 'email':'jchrist@heaven.god', 'password':'imcross'},
         {'username':'Moses', 'email':'parting@water.god', 'password':"watern't"},
         {'username':'God', 'email':'god@god.god', 'password':'admin'},
         {'username':'John', 'email':'spreadingthe@word.god', 'password':'disciple12'}
@@ -39,7 +39,7 @@ def populate():
     for o in UserProfile.objects.all():
         o.user.delete()
     #adding new users by creating new user objects, then using them to create new userprofile objects
-        for i in users:
+    for i in users:
         newUser = User.objects.create_user(i['username'], i['email'], i['password'])
         newUserProfile = UserProfile(user =newUser)
         newUserProfile.save()
@@ -64,13 +64,12 @@ def populate():
 
     for c in Canvas.objects.all():
         print(str(c))
-    for ca in CanvasAcess.objects.all():
+    for ca in CanvasAccess.objects.all():
         print(str(ca))
     for u in UserProfile.objects.all():
         print(str(u))
 
 #Startexecutionhere!
 if __name__=='__main__':
-    print('Starting Ourplace population script...') 
+    print('Starting Ourplace population script...')
     populate()
-
