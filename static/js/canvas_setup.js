@@ -181,8 +181,6 @@ function canvasClick(event){
     var bounds = event.target.getBoundingClientRect();
     var coordX = event.clientX-bounds.left;
     var coordY = event.clientY-bounds.top;
-    var x = event.pageX-div_canvas.offsetLeft;
-    var y = event.pageY-div_canvas.offsetTop;
 
     if(timeLeft<=0){
         if(confirm("You are about to paint the canvas")){
@@ -193,6 +191,8 @@ function canvasClick(event){
         alert("Still waiting for countdown...");
     }
 }
+
+
 
 
 
@@ -226,7 +226,10 @@ function canvasZoom(){
     $('#div_canvas').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
 }
 
-
+var highlight_x = -1;
+var highlight_y = -1;
+var highlight_color = "rgb(104,151,217)";
+var old_colour = "rgb(255,255,255)";
 
 $(document).ready(function(){
     $('#div_canvas').css("height", CANVAS_HEIGHT);
@@ -258,6 +261,57 @@ $(document).ready(function(){
      });
 
     createDrawingFromArray();
+
+
+    $("#div_canvas").mousemove(function(){
+
+        $("p").css("background-color", "yellow");
+        var bounds = event.target.getBoundingClientRect();
+        var x = event.clientX-bounds.left;
+        var y = event.clientY-bounds.top;
+        x = x/zoomScale;
+        y = y/zoomScale;
+
+        var old_x_mod = highlight_x-(highlight_x%3);
+        var old_y_mod = highlight_y-(highlight_y%3);
+
+        var new_x_mod = x-(x%3);
+        var new_y_mod = y-(y%3);
+
+
+        // check if inside border of canvas
+        if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
+
+            //if new position
+            if(new_x_mod!=old_x_mod||new_y_mod!=old_y_mod){
+                //get colour at current position
+                colour_data = ctx.getImageData(new_x_mod, new_y_mod, 1, 1).data;
+
+                //draw highlight over
+                drawPixel(new_x_mod/3,new_y_mod/3,highlight_color);
+
+                //draw old colour at old position
+                if(highlight_x!=-1&&highlight_y!=-1){
+                    my_data = ctx.getImageData(old_x_mod, old_y_mod, 1, 1).data;
+                    colour_check = "rgb("+my_data[0]+","+my_data[1]+","+my_data[2]+")";
+                    if(colour_check==highlight_color){
+                        drawPixel(old_x_mod/3,old_y_mod/3,old_colour);
+                    }
+                }
+
+                //update old_colour to be colour before current highlight
+                old_colour = "rgb("+colour_data[0]+","+colour_data[1]+","+colour_data[2]+")";
+                //alert(new_x_mod/3+", "+new_y_mod/3);
+                //alert("x and y: "+x+", "+y);
+                highlight_x = x;
+                highlight_y = y;
+            }
+        }
+
+    });
+
+    $("#colour_string").css("background-color","transparent");
+    $("#timer").css("background-color","transparent");
 
    });
 //ctx.scale(2,2)
