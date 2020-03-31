@@ -3,7 +3,7 @@ Ourplace is a collaborative canvas that can be used to relax with friends and le
 ## Using Docker To Deploy
 1. Follow the install guide for your system on the [Docker Website](https://docs.docker.com/install/).
 2. Clone this repository (into a sensible directory) with `git clone https://github.com/2400757n/ourplace_project.git`
-  - For now you also need to do `git checkout backend-working` because we haven't merged this into master yet.
+   - For now you also need to do `git checkout backend-working` because we haven't merged this into master yet.
 3. Run `docker-compose build ourplace` to create a docker image.
 4. Run `docker-compose up -d` and head to http://localhost:8000/
 
