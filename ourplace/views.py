@@ -60,6 +60,8 @@ def create_place(request):
             canvas = form.save(commit=False)
             canvas.owner = request.user
             canvas.save()
+            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
+            newcanvasaccess.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
         # else:
         #     print(form.errors)
@@ -123,7 +125,7 @@ def access_place(request, place_name_slug):
 
             # this generates a list of users that currently have access and stores it in the context dict under 'current_access'
             current_users_objects= CanvasAccess.objects.filter(canvas=canvas)
-            current_users =             []
+            current_users = []
             for use in current_users_objects:
                 current_users.append(use.user.username)
             context_dict['current_access'] = current_users
@@ -163,10 +165,15 @@ def view_place(request, place_name_slug):
 
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
-        # if public or owner, or on canvas acess
-        if request.user.is_authenticated and (canvas.visibility == Canvas.PUBLIC or request.user == canvas.owner or  CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists()):
+        # if the canvas is public and the user hasn't got a canvas access entry then make a canvas access entry for them
+        if canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
+            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
+            newcanvasaccess.save()
+        # if the user has access
+        if request.user.is_authenticated and CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
             context_dict['canvas'] = canvas
             context_dict['is_auth'] = True
+
         else:
             # tell the page that it isn't authorised
             context_dict['is_auth'] = False
