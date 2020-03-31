@@ -49,6 +49,11 @@ class Canvas(models.Model):
     #thumbnails:
     thumbnail = models.ImageField(upload_to='thumbnails', blank=True)
 
+    # public or private?
+    PUBLIC = 'O' # o for open
+    PRIVATE = 'C' # c for closed
+    VISIBILITY_CHOICES = [ (PUBLIC, 'Public'), (PRIVATE, 'Private')]
+    visibility = models.CharField(max_length=1, choices=VISIBILITY_CHOICES, default=PRIVATE)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -66,11 +71,11 @@ class Canvas(models.Model):
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    placeTime = models.DateTimeField(default=timezone.now)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    placeTime = models.DateTimeField(null=True)
+    
     class Meta:
         verbose_name_plural = 'CanvasAccess'
 
     def __str__(self):
-        return ("Canvas: " + str(self.canvas) + ", User: " + str(self.user) + ", Placetime: " + str(self.placeTime))
+        return ("Canvas: " + self.canvas.slug + ", User: " + self.user.username + ", Placetime: " + str(self.placeTime))

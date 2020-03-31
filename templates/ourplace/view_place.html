@@ -7,8 +7,9 @@
 {% if canvas %}
 <div class="row">
     <div class="col">
-        <h1 id="room_name_slug" style="visibility: hidden;">{{ canvas.slug }}</h1>
-        <h1 id="room_size" style="visibility: hidden;">{{ canvas.size }}</h1>
+      <h1>{{ canvas.title }} by <small class="text-muted">{{ canvas.owner }}</small></h1>
+        <h1 id="room_name_slug" style="display: none;">{{ canvas.slug }}</h1>
+        <h1 id="room_size" style="display: none;">{{ canvas.size }}</h1>
     </div>
 </div>
 <div class="row">
@@ -17,7 +18,6 @@
           <div id="div_canvas">
               <canvas id="canvas"></canvas>
           </div>
-
 
 
           <div id="colour_box">
