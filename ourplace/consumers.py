@@ -6,6 +6,7 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from ourplace.models import Canvas
 import static.constants.colours as colours
+from PIL import Image
 
 class CanvasConsumer(WebsocketConsumer):
     #groups = ["broadcast"]
@@ -55,7 +56,7 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = colour
-            #self.update_thumbnail(canvas, identical_copy)
+            # self.update_thumbnail(canvas, identical_copy)                    # this would call the thumbnail generator, if it worked
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             canvas.save()
@@ -98,4 +99,16 @@ class CanvasConsumer(WebsocketConsumer):
     
     def update_thumbnail(self, canvas, bitmap_array):
         print(canvas)
-        print(numpy.transpose(bitmap_array))
+        newarray = numpy.copy(numpy.transpose(bitmap_array)) #creating a copy of the bitmap array to work on 
+        print(newarray)
+        nestedlists=numpy.ndarray.tolist(newarray) #converting it to a nested list
+        for i in range(len(nestedlists)):
+            for j in range(len(nestedlists)):
+                print(nestedlists[i][j])
+                nestedlists[i][j] = (colours.palette1[nestedlists[i][j]][4:-1]).split(", ") #swappig each colour int with its rgb value 
+        print(nestedlists)
+        newarray=numpy.array(nestedlists) #converting back to numpy
+        print(newarray)
+        img = Image.fromarray(newarray, 'RGB') #converting to image
+        img.save('thumbnail.png')
+        img.show()
