@@ -64,22 +64,22 @@ function loadDoc() {
   }
 
 function setupTimer(){
-    
+
     var x = setInterval(function(){
         var now = new Date().getTime();
         timeLeft = unlockTime - now;
-    
+
         var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-    
+
         document.getElementById("timer").innerHTML = minutes+"m "+seconds + "s ";
-    
+
         if (timeLeft <= 0) {
             //clearInterval(x);
             document.getElementById("timer").innerHTML = "0m 0s";
-    
+
         }
-    
+
     }, 1000);
 }
 
@@ -152,7 +152,7 @@ function testCanvasDrawing(){
 
 function createDrawingFromArray(){
     var roomName = document.getElementById("room_name_slug").innerHTML;
-    var URL = "http://"+window.location.host+'/bitmap/'+roomName+'/';
+    var URL = window.location.protocol+ "//" +window.location.host+'/bitmap/'+roomName+'/';
     $.getJSON(URL, function(data){
         var imageArray = data['bitmap'];
         for(var x=0; x<imageArray.length;x++){
@@ -248,7 +248,7 @@ $(document).ready(function(){
 
     findScales();
     canvasZoom();
-    
+
 
     $("#colour_box").click(function(){
         $("#div_buttons").slideToggle("slow");

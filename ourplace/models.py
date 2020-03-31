@@ -46,6 +46,9 @@ class Canvas(models.Model):
     #for hit tracking
     views = models.IntegerField(default=0)
 
+    #thumbnails:
+    thumbnail = models.ImageField(upload_to='thumbnails', blank=True)
+
     # public or private?
     PUBLIC = 'O' # o for open
     PRIVATE = 'C' # c for closed

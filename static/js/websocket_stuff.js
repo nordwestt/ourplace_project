@@ -2,7 +2,15 @@
 var roomName =  document.getElementById("room_name_slug").innerHTML;
 testAddr = "ws://echo.websocket.org"
 
-realAddr = 'ws://' + window.location.host + '/ws/place/' + roomName + '/';
+var ws_protocol;
+
+if (window.location.protocol == "https:") {
+  ws_protocol = "wss://";
+} else {
+  ws_protocol = "ws://";
+}
+
+realAddr = ws_protocol + window.location.host + '/ws/place/' + roomName + '/';
 
 const canvasSocket = new WebSocket(realAddr);
 
@@ -25,4 +33,3 @@ function SendUpdate(x, y, colour){
         'colour':colour
     }));
 }
-
