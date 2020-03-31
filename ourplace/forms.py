@@ -25,22 +25,21 @@ class CanvasForm(forms.ModelForm):
     visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices = Canvas.VISIBILITY_CHOICES))
     class Meta:
         model = Canvas
-        exclude = ('slug', 'owner', 'url', 'bitmap', 'views')
-        #fields = ('title', 'size', 'colour_palette', 'cooldown', 'visibility')
+        fields = ('title', 'size', 'colour_palette', 'cooldown', 'visibility')
 
 class CanvasEditForm(forms.ModelForm):
     cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
     visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices=Canvas.VISIBILITY_CHOICES))
     class Meta:
         model = Canvas
-        exclude = ('slug', 'title', 'size', 'owner', 'colour_palette', 'url', 'views')
+        fields = ('cooldown', 'visibility')
 
 class CanvasAccessForm(forms.ModelForm):
     username = forms.CharField(label="Username", widget=forms.TextInput(attrs=class_attrs))
 
     class Meta:
         model = CanvasAccess
-        exclude = ('user', 'canvas', 'placeTime')
+        fields = ('username')
 
 
     def clean(self):
