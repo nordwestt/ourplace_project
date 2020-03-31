@@ -82,6 +82,9 @@ def edit_place(request, place_name_slug):
         if request.user == canvas.owner:
             # if everything is correct and the settings can be edited
 
+            # add the canvas title to the context dict
+            context_dict['canvas_title'] = canvas.title
+
             # deal with the form
             form = CanvasEditForm()
             context_dict['form'] = form
@@ -124,6 +127,9 @@ def access_place(request, place_name_slug):
             for use in current_users_objects:
                 current_users.append(use.user.username)
             context_dict['current_access'] = current_users
+
+            # add the canvas title to the context dict
+            context_dict['canvas_title'] = canvas.title
 
             # then we handle the form
             form = CanvasAccessForm()
