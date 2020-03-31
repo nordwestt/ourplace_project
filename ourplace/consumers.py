@@ -55,7 +55,7 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = 5
-            #update_thumbnail(canvas, identical_copy)
+            #self.update_thumbnail(canvas, identical_copy)
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             print("canvas updated!"+canvas.title)
@@ -97,4 +97,4 @@ class CanvasConsumer(WebsocketConsumer):
     
     def update_thumbnail(self, canvas, bitmap_array):
         print(canvas)
-        print(bitmap_array)
+        print(numpy.transpose(bitmap_array))

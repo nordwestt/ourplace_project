@@ -45,7 +45,7 @@ class Canvas(models.Model):
     views = models.IntegerField(default=0)
 
     #thumbnails:
-    thumbnail = models.IntegerField(upload_to='thumbnails')
+    thumbnail = models.ImageField(upload_to='thumbnails', blank=True)
 
 
     def save(self, *args, **kwargs):
