@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-
-
-# Create your models here.
-
+import pickle
+import base64
+import numpy
+from django.utils import timezone
 
 
 class UserProfile(models.Model):
@@ -42,7 +43,7 @@ class Canvas(models.Model):
     # cooldown in number of seconds
     cooldown = models.IntegerField(default=60)
 
-    #for hit tracking 
+    #for hit tracking
     views = models.IntegerField(default=0)
 
     # public or private?
@@ -54,19 +55,34 @@ class Canvas(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Canvas, self).save(*args, **kwargs)
+        if self.bitmap is None:
+            arr = numpy.zeros((self.size, self.size), dtype=numpy.ushort)
+            bitmap_bytes = base64.b64encode(pickle.dumps(arr))
+            self.bitmap = bitmap_bytes
+
     def __str__(self):
         return self.slug
-    
+
     class Meta:
         verbose_name_plural = 'Canvases'
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
+<<<<<<< HEAD
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     placeTime = models.DateTimeField(null=True)
     
+=======
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    placeTime = models.DateTimeField(default=timezone.now)
+
+>>>>>>> 9ce52d168426b65fa2abe8fa9ee3811977b61206
     class Meta:
         verbose_name_plural = 'CanvasAccess'
-    
+
     def __str__(self):
+<<<<<<< HEAD
         return ("Canvas: " + self.canvas.slug + ", User: " + self.user.username + ", Placetime: " + str(self.placeTime))
+=======
+        return ("Canvas: " + str(self.canvas) + ", User: " + str(self.user) + ", Placetime: " + str(self.placeTime))
+>>>>>>> 9ce52d168426b65fa2abe8fa9ee3811977b61206

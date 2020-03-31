@@ -1,5 +1,6 @@
 
 
+
 #div_main {
   float: left;
   clear: both;
@@ -7,8 +8,6 @@
 
 #div_canvas {
   box-shadow: 10px 10px 10px grey;
-  margin-top: 18px;
-  margin-left: 120px;
   image-rendering: -moz-crisp-edges; /* Firefox for android 4 < version < 65 */
   image-rendering: crisp-edges; /* Acts as fall back for when pixelated doesn't work. */
   image-rendering: pixelated;
@@ -30,17 +29,18 @@
   position: fixed;
   width: 24vh;
   height: 4vh;
-  margin-left: 2%;
+  margin-left: 0%;
 
 }
 
-.row{
+.rowx{
   float: left;
   height: 25%;
   width: 100%;
+  margin:auto;
 }
 
-.column{
+.columnx{
   float: left;
   width:25%;
   height:100%;
@@ -50,19 +50,19 @@
   position: absolute;
   margin: auto;
   margin-left: 10%;
-  margin-top: 3%;
   color: whitesmoke;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   outline-style:none;
+  background-color: transparent;
 }
 
 #timer{
   margin: auto;
   float:right;
-  margin-top: 3%;
   margin-right: 10%;
   color: whitesmoke;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  background-color: transparent;
 }
 
 #selected_colour{

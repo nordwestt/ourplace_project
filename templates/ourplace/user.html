@@ -1,1 +1,20 @@
 {% extends "ourplace/base.html" %}
+{% load ourplace_template_tags %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col border-bottom">
+        <h1>{{target_user.username}}</h>
+    </div>
+</div>
+<div class="row mt-3 justify-content-between">
+    <div class="col-3">
+        <h3>User Stats</h3>
+    </div>
+    <div class="col-3 list-group">
+      <div class="list-group-item">Total Views: {{ target_user_total_views }}</div>
+      <div class="list-group-item">Number of places: {{ num_target_users_places }}</div>
+    </div>
+</div>
+{% display_carousel target_users_places False %}
+{% endblock %}

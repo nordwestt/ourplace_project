@@ -40,7 +40,7 @@ class CanvasConsumer(WebsocketConsumer):
         )
 
         print("x, y: "+str(x)+', '+str(y))
-        print("colour: "+colour)
+        print("colour: "+str(colour))
 
 
     def canvas_update(self, event):
@@ -53,9 +53,11 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_array = pickle.loads(bitmap_bytes)
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
-            identical_copy[x][y] = 5
+            identical_copy[x][y] = colour
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
+            canvas.save()
+            print("canvas updated!"+canvas.title)
         except Canvas.DoesNotExist: 
             print("Canvas not found...")
 
@@ -87,7 +89,7 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_bytes = base64.b64decode(canvas.bitmap)
             bitmap_array = pickle.loads(bitmap_bytes)
             response['bitmap']   = bitmap_bytes
-        except Canvas.DoesNotExist: 
+        except Canvas.DoesNotExist:
             raise Http404("Place not found..")
 
         return HttpResponse(json.dumps(response), content_type="application/json")

@@ -1,10 +1,10 @@
-<div class="row">
+<div class="row pt-3">
   {% for place in place_list %}
-    <div class="col-md-4">
+    <div class="col-md-3">
       <a href="{% url 'ourplace:view_place' place.slug %}">
         <h3>{{ place.title }}</h3>
-        {% if include_author %}<div class="text-muted">{{ place.owner }}</div>{% endif %}
-        <img src="{{ place.bitmap }}" />
+        {% if include_author %}<div class="text-muted"><a href="{% url 'ourplace:user' place.owner %}">{{ place.owner }}</a></div>{% endif %}
+        <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" />
         <p>
           {{ place.views }} views
         </p>

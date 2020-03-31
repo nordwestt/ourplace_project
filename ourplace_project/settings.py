@@ -143,11 +143,14 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # Channel layers
 # http://channels.readthedocs.org/en/latest/concepts.html#what-is-a-channel
 
+# Needed for redis to work in docker
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(REDIS_HOST, 6379)],
         },
         #"ROUTING": "ourplace.routing.channel_routing",
     },
