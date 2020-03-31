@@ -68,21 +68,11 @@ class Canvas(models.Model):
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
-<<<<<<< HEAD
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     placeTime = models.DateTimeField(null=True)
     
-=======
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    placeTime = models.DateTimeField(default=timezone.now)
-
->>>>>>> 9ce52d168426b65fa2abe8fa9ee3811977b61206
     class Meta:
         verbose_name_plural = 'CanvasAccess'
 
     def __str__(self):
-<<<<<<< HEAD
         return ("Canvas: " + self.canvas.slug + ", User: " + self.user.username + ", Placetime: " + str(self.placeTime))
-=======
-        return ("Canvas: " + str(self.canvas) + ", User: " + str(self.user) + ", Placetime: " + str(self.placeTime))
->>>>>>> 9ce52d168426b65fa2abe8fa9ee3811977b61206

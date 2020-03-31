@@ -11,18 +11,11 @@ import json
 
 import static.constants.colours as palettes
 
-<<<<<<< HEAD
+
 context_dict = {}
-
-from ourplace.models import Canvas, CanvasAccess
+from django.contrib.auth.models import User
+from ourplace.models import Canvas, UserProfile, CanvasAccess
 from ourplace.forms import CanvasForm, CanvasEditForm, CanvasAccessForm
-
-from django.contrib.auth.models import User
-=======
-from django.contrib.auth.models import User
-from ourplace.models import Canvas, UserProfile
-from ourplace.forms import CanvasForm
->>>>>>> 9ce52d168426b65fa2abe8fa9ee3811977b61206
 
 def index(request):
     response = render(request, 'ourplace/index.html')
