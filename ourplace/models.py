@@ -45,6 +45,11 @@ class Canvas(models.Model):
     #for hit tracking 
     views = models.IntegerField(default=0)
 
+    # public or private?
+    PUBLIC = 'O' # o for open
+    PRIVATE = 'C' # c for closed
+    VISIBILITY_CHOICES = [ (PUBLIC, 'Public'), (PRIVATE, 'Private')]
+    visibility = models.CharField(max_length=1, choices=VISIBILITY_CHOICES, default=PRIVATE)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -57,11 +62,11 @@ class Canvas(models.Model):
 
 class CanvasAccess(models.Model):
     canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    placeTime = models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    placeTime = models.DateTimeField(null=True)
     
     class Meta:
         verbose_name_plural = 'CanvasAccess'
     
     def __str__(self):
-        return ("Canvas: " + self.canvas + ", User: " + self.user.username + ", Placetime: " + self.placeTime)
+        return ("Canvas: " + self.canvas.slug + ", User: " + self.user.username + ", Placetime: " + str(self.placeTime))

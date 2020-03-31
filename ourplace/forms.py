@@ -22,10 +22,31 @@ class CanvasForm(forms.ModelForm):
     size = forms.IntegerField(initial=10, label="Size", widget=forms.NumberInput(attrs=class_attrs))
     colour_palette = forms.IntegerField(initial=0, label="Colour Palette", widget=forms.NumberInput(attrs=class_attrs))
     cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
+    visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices = Canvas.VISIBILITY_CHOICES))
     class Meta:
         model = Canvas
         exclude = ('slug', 'owner', 'url', 'views',)
 
+class CanvasEditForm(forms.ModelForm):
+    cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
+    visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices=Canvas.VISIBILITY_CHOICES))
+    class Meta:
+        model = Canvas
+        exclude = ('slug', 'title', 'size', 'owner', 'colour_palette', 'url', 'views')
+
+class CanvasAccessForm(forms.ModelForm):
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs=class_attrs))
+
+    class Meta:
+        model = CanvasAccess
+        exclude = ('user', 'canvas', 'placeTime')
+
+
+    def clean(self):
+        cd = self.cleaned_data
+        if not User.objects.filter(username=cd.get('username')).exists:
+            self.add_error('username', 'User not found')
+        return cd
 
 # class CategoryForm(forms.ModelForm):
 #     name = forms.CharField(max_length=Category.NAME_MAX_LENGTH,
