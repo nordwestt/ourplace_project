@@ -1,7 +1,7 @@
 # Ourplace - A Collaborative Canvas
 Ourplace is a collaborative canvas that can be used to relax with friends and let our your creative spirit.
 ## Using Docker To Deploy
-1. Follow the install guide for your system on the [Docker Website](https://docs.docker.com/install/).
+1. Follow the install guide for your system on the [Docker Website](https://docs.docker.com/install/), if you are running Linux you will also need to install [Docker Compose](https://docs.docker.com/compose/install/).
 2. Clone this repository (into a sensible directory) with `git clone https://github.com/2400757n/ourplace_project.git`
    - For now you also need to do `git checkout backend-working` because we haven't merged this into master yet.
 3. Run `docker-compose build ourplace` to create a docker image.
@@ -14,3 +14,6 @@ If you are running windows then you can either:
 1. Use Docker (it _just_ works)
 2. Install Ubuntu WSL from the [Microsoft Store](https://www.microsoft.com/en-gb/p/ubuntu/9nblggh4msv6) and `apt install redis-server` then `sudo service redis-server start`.
 3. Install [Memurai](https://www.memurai.com/get-memurai) and follow the setup.
+
+## Acknowledgements
+This project would not work without [Bootstrap](https://getbootstrap.com/) - in particular the Yeti them from [Bootswatch](https://bootswatch.com/), [JQuery](https://jquery.com/) and [Django](https://www.djangoproject.com/).
