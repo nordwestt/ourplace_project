@@ -50,6 +50,18 @@ ctx.width = CANVAS_WIDTH;
 var colour_value = "rgb(0, 0, 0)";
 var colour_id = 16;
 
+function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var data = JSON.parse(this.responseText);
+        var bitmap = data['bitmap'];
+       document.getElementById("demo").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "ajax_info.txt", true);
+    xhttp.send();
+  }
 
 function setupTimer(){
     
@@ -106,8 +118,10 @@ function drawUpdatePixel(x, y, colour_id){
 }
 
 function drawPixel(x, y, colour){
-    ctx.fillStyle = colour;
-    ctx.fillRect(x*3, y*3,3,3);
+    if(x>0&&y>0&&x<real_canvas_width-1&&y<real_canvas_height-1){
+        ctx.fillStyle = colour;
+        ctx.fillRect(x*3, y*3,3,3);
+    }
 }
 
 function colourIdToVal(id){
@@ -136,15 +150,22 @@ function testCanvasDrawing(){
     ctx.putImageData(imgData, 0, 0);
 }
 
-function createDrawingFromArray(imageArray, x, y){
-    var roomName = document.getElementById("room_name").innerHTML;
+function createDrawingFromArray(){
+    var roomName = document.getElementById("room_name_slug").innerHTML;
     var URL = "http://"+window.location.host+'/bitmap/'+roomName+'/';
     $.getJSON(URL, function(data){
-        alert("We got stuff! :"+data['bitmap'][0]);
+        var imageArray = data['bitmap'];
+        for(var x=0; x<imageArray.length;x++){
+            for(var y=0; y<imageArray[x].length; y++){
+                var colour_id = imageArray[x][y];
+                drawPixel(x,y,colourIdToVal(colour_id));
+            }
+        }
+
     })
-    var imgData = ctx.createImageData(x, y);
-    imgData.data = imageArray;
-    ctx.putImageData(imgData, 20, 30);
+    //var imgData = ctx.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+    //imgData.data = imageArray;
+    //ctx.putImageData(imgData, 20, 30);
 }
 
 
@@ -160,8 +181,6 @@ function canvasClick(event){
     var bounds = event.target.getBoundingClientRect();
     var coordX = event.clientX-bounds.left;
     var coordY = event.clientY-bounds.top;
-    var x = event.pageX-div_canvas.offsetLeft;
-    var y = event.pageY-div_canvas.offsetTop;
 
     if(timeLeft<=0){
         if(confirm("You are about to paint the canvas")){
@@ -175,7 +194,9 @@ function canvasClick(event){
 
 
 
-testCanvasDrawing();
+
+
+//testCanvasDrawing();
 
 
 ctx.lineWidth = 5;
@@ -205,7 +226,10 @@ function canvasZoom(){
     $('#div_canvas').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
 }
 
-
+var highlight_x = -1;
+var highlight_y = -1;
+var highlight_color = "rgb(104,151,217)";
+var old_colour = "rgb(255,255,255)";
 
 $(document).ready(function(){
     $('#div_canvas').css("height", CANVAS_HEIGHT);
@@ -236,7 +260,58 @@ $(document).ready(function(){
         $("#colour_box").draggable({containment: "window", scroll: false });
      });
 
+    createDrawingFromArray();
 
+
+    $("#div_canvas").mousemove(function(){
+
+        $("p").css("background-color", "yellow");
+        var bounds = event.target.getBoundingClientRect();
+        var x = event.clientX-bounds.left;
+        var y = event.clientY-bounds.top;
+        x = x/zoomScale;
+        y = y/zoomScale;
+
+        var old_x_mod = highlight_x-(highlight_x%3);
+        var old_y_mod = highlight_y-(highlight_y%3);
+
+        var new_x_mod = x-(x%3);
+        var new_y_mod = y-(y%3);
+
+
+        // check if inside border of canvas
+        if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
+
+            //if new position
+            if(new_x_mod!=old_x_mod||new_y_mod!=old_y_mod){
+                //get colour at current position
+                colour_data = ctx.getImageData(new_x_mod, new_y_mod, 1, 1).data;
+
+                //draw highlight over
+                drawPixel(new_x_mod/3,new_y_mod/3,highlight_color);
+
+                //draw old colour at old position
+                if(highlight_x!=-1&&highlight_y!=-1){
+                    my_data = ctx.getImageData(old_x_mod, old_y_mod, 1, 1).data;
+                    colour_check = "rgb("+my_data[0]+","+my_data[1]+","+my_data[2]+")";
+                    if(colour_check==highlight_color){
+                        drawPixel(old_x_mod/3,old_y_mod/3,old_colour);
+                    }
+                }
+
+                //update old_colour to be colour before current highlight
+                old_colour = "rgb("+colour_data[0]+","+colour_data[1]+","+colour_data[2]+")";
+                //alert(new_x_mod/3+", "+new_y_mod/3);
+                //alert("x and y: "+x+", "+y);
+                highlight_x = x;
+                highlight_y = y;
+            }
+        }
+
+    });
+
+    $("#colour_string").css("background-color","transparent");
+    $("#timer").css("background-color","transparent");
 
    });
 //ctx.scale(2,2)

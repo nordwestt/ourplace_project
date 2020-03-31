@@ -54,12 +54,13 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_array = pickle.loads(bitmap_bytes)
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
-            identical_copy[x][y] = 5
+            identical_copy[x][y] = colour
             #self.update_thumbnail(canvas, identical_copy)
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
+            canvas.save()
             print("canvas updated!"+canvas.title)
-        except Canvas.DoesNotExist:
+        except Canvas.DoesNotExist: 
             print("Canvas not found...")
 
         # Send message to WebSocket
