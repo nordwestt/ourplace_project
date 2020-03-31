@@ -8,6 +8,7 @@ import pickle
 import base64
 import numpy
 import json
+from itertools import zip_longest
 
 import static.constants.colours as palettes
 
@@ -67,10 +68,7 @@ def create_place(request):
         #     print(form.errors)
 
     # This is needed to allow the form to automagically display in two columns
-    if len(list(form)) % 2 == 1:
-        list(form).append(None)
-
-    context_dict['form'] = zip(*[iter(form)]*2)
+    context_dict['form'] = zip_longest(*[iter(form)]*2)
 
     return render(request, 'ourplace/create_place.html', context=context_dict)
 
