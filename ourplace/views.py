@@ -37,7 +37,16 @@ def user(request, username):
 
     try:
         target_user = User.objects.get(username=username)
-        context_dict['target_users_places'] = Canvas.objects.filter(owner=target_user).order_by('-views')
+        # the target user's public places
+        context_dict['target_users_places'] = Canvas.objects.filter(owner=target_user, visibility=Canvas.PUBLIC).order_by('-views')
+        # find the target user's private places that the currently logged in user has access to
+        private_canvases= Canvas.objects.filter(owner=target_user, visibility=Canvas.PRIVATE, ).order_by('-views')
+        private_canvases_with_access = []
+        for canvas in private_canvases:
+            if CanvasAccess.objects.filter(user = request.user, canvas=canvas):
+                private_canvases_with_access.append(canvas)
+        context_dict['target_users_private_places_with_current_user_access'] = private_canvases_with_access
+
         context_dict['num_target_users_places'] = len(context_dict['target_users_places'])
         context_dict['target_user_total_views'] = context_dict['target_users_places'].aggregate(Sum('views'))['views__sum']
         context_dict['target_user'] = target_user
@@ -61,6 +70,8 @@ def create_place(request):
             canvas = form.save(commit=False)
             canvas.owner = request.user
             canvas.save()
+            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
+            newcanvasaccess.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
         # else:
         #     print(form.errors)
@@ -122,7 +133,7 @@ def access_place(request, place_name_slug):
 
             # this generates a list of users that currently have access and stores it in the context dict under 'current_access'
             current_users_objects= CanvasAccess.objects.filter(canvas=canvas)
-            current_users =             []
+            current_users = []
             for use in current_users_objects:
                 current_users.append(use.user.username)
             context_dict['current_access'] = current_users
@@ -141,10 +152,10 @@ def access_place(request, place_name_slug):
                         newuser = User.objects.get(username=form.cleaned_data['username'])
                         # if the username and canvas mapping don't already exist then make a new one, if it already exists then delete it
                         if not CanvasAccess.objects.filter(user=newuser).filter(canvas=canvas).exists():
-                            canvasaccess = form.save(commit=False)
-                            canvasaccess.user = newuser
-                            canvasaccess.canvas = canvas
-                            canvasaccess.save()
+                            newcanvasaccess = form.save(commit=False)
+                            newcanvasaccess.user = newuser
+                            newcanvasaccess.canvas = canvas
+                            newcanvasaccess.save()
                         else:
                             CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
                     else:
@@ -162,10 +173,15 @@ def view_place(request, place_name_slug):
 
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
-        # if public or owner, or on canvas acess
-        if request.user.is_authenticated and (canvas.visibility == Canvas.PUBLIC or request.user == canvas.owner or  CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists()):
+        # if the canvas is public and the user hasn't got a canvas access entry then make a canvas access entry for them
+        if canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
+            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
+            newcanvasaccess.save()
+        # if the user has access
+        if request.user.is_authenticated and CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
             context_dict['canvas'] = canvas
             context_dict['is_auth'] = True
+
         else:
             # tell the page that it isn't authorised
             context_dict['is_auth'] = False
@@ -195,10 +211,18 @@ def search(request):
 
     try:
         if (request.user.is_authenticated):
+            # find all the places the user owns
             context_dict['users_places'] = Canvas.objects.filter(owner=request.user)
+            #find all the places the user has access to
+            private_canvas_accesses = CanvasAccess.objects.filter(user=request.user)
+            private_canvases = []
+            for access in private_canvas_accesses:
+                private_canvases.append(access.canvas)
+            context_dict['private_places_with_user_access'] = private_canvases
+            # and the length
             context_dict['num_user_places'] = len(context_dict['users_places'])
 
-        context_dict['popular_places'] = Canvas.objects.order_by('-views')[:8]
+        context_dict['popular_places'] = Canvas.objects.filter(visibility=Canvas.PUBLIC).order_by('-views')[:8]
     except Canvas.DoesNotExist:
         context_dict['user_places'] = {}
     return render(request, 'ourplace/search.html', context=context_dict)
