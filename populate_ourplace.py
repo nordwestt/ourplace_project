@@ -66,10 +66,8 @@ def populate():
         c.colour_palette = canvas['colour_palette']
         c.save()
         if 'image' in canvas:
-            imageToCanvas(c,canvas['image'])
+            imageToCanvas(c,imageLink=canvas['image'])
             c.save()
-            cc = CanvasConsumer
-            CanvasConsumer.make_thumbnail(cc, c)
 
     #setting up access rights by finding the correct canvas objects and the correct users then using them to create a new entry
     for i in canvasaccess:
@@ -87,7 +85,7 @@ def populate():
     for u in UserProfile.objects.all():
         print(str(u))
 
-def imageToCanvas(canvas, imageLink):
+def imageToCanvas(canvas, imageLink=False):
 
     #filling out a blank canvas
     palette = [] # starting by making a palette 
@@ -98,9 +96,12 @@ def imageToCanvas(canvas, imageLink):
         palette.append(colourtuple)# assign it to the list
         indexfinder[colourtuple] = i #and assign it to the dict with its index
     
-    #now we have our palette we can open the image
-    im=Image.open(imageLink)
-    im=im.convert('RGB')
+    if imageLink==False:
+        im=Image.new('RGB', (canvas.size, canvas.size), (255,255,255))
+    else:
+        #now we have our palette we can open the image
+        im=Image.open(imageLink)
+        im=im.convert('RGB')
     width, height = im.size
     #need to set up the array to put the pixels in to
     nl = [[0 for i in range(width)] for i in range(height)]

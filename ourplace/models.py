@@ -7,6 +7,10 @@ import base64
 import numpy
 from django.utils import timezone
 from ourplace.storage import OverwriteStorage
+from PIL import Image
+import static.constants.colours as colours
+from io import BytesIO
+from django.core.files import File
 
 
 class UserProfile(models.Model):
@@ -61,9 +65,27 @@ class Canvas(models.Model):
             arr = numpy.zeros((self.size, self.size), dtype=numpy.ushort)
             bitmap_bytes = base64.b64encode(pickle.dumps(arr))
             self.bitmap = bitmap_bytes
+        self.createthumbnail()
         super(Canvas, self).save(*args, **kwargs)
         CanvasAccess.objects.get_or_create(user=self.owner,canvas=self)
-        
+    
+    def createthumbnail(self):
+        bitmap_bytes = base64.b64decode(self.bitmap)
+        bitmap_array = pickle.loads(bitmap_bytes)
+        im = Image.new("RGB", (self.size, self.size), 0) #creating a new image to start with
+        pixels=im.load() #loading the pixels in to memory
+        nestedlists=numpy.ndarray.tolist(bitmap_array) #converting the numpy array to a nested list
+        for i in range(len(nestedlists)): #iterating through the array looking at each pixel individually
+            for j in range(len(nestedlists)):
+                if nestedlists[i][j] ==16: #a bodge fix for when the colour black is stored at 16 rather than 15 for some reason.
+                    colourlist =colours.palette1[15][4:-1].split(", ") #finding the correct colour for this pizxel
+                else:
+                    colourlist =colours.palette1[nestedlists[i][j]][4:-1].split(", ") #finding the correct colour for this pizxel
+                pixels[i,j]=(int(colourlist[0]), int(colourlist[1]), int(colourlist[2]))#writing that to the image 
+        im = im.resize((255,255), resample=Image.NEAREST)
+        blob=BytesIO()
+        im.save(blob, 'PNG')
+        self.thumbnail.save(self.slug+".png", File(blob), save=False)
 
     def __str__(self):
         return self.slug
