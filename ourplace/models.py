@@ -6,6 +6,7 @@ import pickle
 import base64
 import numpy
 from django.utils import timezone
+from ourplace.storage import OverwriteStorage
 
 
 class UserProfile(models.Model):
@@ -46,7 +47,7 @@ class Canvas(models.Model):
     views = models.IntegerField(default=0)
 
     #thumbnails:
-    thumbnail = models.ImageField(upload_to='thumbnails', blank=True)
+    thumbnail = models.ImageField(upload_to='thumbnails', storage=OverwriteStorage(), blank=True)
 
     # public or private?
     PUBLIC = 'O' # o for open
