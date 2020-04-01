@@ -107,7 +107,7 @@ def edit_place(request, place_name_slug):
                     canvas = Canvas.objects.get(slug=place_name_slug)
                     canvas.cooldown = form.cleaned_data['cooldown']
                     canvas.visibility = form.cleaned_data['visibility']
-                    canvas.save(['cooldown', 'visibility'])
+                    canvas.save(force_update=True)
                     return redirect(reverse('ourplace:edit_place', args=[canvas.slug]))
 
                 else:
