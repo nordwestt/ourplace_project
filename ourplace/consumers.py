@@ -58,7 +58,6 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = colour
-            self.update_thumbnail(canvas, identical_copy)                    # calls the thumbnail generator
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             canvas.save()
@@ -98,27 +97,3 @@ class CanvasConsumer(WebsocketConsumer):
             raise Http404("Place not found..")
 
         return HttpResponse(json.dumps(response), content_type="application/json")
-    
-    def update_thumbnail(self, canvas, bitmap_array):
-
-        im = Image.new("RGB", (canvas.size, canvas.size), 0) #creating a new image to start with
-        pixels=im.load() #loading the pixels in to memory
-        nestedlists=numpy.ndarray.tolist(bitmap_array) #converting the numpy array to a nested list
-        for i in range(len(nestedlists)): #iterating through the array looking at each pixel individually
-            for j in range(len(nestedlists)):
-                if nestedlists[i][j] ==16: #a bodge fix for when the colour black is stored at 16 rather than 15 for some reason.
-                    colourlist =colours.palette1[15][4:-1].split(", ") #finding the correct colour for this pizxel
-                else:
-                    colourlist =colours.palette1[nestedlists[i][j]][4:-1].split(", ") #finding the correct colour for this pizxel
-                pixels[i,j]=(int(colourlist[0]), int(colourlist[1]), int(colourlist[2]))#writing that to the image 
-        im = im.resize((255,255), resample=Image.NEAREST)
-        blob=BytesIO()
-        im.save(blob, 'PNG')
-        canvas.thumbnail.save(canvas.slug+".png", File(blob), save=False)
-    
-
-    def make_thumbnail(self, canvas):
-        bitmap_bytes = base64.b64decode(canvas.bitmap)
-        bitmap_array = pickle.loads(bitmap_bytes)
-        self.update_thumbnail(self, canvas, bitmap_array)
-        canvas.save()
