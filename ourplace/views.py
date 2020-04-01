@@ -18,11 +18,13 @@ from ourplace.models import Canvas, UserProfile, CanvasAccess
 from ourplace.forms import CanvasForm, CanvasEditForm, CanvasAccessForm
 
 def index(request):
-    response = render(request, 'ourplace/index.html')
+    context_dict = {}
+    context_dict["popular_canvas"] = Canvas.objects.filter(visibility=Canvas.PUBLIC).order_by('-views')[:1].get()
+    response = render(request, 'ourplace/index.html', context=context_dict)
     return response
 
 def about(request):
-    return render(request, 'ourplace/about.html', context=context_dict)
+    return render(request, 'ourplace/about.html')
 
 def faq(request):
     return render(request, 'ourplace/faq.html')
@@ -100,12 +102,13 @@ def edit_place(request, place_name_slug):
 
             if request.method == 'POST':
                 form = CanvasEditForm(request.POST)
-
+                
                 if form.is_valid():
-                    canvasquery = Canvas.objects.filter(slug=place_name_slug)
-                    canvasquery.update(cooldown=form.cleaned_data['cooldown'])
-                    canvasquery.update(visibility=form.cleaned_data['visibility'])
-                    return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
+                    canvas = Canvas.objects.get(slug=place_name_slug)
+                    canvas.cooldown = form.cleaned_data['cooldown']
+                    canvas.visibility = form.cleaned_data['visibility']
+                    canvas.save(['cooldown', 'visibility'])
+                    return redirect(reverse('ourplace:edit_place', args=[canvas.slug]))
 
                 else:
                     print(form.errors)
@@ -159,13 +162,14 @@ def access_place(request, place_name_slug):
                             newcanvasaccess.user = newuser
                             newcanvasaccess.canvas = canvas
                             newcanvasaccess.save()
+                            return redirect(reverse('ourplace:access_place', args=[canvas.slug]))
                         else:
                             if request.user == newuser:
                                 context_dict['form_error'] = "You cannot remove your own access to a canvas"
                             else:
                                 CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
-                    else:
-                        context_dict['form_error'] = "User not found."
+                    # else:
+                    #     context_dict['form_error'] = "User not found."
                 else:
                     print(form.errors)
         else:
@@ -222,7 +226,8 @@ def search(request):
             private_canvas_accesses = CanvasAccess.objects.filter(user=request.user)
             private_canvases = []
             for access in private_canvas_accesses:
-                private_canvases.append(access.canvas)
+                if access.canvas.owner != request.user:
+                    private_canvases.append(access.canvas)
             context_dict['private_places_with_user_access'] = private_canvases
             # and the length
             context_dict['num_user_places'] = len(context_dict['users_places'])
