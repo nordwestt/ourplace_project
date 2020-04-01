@@ -8,6 +8,7 @@ import django
 django.setup()
 from ourplace.models import Canvas, UserProfile, CanvasAccess
 from django.contrib.auth.models import User
+from django.utils import timezone
 def populate():
     #Start by creating lists of dictionaries of each entry required
 
@@ -19,9 +20,9 @@ def populate():
     ]
 
     canvases = [
-        {'title':'The Long Table', 'size':50, 'owner':'Christ', 'colour_palette':1,},
-        {'title':'Earth', 'size':100, 'owner':'God', 'colour_palette':2},
-        {'title':'Heaven', 'size':200, 'owner':'God','colour_palette':0}
+        {'title':'The Long Table', 'size':50, 'owner':'Christ', 'colour_palette':1, 'visibility':'O'},
+        {'title':'Earth', 'size':100, 'owner':'God', 'colour_palette':1, 'visibility':'O'},
+        {'title':'Heaven', 'size':200, 'owner':'God','colour_palette':0, 'visibility':'C'}
     ]
 
     canvasaccess = [
@@ -36,6 +37,10 @@ def populate():
     ]
     # adding our new items in to the databases
     # starting by deleting all the existing objets so we don't have any issues with unique fields
+    for o in CanvasAccess.objects.all():
+        o.delete()
+    for o in Canvas.objects.all():
+        o.delete()
     for o in UserProfile.objects.all():
         o.user.delete()
     #adding new users by creating new user objects, then using them to create new userprofile objects
@@ -47,16 +52,16 @@ def populate():
     #creating new blank canvases
     for canvas in canvases:
         u = User.objects.get_or_create(username=canvas['owner'])[0]
-        c = Canvas.objects.get_or_create(title=canvas['title'], owner=u, size=canvas['size'])[0]
+        c = Canvas.objects.get_or_create(title=canvas['title'], owner=u, size=canvas['size'], visibility=canvas['visibility'])[0]
         c.colour_palette = canvas['colour_palette']
         c.save()
 
     #setting up access rights by finding the correct canvas objects and the correct users then using them to create a new entry
     for i in canvasaccess:
         u = User.objects.get(username=i['user'])
-        up = UserProfile.objects.get(user=u)
         c = Canvas.objects.get(title=i['canvas'])
-        ca = CanvasAccess(user=up,canvas=c)
+        ca = CanvasAccess(user=u,canvas=c, placeTime=timezone.now())
+        print(ca)
         ca.save()
 
 
