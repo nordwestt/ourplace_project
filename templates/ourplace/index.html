@@ -13,12 +13,17 @@
 {% block body_block %}
   <div class="row">
       <div class="col">
-          <h1 class="text-break">{{ popular_canvas.title }} by {{ popular_canvas.owner}} <small class="text-muted">{{ popular_canvas.views }} views</small></h1>
+          <h1>Most Viewed Place: </h1>
       </div>
   </div>
   <div class="row">
       <div class="col">
-          <img src="{{ MEDIA_URL }}{{ popular_canvas.thumbnail }}" class="w-100 crisp_edges" />
+          <h3 class="text-break">{{ popular_canvas.title }} by {{ popular_canvas.owner}} <small class="text-muted">{{ popular_canvas.views }} views</small></h3>
+      </div>
+  </div>
+  <div class="row flex-fill">
+      <div class="col h-100">
+          <img src="{{ MEDIA_URL }}{{ popular_canvas.thumbnail }}" class="h-100 crisp_edges" />
       </div>
   </div>
 {% endblock %}

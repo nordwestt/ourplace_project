@@ -64,8 +64,16 @@
     </div>
 </div>
 {% elif canvas_thumbnail %}
-<h1 class="text-break">{{ canvas_thumbnail.title }}<small class="text-muted"> by {{ canvas_thumbnail.owner }}</small></h1>
-<img src="{{ MEDIA_URL }}{{ canvas_thumbnail.thumbnail }}" class="w-100 crisp_edges border" />
+<div class="row">
+    <div class="col">
+        <h1 class="text-break">{{ canvas_thumbnail.title }}<small class="text-muted"> by {{ canvas_thumbnail.owner }}</small></h1>
+    </div>
+</div>
+<div class="row flex-fill">
+    <div class="col h-100">
+        <img src="{{ MEDIA_URL }}{{ canvas_thumbnail.thumbnail }}" class="h-100 crisp_edges" />
+    </div>
+</div>
 {% else %}
 <h1>Canvas not found :(</h1>
 {% endif %}
