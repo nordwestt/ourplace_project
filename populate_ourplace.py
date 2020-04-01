@@ -28,7 +28,7 @@ def populate():
         {'username':'Thomas', 'email':'thomas@yahoo.com', 'password':'securepassword'},
     ]
 
-    canvases = [ #if you want to add another image put it in the sime directory as this file, then add 'image':'image.png' to the canvas. Make sure the input image is the right size
+    canvases = [ #if you want to add another image put it in the population images directory then add 'image':'image.png' to the canvas. Make sure the input image is the right size
         {'title':'The Long Table', 'size':50, 'owner':'Christ', 'colour_palette':1, 'visibility':'O','views':10},
         {'title':'The Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong Table', 'size':50, 'owner':'Moses', 'colour_palette':1, 'visibility':'O','views':5},
         {'title':'Earth', 'size':100, 'owner':'God', 'colour_palette':1, 'visibility':'O','views':20},
@@ -66,7 +66,7 @@ def populate():
         c.colour_palette = canvas['colour_palette']
         c.save()
         if 'image' in canvas:
-            imageToCanvas(c,imageLink=canvas['image'])
+            imageToCanvas(c,canvas['image'])
             c.save()
 
     #setting up access rights by finding the correct canvas objects and the correct users then using them to create a new entry
@@ -85,7 +85,7 @@ def populate():
     for u in UserProfile.objects.all():
         print(str(u))
 
-def imageToCanvas(canvas, imageLink=False):
+def imageToCanvas(canvas, imageLink):
 
     #filling out a blank canvas
     palette = [] # starting by making a palette 
@@ -96,12 +96,11 @@ def imageToCanvas(canvas, imageLink=False):
         palette.append(colourtuple)# assign it to the list
         indexfinder[colourtuple] = i #and assign it to the dict with its index
     
-    if imageLink==False:
-        im=Image.new('RGB', (canvas.size, canvas.size), (255,255,255))
-    else:
-        #now we have our palette we can open the image
-        im=Image.open(imageLink)
-        im=im.convert('RGB')
+    
+    #now we have our palette we can open the image
+    imageLocation = os.path.join("population images", imageLink)
+    im=Image.open(imageLocation)
+    im=im.convert('RGB')
     width, height = im.size
     #need to set up the array to put the pixels in to
     nl = [[0 for i in range(width)] for i in range(height)]

@@ -144,12 +144,14 @@ STATIC_URL = '/static/'
 # Needed for redis to work in docker
 REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 
+redis_server = ("SG-ourplace-32809.servers.mongodirector.com", 6379)
+
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_HOST, 6379)],
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        #"CONFIG": {
+        #    "hosts": [(REDIS_HOST, 6379)],
+        #},
         #"ROUTING": "ourplace.routing.channel_routing",
     },
 }
