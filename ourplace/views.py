@@ -178,8 +178,12 @@ def view_place(request, place_name_slug):
 
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
+
+        if not request.user.is_authenticated:
+            context_dict['is_auth'] = False
+            # in theory
         # if the canvas is public and the user hasn't got a canvas access entry then make a canvas access entry for them
-        if canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
+        elif canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
             newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
             newcanvasaccess.save()
         # if the user has access
