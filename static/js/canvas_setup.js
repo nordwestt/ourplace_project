@@ -225,7 +225,8 @@ function canvasZoom(){
 
 
     $('#div_canvas').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
-    window.scrollTo(clientX,clientY);
+
+    document.getElementById("canvas_row").scrollTo((highlight_x-(highlight_x%3))*zoomScale-(6*zoomScale), (highlight_y-(highlight_y%3))*zoomScale-(6*zoomScale));
 }
 
 var highlight_x = -1;
