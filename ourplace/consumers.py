@@ -118,9 +118,7 @@ class CanvasConsumer(WebsocketConsumer):
     
 
     def make_thumbnail(self, canvas):
-        print(self, canvas)
         bitmap_bytes = base64.b64decode(canvas.bitmap)
         bitmap_array = pickle.loads(bitmap_bytes)
-        print(bitmap_array)
         self.update_thumbnail(self, canvas, bitmap_array)
         canvas.save()
