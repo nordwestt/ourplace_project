@@ -137,8 +137,6 @@ USE_TZ = True
 
 STATICFILES_DIRS = [STATIC_DIR, ]
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR, ]
-
 
 # Channel layers
 # http://channels.readthedocs.org/en/latest/concepts.html#what-is-a-channel
