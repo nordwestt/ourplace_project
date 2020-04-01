@@ -85,9 +85,11 @@ def create_place(request):
 def edit_place(request, place_name_slug):
     # context dict: 'form' is the form, 'error' is a general error
     # first, make sure there's a canvas
+
     if Canvas.objects.filter(slug=place_name_slug).exists():
         canvas = Canvas.objects.get(slug=place_name_slug)
         # check if the currently logged in user is the owner
+
         if request.user == canvas.owner:
             # if everything is correct and the settings can be edited
 
@@ -96,10 +98,12 @@ def edit_place(request, place_name_slug):
             context_dict['canvas_slug'] = canvas.slug
 
             # deal with the form
-            form = CanvasEditForm()
+            form = CanvasEditForm(initial={'cooldown':canvas.cooldown, 'visivility': canvas.visibility})
             context_dict['form'] = form
+
             if request.method == 'POST':
                 form = CanvasEditForm(request.POST)
+
                 if form.is_valid():
                     canvasquery = Canvas.objects.filter(slug=place_name_slug)
                     canvasquery.update(cooldown=form.cleaned_data['cooldown'])
