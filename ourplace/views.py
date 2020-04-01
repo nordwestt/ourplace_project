@@ -157,7 +157,10 @@ def access_place(request, place_name_slug):
                             newcanvasaccess.canvas = canvas
                             newcanvasaccess.save()
                         else:
-                            CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
+                            if request.user == newuser:
+                                context_dict['form_error'] = "You cannot remove your own access to a canvas"
+                            else:
+                                CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
                     else:
                         context_dict['form_error'] = "User not found."
                 else:

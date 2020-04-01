@@ -37,7 +37,6 @@ class Canvas(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE) # Get the user that's creating it somehow??
 
     colour_palette =  models.IntegerField(default =0) #set to an integer for testing
-    url = models.URLField()
     bitmap = models.BinaryField(default=None, blank=True, null=True)
 
     # cooldown in number of seconds
