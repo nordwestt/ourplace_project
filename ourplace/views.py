@@ -95,7 +95,7 @@ def edit_place(request, place_name_slug):
             context_dict['canvas_slug'] = canvas.slug
 
             # deal with the form
-            form = CanvasEditForm(initial={'cooldown':canvas.cooldown, 'visivility': canvas.visibility})
+            form = CanvasEditForm(initial={'cooldown':canvas.cooldown, 'visibility': canvas.visibility})
             context_dict['form'] = form
 
             if request.method == 'POST':
@@ -192,7 +192,8 @@ def view_place(request, place_name_slug):
 
         else:
             context_dict['canvas'] = None
-            context_dict['canvas_thumbnail'] = canvas.thumbnail
+            context_dict['canvas_thumbnail'] = canvas # so that template can access name and owner
+
         Canvas.objects.filter(slug=place_name_slug).update(views=canvas.views+1)
     except Canvas.DoesNotExist:
         context_dict['canvas'] = None

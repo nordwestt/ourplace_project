@@ -118,3 +118,9 @@
     color: black;
     border: 2px solid rgb(255, 255, 255);
   }
+
+.crisp_edges {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
