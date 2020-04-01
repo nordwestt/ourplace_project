@@ -195,12 +195,6 @@ function canvasClick(event){
 }
 
 
-
-
-
-//testCanvasDrawing();
-
-
 ctx.lineWidth = 5;
 ctx.strokeRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -208,7 +202,6 @@ var buttons = document.getElementsByClassName('button');
 
 var button_colors = ['rgb(38, 180, 61)', 'rgb(0, 140, 186)'];
 
-//canvas.addEventListener('dblclick', changeZoom);
 var canvasDiv = document.getElementById('div_canvas');
 canvasDiv.addEventListener('click', canvasClick);
 
@@ -232,7 +225,7 @@ function canvasZoom(){
 
 
     $('#div_canvas').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
-    //$('.mt-5').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
+    window.scrollTo(clientX,clientY);
 }
 
 var highlight_x = -1;
@@ -251,7 +244,6 @@ $(document).ready(function(){
         colour_id =$(this).attr('id');
         colour_value = $(this).css('backgroundColor');
         $('#selected_colour').css("background-color", colour_value);
-
     });
     setupTimer();
 
