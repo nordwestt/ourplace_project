@@ -70,8 +70,6 @@ def create_place(request):
             canvas = form.save(commit=False)
             canvas.owner = request.user
             canvas.save()
-            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
-            newcanvasaccess.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
         # else:
         #     print(form.errors)

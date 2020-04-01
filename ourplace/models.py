@@ -61,6 +61,7 @@ class Canvas(models.Model):
             bitmap_bytes = base64.b64encode(pickle.dumps(arr))
             self.bitmap = bitmap_bytes
         super(Canvas, self).save(*args, **kwargs)
+        CanvasAccess.objects.get_or_create(user=self.owner,canvas=self)
         
 
     def __str__(self):
