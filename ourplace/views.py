@@ -143,6 +143,7 @@ def access_place(request, place_name_slug):
 
             # add the canvas title to the context dict
             context_dict['canvas_title'] = canvas.title
+            context_dict['canvas_slug'] = canvas.slug
 
             # then we handle the form
             form = CanvasAccessForm()
