@@ -1,13 +1,22 @@
 {% extends "ourplace/base.html" %}
 {% load staticfiles %}
 
-
+{% block page_title %}
+  - {% if canvas %}Drawing in {{ canvas.title }}{% elif canvas_thumbnail %}Viewing {{ canvas.title }} {% else %}Place Does Not Exist{% endif %}
+{% endblock %}
 
 {% block body_block %}
 {% if canvas %}
 <div class="row">
     <div class="col">
       <h1>{{ canvas.title }}<small class="text-muted"> by {{ canvas.owner }}</small></h1>
+      {% if canvas.owner == user %}
+        <p>Edit canvas <a href="{% url 'ourplace:edit_place' canvas.slug %}">properties</a>{% if canvas.visibility == 'C' %}
+            or <a href="{% url 'ourplace:edit_place_access' canvas.slug %}">access rights</a>.
+          {% else %}.
+      {% endif %}
+        </p>
+      {% endif %}
         <h1 id="room_name_slug" style="display: none;">{{ canvas.slug }}</h1>
         <h1 id="room_size" style="display: none;">{{ canvas.size }}</h1>
         <h1 id="cooldown" style="display: none;">{{ canvas.cooldown }}</h1>

@@ -1,17 +1,12 @@
 {% extends "ourplace/base.html" %}
 {% load ourplace_template_tags %}
+
+{% block page_title %}
+  - Edit Place - {% if not error %}{{ canvas_title }}{% endif %} 
+{% endblock %}
+
 {% block body_block %}
 
-<div class="form-row">
-  <div class="col">
-    <h1>Editing {{ canvas_title }}</h1>
-  </div>
-</div>
-<div class="form-row">
-  <div class="col">
-      <a href="{% url 'ourplace:edit_place_access' canvas_slug  %}">Edit Access Settings</a>
-  </div>
-</div>
 {% if error %}
 <div class="form-row justify-content-center">
   <div class="col text-danger">
@@ -19,17 +14,30 @@
   </div>
 </div>
 {% else %}
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <form method="post" action=".">
-      {{ form }}
-    </form>
+<div class="form-row">
+  <div class="col">
+    <h1>Editing {{ canvas_title }}</h1>
   </div>
 </div>
-<div class="row justify-content-center mt-2">
-      <div class="col-md-6">
-          <button class="btn btn-primary float-right" type="submit">Make Changes</button>
-      </div>
+<div class="form-row">
+  <div class="col">
+      <a href="{% url 'ourplace:view_place' canvas_slug %}">View Place</a> or
+      <a href="{% url 'ourplace:edit_place_access' canvas_slug %}">Edit Access Settings</a>
+  </div>
 </div>
+<form method="post" action=".">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      {% csrf_token %}
+      {{ form }}
+    </div>
+  </div>
+  <div class="row justify-content-center mt-2">
+    <div class="col-md-6">
+      <button class="btn btn-primary float-right" type="submit">Make Changes</button>
+    </div>
+  </div>
+</form>
+
 {% endif %}
 {% endblock %}
