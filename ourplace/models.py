@@ -57,11 +57,12 @@ class Canvas(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(Canvas, self).save(*args, **kwargs)
         if self.bitmap is None:
             arr = numpy.zeros((self.size, self.size), dtype=numpy.ushort)
             bitmap_bytes = base64.b64encode(pickle.dumps(arr))
             self.bitmap = bitmap_bytes
+        super(Canvas, self).save(*args, **kwargs)
+        
 
     def __str__(self):
         return self.slug

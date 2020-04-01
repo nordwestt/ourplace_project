@@ -1,7 +1,9 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-var timer = 2*60*1000;
+
+var cooldown = document.getElementById("cooldown").innerHTML;
+var timer = parseInt(cooldown)*1000;
 
 var unlockTime = new Date().getTime();
 
