@@ -2,7 +2,7 @@
 {% load ourplace_template_tags %}
 
 {% block page_title %}
-  - Edit Place - {% if not error %}{{ canvas_title }}{% endif %} 
+  - Edit Place - {% if not error %}{{ canvas_title }}{% endif %}
 {% endblock %}
 
 {% block body_block %}
@@ -16,7 +16,7 @@
 {% else %}
 <div class="form-row">
   <div class="col">
-    <h1>Editing {{ canvas_title }}</h1>
+    <h1 class="text-break">Editing {{ canvas_title }}</h1>
   </div>
 </div>
 <div class="form-row">

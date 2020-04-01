@@ -4,7 +4,7 @@
   {% for place in place_list %}
     <div class="col-md-3" style="min-width: 255px;">
       <a href="{% url 'ourplace:view_place' place.slug %}">
-        <h3>{{ place.title }}</h3>
+        <h3 class="text-truncate">{{ place.title }}</h3>
         <div class="text-muted">
           {% if user.is_authenticated and user == place.owner %}
             You!
