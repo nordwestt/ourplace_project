@@ -12,10 +12,14 @@
   image-rendering: crisp-edges; /* Acts as fall back for when pixelated doesn't work. */
   image-rendering: pixelated;
   cursor: pointer;
+  margin: auto;
 
   /* Note: MS Edge doesn't support any form of pixelated edges through CSS (30/02/20) */
 }
 
+#canvas{
+  margin-left: auto;
+}
 
 .page_title {
   color: cyan;

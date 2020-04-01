@@ -1,10 +1,11 @@
 from django import template
+from django.conf import settings
 
 register = template.Library()
 
 @register.inclusion_tag('ourplace/place_carousel.html')
 def display_carousel(place_list, user):
-    return_dict = {'place_list': place_list, 'user':user}
+    return_dict = {'place_list': place_list, 'user':user, 'MEDIA_URL': settings.MEDIA_URL}
     return return_dict
 
 @register.inclusion_tag('ourplace/styled_form.html')
