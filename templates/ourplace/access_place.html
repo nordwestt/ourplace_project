@@ -2,6 +2,14 @@
 {% load ourplace_template_tags %}
 
 {% block body_block %}
+
+{% if error %}
+<div class="row">
+    <div class="col">
+        <h1>{{ error }}</h1>
+    </div>
+</div>
+{% else %}
 <div class="row">
   <div class="col">
     <h1>Edit Access to {{ canvas_title }}</h1>
@@ -35,5 +43,6 @@
 {% endif %}
 
 {% styled_form form %}
+{% endif %}
 
 {% endblock %}
