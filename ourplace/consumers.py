@@ -6,7 +6,9 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from ourplace.models import Canvas
 import static.constants.colours as colours
-from PIL import Image
+from PIL import Image, ImageOps
+from io import BytesIO
+from django.core.files import File
 
 class CanvasConsumer(WebsocketConsumer):
     #groups = ["broadcast"]
@@ -56,7 +58,7 @@ class CanvasConsumer(WebsocketConsumer):
             identical_copy = numpy.copy(bitmap_array)
             #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = colour
-            # self.update_thumbnail(canvas, identical_copy)                    # this would call the thumbnail generator, if it worked
+            self.update_thumbnail(canvas, identical_copy)                    # this would call the thumbnail generator, if it worked
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             canvas.save()
@@ -98,17 +100,17 @@ class CanvasConsumer(WebsocketConsumer):
         return HttpResponse(json.dumps(response), content_type="application/json")
     
     def update_thumbnail(self, canvas, bitmap_array):
-        print(canvas)
-        newarray = numpy.copy(numpy.transpose(bitmap_array)) #creating a copy of the bitmap array to work on 
-        print(newarray)
-        nestedlists=numpy.ndarray.tolist(newarray) #converting it to a nested list
-        for i in range(len(nestedlists)):
+
+        im = Image.new("RGB", (canvas.size, canvas.size), 0) #creating a new image to start with
+        pixels=im.load() #loading the pixels in to memory
+        nestedlists=numpy.ndarray.tolist(bitmap_array) #converting the numpy array to a nested list
+        for i in range(len(nestedlists)): #iterating through the array looking at each pixel individually
             for j in range(len(nestedlists)):
-                print(nestedlists[i][j])
-                nestedlists[i][j] = (colours.palette1[nestedlists[i][j]][4:-1]).split(", ") #swappig each colour int with its rgb value 
-        print(nestedlists)
-        newarray=numpy.array(nestedlists) #converting back to numpy
-        print(newarray)
-        img = Image.fromarray(newarray, 'RGB') #converting to image
-        img.save('thumbnail.png')
-        img.show()
+                colourlist =colours.palette1[nestedlists[i][j]][4:-1].split(", ") #finding the correct colour for this pizxel
+                pixels[i,j]=(int(colourlist[0]), int(colourlist[1]), int(colourlist[2]))#writing that to the image 
+        im = im.resize((255,255), resample=Image.NEAREST)
+        blob=BytesIO()
+        im.save(blob, 'PNG')
+        canvas.thumbnail.save(canvas.slug+".png", File(blob), save=False)
+    
+

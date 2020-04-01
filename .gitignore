@@ -5,3 +5,4 @@ Thumbs.db
 *.pyc
 *.sqlite3
 ourplace/migrations/
+media/thumbnails/
