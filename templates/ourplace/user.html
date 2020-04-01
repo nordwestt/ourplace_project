@@ -1,6 +1,10 @@
 {% extends "ourplace/base.html" %}
 {% load ourplace_template_tags %}
 
+{% block page_title %}
+  - {% if target_user %}{{target_user.username}}{% else %}User Not Found{% endif %}
+{% endblock %}
+
 {% block body_block %}
 <div class="row">
     <div class="col border-bottom">

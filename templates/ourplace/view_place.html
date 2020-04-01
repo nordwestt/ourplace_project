@@ -1,7 +1,9 @@
 {% extends "ourplace/base.html" %}
 {% load staticfiles %}
 
-
+{% block page_title %}
+  - {% if canvas %}Drawing in {{ canvas.title }}{% elif canvas_thumbnail %}Viewing {{ canvas.title }} {% else %}Place Does Not Exist{% endif %}
+{% endblock %}
 
 {% block body_block %}
 {% if canvas %}

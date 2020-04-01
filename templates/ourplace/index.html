@@ -1,1 +1,18 @@
 {% extends "ourplace/base.html" %}
+
+{% block page_title %}
+  - Home
+{% endblock %}
+
+{% block body_block %}
+  <div class="row">
+      <div class="col">
+          <h1>{{ popular_canvas.title }} by {{ popular_canvas.owner}} <small class="text-muted">{{ popular_canvas.views }} views</small></h1>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col">
+          <img src="{{ MEDIA_URL }}{{ popular_canvas.thumbnail }}" class="w-100" />
+      </div>
+  </div>
+{% endblock %}

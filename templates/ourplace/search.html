@@ -2,6 +2,14 @@
 {% load ourplace_template_tags %}
 {# Required variables: list of users own canvas's - users_places, list of popular canvases - popular_places #}
 
+{% block page_title %}
+  {% if has_searched %}
+  - Search - {{ search_string }}
+  {% else %}
+  - Browse
+  {% endif %}
+{% endblock %}
+
 {% block body_block %}
   {% if has_searched %}
   <div class="row mb-2">

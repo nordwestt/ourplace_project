@@ -1,6 +1,10 @@
 {% extends "ourplace/base.html" %}
 {% load ourplace_template_tags %}
 
+{% block page_title %}
+  - Access Permissions {% if not error %} - {{ canvas_title }}{% endif %}
+{% endblock %}
+
 {% block body_block %}
 
 {% if error %}
