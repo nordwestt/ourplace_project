@@ -9,4 +9,7 @@ def display_carousel(place_list, user):
 
 @register.inclusion_tag('ourplace/styled_form.html')
 def styled_form(form):
-    return {'form': form}
+    return_dict = {'form': form}
+    if len(list(form)) == 1:
+        return_dict['single_input'] = [input for input in form][0]
+    return return_dict

@@ -1,24 +1,37 @@
-<form id="CanvasForm" method="post" action=".">
-    {% csrf_token %}
+<div class="form-row justify-content-center">
+  <ul class="list-group">
+    {% for non_field_error in form.non_field_errors %}
+      <li class="list-group-item bg-danger text-white">{{ non_field_error }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% if single_input %}
+  <form method="post" action="." class="form-inline">
     <div class="form-row justify-content-center">
-      <ul class="list-group">
-        {% for non_field_error in form.non_field_errors %}
-          <li class="list-group-item bg-danger text-white">{{ non_field_error }}</li>
-        {% endfor %}
-      </ul>
+      {% csrf_token %}
+      {{ single_input.label_tag }}<span class="ml-1"></span>
+      {{ single_input }}
+      <button type="submit" class="btn btn-primary ml-1">Add/Remove</button>
+      {% for field_error in single_input.errors %}
+        <span class="text-danger">{{ field_error }}</span>
+      {% endfor %}
     </div>
+  </form>
+{% else %}
+  <form method="post" action=".">
+    {% csrf_token %}
     {% for form_row in form %}
     <div class="form-group form-row justify-content-center">
       {% for form_field in form_row %}
-      <div class="col-md-5">
-        {% if form_field %}
-          {{ form_field.label_tag }}
-          {{ form_field }}
-          {% for field_error in form_field.errors %}
-            <span class="text-danger">{{ field_error }}</span>
-          {% endfor %}
-        {% endif %}
-      </div>
+        <div class="col-md-5">
+          {% if form_field %}
+            {{ form_field.label_tag }}
+            {{ form_field }}
+            {% for field_error in form_field.errors %}
+              <span class="text-danger">{{ field_error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
       {% endfor %}
     </div>
     {% endfor %}
@@ -27,4 +40,5 @@
         <button type="submit" class="btn btn-primary float-right">Create Place!</button>
       </div>
     </div>
-</form>
+  </form>
+{% endif %}

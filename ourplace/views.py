@@ -66,7 +66,7 @@ def create_place(request):
         #     print(form.errors)
 
     # This is needed to allow the form to automagically display in two columns
-    context_dict['form'] = zip_longest(*[iter(form)]*2)
+    context_dict['form'] = list(zip_longest(*[iter(form)]*2))
 
     return render(request, 'ourplace/create_place.html', context=context_dict)
 
@@ -82,6 +82,7 @@ def edit_place(request, place_name_slug):
 
             # add the canvas title to the context dict
             context_dict['canvas_title'] = canvas.title
+            context_dict['canvas_slug'] = canvas.slug
 
             # deal with the form
             form = CanvasEditForm()

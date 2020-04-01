@@ -16,5 +16,9 @@
       <div class="list-group-item">Number of places: {{ num_target_users_places }}</div>
     </div>
 </div>
-{% display_carousel target_users_places False %}
+{% if user.is_authenticated %}
+  {% display_carousel target_users_places user %}
+{% else %}
+  {% display_carousel target_users_places user %}
+{% endif %}
 {% endblock %}

@@ -3,12 +3,20 @@
     <div class="col-md-3">
       <a href="{% url 'ourplace:view_place' place.slug %}">
         <h3>{{ place.title }}</h3>
-        {% if include_author %}<div class="text-muted"><a href="{% url 'ourplace:user' place.owner %}">{{ place.owner }}</a></div>{% endif %}
+        <div class="text-muted">
+          {% if user.is_authenticated and user == place.owner %}
+            You!
+          {% else %}
+            <a href="{% url 'ourplace:user' place.owner %}">{{ place.owner }}</a>
+          {% endif %}
+        </div>
         <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" />
-        <p>
-          {{ place.views }} views
-        </p>
       </a>
+      <p>{{ place.views }} views
+      {% if place.owner == user %}
+        (<a href="{% url 'ourplace:edit_place' place.slug %}">edit</a>)
+      {% endif %}
+      </p>
     </div>
   {% endfor %}
 </div>

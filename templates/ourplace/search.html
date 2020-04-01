@@ -10,7 +10,7 @@
       </div>
   </div>
     {% if num_results > 0 %}
-      {% display_carousel search_results %}
+      {% display_carousel search_results user %}
     {% else %}
     <div class="row">
       <div class="col">
@@ -26,7 +26,7 @@
       </div>
   </div>
   {% if num_user_places > 0 %}
-    {% display_carousel users_places False %}
+    {% display_carousel users_places user %}
     {% else %}
     <div class="row">
         <div class="col">
@@ -40,5 +40,5 @@
       <h1>Popular</h1>
     </div>
   </div>
-  {% display_carousel popular_places %}
+  {% display_carousel popular_places user %}
 {% endblock %}
