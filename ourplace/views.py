@@ -13,7 +13,6 @@ from itertools import zip_longest
 import static.constants.colours as palettes
 
 
-context_dict = {}
 from django.contrib.auth.models import User
 from ourplace.models import Canvas, UserProfile, CanvasAccess
 from ourplace.forms import CanvasForm, CanvasEditForm, CanvasAccessForm
@@ -82,8 +81,8 @@ def create_place(request):
 @login_required
 def edit_place(request, place_name_slug):
     # context dict: 'form' is the form, 'error' is a general error
+    context_dict = {}
     # first, make sure there's a canvas
-
     if Canvas.objects.filter(slug=place_name_slug).exists():
         canvas = Canvas.objects.get(slug=place_name_slug)
         # check if the currently logged in user is the owner
@@ -123,6 +122,8 @@ def access_place(request, place_name_slug):
     # view for the form that adds/removes entries in the canvas access table which dictates if a user can acess a canvas
     # context dict: 'form' is the form, 'error' is a general error, 'form_error' is an error with the form to be put out
     # with the form, 'current_access' is a list of strings that are the usernames that currently have access
+
+    context_dict = {}
 
     # make sure there's a canvas in the first place
     if Canvas.objects.filter(slug=place_name_slug).exists():
@@ -175,35 +176,29 @@ def access_place(request, place_name_slug):
     return render(request, 'ourplace/access_place.html', context=context_dict)
 
 def view_place(request, place_name_slug):
-
+    # if there is a canvas and the user can view it, it will be in the context dict, if not, but the canvas is public
+    # then the thumbnail is added to the context dict, else, there will be an empty canvas entry
+    context_dict= {}
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
-
-        if not request.user.is_authenticated:
-            context_dict['is_auth'] = False
-            # in theory
-        # if the canvas is public and the user hasn't got a canvas access entry then make a canvas access entry for them
-        elif canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
-            newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
-            newcanvasaccess.save()
-        # if the user has access
-        if request.user.is_authenticated and CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
-            context_dict['canvas'] = canvas
-            context_dict['is_auth'] = True
+        if request.user.is_authenticated:
+            # if the canvas is public and the user hasn't got a canvas access entry then make a canvas access entry for them
+            if  canvas.visibility == Canvas.PUBLIC and not CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
+                newcanvasaccess = CanvasAccess(user=request.user, canvas=canvas)
+                newcanvasaccess.save()
+            # if the user has access
+            if CanvasAccess.objects.filter(user=request.user).filter(canvas=canvas).exists():
+                context_dict['canvas'] = canvas
 
         else:
-            # tell the page that it isn't authorised
-            context_dict['is_auth'] = False
-
+            context_dict['canvas'] = None
+            context_dict['canvas_thumbnail'] = canvas.thumbnail
         Canvas.objects.filter(slug=place_name_slug).update(views=canvas.views+1)
     except Canvas.DoesNotExist:
         context_dict['canvas'] = None
 
-
     palette = palettes.palette1
     context_dict['palette'] = palette
-
-
 
     return render(request, 'ourplace/view_place.html', context=context_dict)
 
