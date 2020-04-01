@@ -225,7 +225,14 @@ function canvasZoom(){
     var move_x = (new_width-CANVAS_WIDTH)/2;
     var move_y = (new_height-CANVAS_HEIGHT)/2;
 
+    $('.mt-5').css("widht","100%");
+
+    $('#canvas_row').css("overflow","auto");
+    $('#canvas_row').css("height",window.innerHeight);
+
+
     $('#div_canvas').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
+    //$('.mt-5').css("transform", "matrix("+zoomScale+",0,0,"+zoomScale+","+move_x+","+move_y+")");
 }
 
 var highlight_x = -1;
