@@ -12,11 +12,11 @@
       {{ single_input.label_tag }}<span class="ml-1"></span>
       {{ single_input }}
       <button type="submit" class="btn btn-primary ml-1">Add/Remove</button>
-      {% for field_error in single_input.errors %}
-        <span class="text-danger">{{ field_error }}</span>
-      {% endfor %}
     </div>
   </form>
+  {% for field_error in single_input.errors %}
+    <span class="text-danger">{{ field_error }}</span>
+  {% endfor %}
 {% else %}
   <form method="post" action=".">
     {% csrf_token %}

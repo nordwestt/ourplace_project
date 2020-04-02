@@ -65,9 +65,27 @@ function loadDoc() {
     xhttp.send();
   }
 
-function setupTimer(){
+function getCookie(key){
+    key += "=";
 
+    var cookies = decodeURIComponent(document.cookie).split(";");
+
+    for(var i=0;i<cookies.length;i++){
+        var cookie = cookies[i];
+        while(cookie.charAt(0)==' '){
+            cookie = cookie.substring(1);
+        }
+        if(cookie.indexOf(key)==0){
+            return cookie.substring(key.length, cookie.length);
+        }
+    }
+    return "";
+}
+
+
+function setupTimer(){
     var x = setInterval(function(){
+
         var now = new Date().getTime();
         timeLeft = unlockTime - now;
 
@@ -77,9 +95,7 @@ function setupTimer(){
         document.getElementById("timer").innerHTML = minutes+"m "+seconds + "s ";
 
         if (timeLeft <= 0) {
-            //clearInterval(x);
             document.getElementById("timer").innerHTML = "0m 0s";
-
         }
 
     }, 1000);
@@ -88,10 +104,24 @@ function setupTimer(){
 function resetTimer(){
     unlockTime = new Date();
     unlockTime.setTime(unlockTime.getTime()+timer);
+    document.cookie = "expires="+unlockTime.toString();
+    //document.cookie = "colour_id="+colour_id.toString();
 }
 
 document.getElementById("timer").innerHTML = "0m 0s";
 
+function loadCookies(){
+    var cookie_time = getCookie("expires");
+    if(cookie_time!=""){
+        unlockTime = new Date(cookie_time);
+    }
+
+    var colour_id = getCookie("colour_id")
+    if(colour_id!=""){
+        colour_id = parseInt(getCookie("colour_id"));
+        $('#selected_colour').css("background-color", colourIdToVal(colour_id));
+    }
+}
 
 
 var zoomedIn = false;
@@ -166,9 +196,6 @@ function createDrawingFromArray(){
         }
 
     })
-    //var imgData = ctx.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
-    //imgData.data = imageArray;
-    //ctx.putImageData(imgData, 20, 30);
 }
 
 
@@ -201,7 +228,6 @@ ctx.strokeRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 var buttons = document.getElementsByClassName('button');
 
-var button_colors = ['rgb(38, 180, 61)', 'rgb(0, 140, 186)'];
 
 var canvasDiv = document.getElementById('div_canvas');
 canvasDiv.addEventListener('click', canvasClick);
@@ -246,7 +272,10 @@ $(document).ready(function(){
         colour_id =$(this).attr('id');
         colour_value = $(this).css('backgroundColor');
         $('#selected_colour').css("background-color", colour_value);
+        document.cookie = "colour_id="+colour_id.toString();
     });
+
+    loadCookies()
     setupTimer();
 
     findScales();

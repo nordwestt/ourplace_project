@@ -58,6 +58,7 @@
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   outline-style:none;
   background-color: transparent;
+  font-size:120%;
 }
 
 #timer{
@@ -67,6 +68,7 @@
   color: whitesmoke;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   background-color: transparent;
+  font-size:120%;
 }
 
 #selected_colour{
