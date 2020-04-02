@@ -18,7 +18,8 @@ from ourplace.models import Canvas, CanvasAccess
 
 def index(request):
     context_dict = {}
-    context_dict["popular_canvas"] = Canvas.objects.filter(visibility=Canvas.PUBLIC).order_by('-views')[:1].get()
+    if Canvas.objects.filter(visibility=Canvas.PUBLIC).exists():
+        context_dict["popular_canvas"] = Canvas.objects.filter(visibility=Canvas.PUBLIC).order_by('-views')[:1].get()
     response = render(request, 'ourplace/index.html', context=context_dict)
     return response
 
@@ -162,12 +163,13 @@ def access_place(request, place_name_slug):
                             newcanvasaccess.user = newuser
                             newcanvasaccess.canvas = canvas
                             newcanvasaccess.save()
-                            return redirect(reverse('ourplace:access_place', args=[canvas.slug]))
+
                         else:
                             if request.user == newuser:
                                 context_dict['form_error'] = "You cannot remove your own access to a canvas"
                             else:
                                 CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
+                        return redirect(reverse('ourplace:edit_place_access', args=[canvas.slug]))
                     # else:
                     #     context_dict['form_error'] = "User not found."
                 else:
