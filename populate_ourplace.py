@@ -131,3 +131,4 @@ def distance(c1, c2): #to calculate how close one colour is from the other
 if __name__=='__main__':
     print('Starting Ourplace population script...')
     populate()
+

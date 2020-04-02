@@ -7,3 +7,6 @@ admin.site.register(CanvasAccess)
 admin.site.register(UserProfile)
 
 
+admin.site.register(UserProfile)
+admin.site.register(Canvas)
+

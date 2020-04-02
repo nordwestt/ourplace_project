@@ -103,3 +103,4 @@ class CanvasAccess(models.Model):
 
     def __str__(self):
         return ("Canvas: " + self.canvas.slug + ", User: " + self.user.username + ", Placetime: " + str(self.placeTime))
+
