@@ -1,6 +1,7 @@
 from django import forms
 from ourplace.models import CanvasAccess, Canvas, UserProfile
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 class_attrs = {'class':'form-control'}
 
@@ -26,6 +27,15 @@ class CanvasForm(forms.ModelForm):
     class Meta:
         model = Canvas
         fields = ('title', 'size', 'cooldown', 'visibility') # removed  'colour_palette', from the form
+    def clean(self):
+        cd = super().clean()
+        if cd.get('cooldown') < 0:
+            self.add_error('cooldown', 'Cooldown must not be negative.')
+        if cd.get('size') > 512:
+            self.add_error('size', 'Size must not be greater than 512')
+        if Canvas.objects.filter(slug=slugify(cd.get('title'))).exists():
+            self.add_error('title', 'Canvas with this Title already exists.')
+
 
 class CanvasEditForm(forms.ModelForm):
     cooldown = forms.IntegerField(initial=60, label="Cooldown Time (seconds)", widget=forms.NumberInput(attrs=class_attrs))
@@ -34,6 +44,12 @@ class CanvasEditForm(forms.ModelForm):
         model = Canvas
         fields = ('cooldown', 'visibility')
 
+    def clean(self):
+        cd = super().clean()
+        if cd.get('cooldown') < 0:
+            self.add_error('cooldown', 'Cooldown must not be negative.')
+
+
 class CanvasAccessForm(forms.ModelForm):
     username = forms.CharField(label="Username", widget=forms.TextInput(attrs=class_attrs))
 
@@ -41,10 +57,11 @@ class CanvasAccessForm(forms.ModelForm):
         model = CanvasAccess
         fields = ('username', )
 
-
     def clean(self):
-        cd = self.cleaned_data
-        if not User.objects.filter(username=cd.get('username')).exists:
-            self.add_error('username', 'User not found')
-        return cd
+        cd = super().clean()
+        if not User.objects.filter(username=cd.get('username')).exists():
+            self.add_error('username', 'User not found.')
+
+
+
 
