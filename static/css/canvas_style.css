@@ -1,4 +1,8 @@
-
+.important-alert {
+  position: absolute;
+  top: 4rem;
+  right: 2rem;
+}
 
 
 #div_main {

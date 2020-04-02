@@ -12,7 +12,7 @@
             <a href="{% url 'ourplace:user' place.owner %}">{{ place.owner }}</a>
           {% endif %}
         </div>
-        <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" width="250px" style="image-rendering: crisp-edges;"/>
+        <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" width="250px" class="border" style="image-rendering: crisp-edges;"/>
       </a>
       <p>{{ place.views }} views
       {% if place.owner == user %}

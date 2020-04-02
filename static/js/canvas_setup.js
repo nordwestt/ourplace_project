@@ -157,7 +157,7 @@ function drawPixel(x, y, colour){
 }
 
 function colourIdToVal(id){
-    if(id<0||id>15) return;     
+    if(id<0||id>15) return;
     var btn = document.getElementById(id);
     return btn.style.backgroundColor;
 }
@@ -206,6 +206,10 @@ var testCanvasData = Uint8ClampedArray.from([200,100,150,50]);
 
 var clicks = 0;
 
+function bootstrapAlert(message) {
+  $('#alert-goes-here').html('<div class="alert alert-dismissible alert-danger important-alert"><button type="button" class="close" data-dismiss="alert">&times;</button>' + message + '</div>')
+}
+
 function canvasClick(event){
 
     var bounds = event.target.getBoundingClientRect();
@@ -213,12 +217,12 @@ function canvasClick(event){
     var coordY = event.clientY-bounds.top;
 
     if(timeLeft<=0){
-        if(confirm("You are about to paint the canvas")){
+        // if(confirm("You are about to paint the canvas")){
             paintCanvas(coordX, coordY);
-        }
+        // }
     }
     else{
-        alert("Still waiting for countdown...");
+        bootstrapAlert("Still waiting for countdown...");
     }
 }
 
