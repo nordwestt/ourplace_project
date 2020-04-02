@@ -18,6 +18,7 @@ from ourplace.models import Canvas, CanvasAccess
 
 def index(request):
     context_dict = {}
+    # check to make sure there's more than one public canvas, and if there is, then stick the most viewed one in the context dict
     if Canvas.objects.filter(visibility=Canvas.PUBLIC).exists():
         context_dict["popular_canvas"] = Canvas.objects.filter(visibility=Canvas.PUBLIC).order_by('-views')[:1].get()
     response = render(request, 'ourplace/index.html', context=context_dict)
@@ -34,24 +35,28 @@ def account(request):
     return render(request, 'ourplace/account.html')
 
 def user(request, username):
+    # this is the page to show a public user profile for all the users. if the user has public places then they will all
+    # be put into the context dict, if the user has
     context_dict = {}
 
     try:
         target_user = User.objects.get(username=username)
         # the target user's public places
         context_dict['target_users_places'] = Canvas.objects.filter(owner=target_user, visibility=Canvas.PUBLIC).order_by('-views')
-        # find the target user's private places that the currently logged in user has access to
-        private_canvases= Canvas.objects.filter(owner=target_user, visibility=Canvas.PRIVATE, ).order_by('-views')
-        private_canvases_with_access = []
-        for canvas in private_canvases:
-            if CanvasAccess.objects.filter(user = request.user, canvas=canvas):
-                private_canvases_with_access.append(canvas)
-        context_dict['target_users_private_places_with_current_user_access'] = private_canvases_with_access
+        # find the target user's private places that the currently logged in user has access to, if there is a user logged in
+        if request.user.is_authenticated:
+            private_canvases= Canvas.objects.filter(owner=target_user, visibility=Canvas.PRIVATE, ).order_by('-views')
+            private_canvases_with_access = []
+            for canvas in private_canvases:
+                if CanvasAccess.objects.filter(user = request.user, canvas=canvas):
+                    private_canvases_with_access.append(canvas)
+            context_dict['target_users_private_places_with_current_user_access'] = private_canvases_with_access
 
+        # gubbins for some useful data
         context_dict['num_target_users_places'] = len(context_dict['target_users_places'])
         context_dict['target_user_total_views'] = context_dict['target_users_places'].aggregate(Sum('views'))['views__sum']
         context_dict['target_user'] = target_user
-        # context_dict['target_user_profile'] = UserProfile.objects.get(user=target_user)
+
     except User.DoesNotExist:
         context_dict['target_user'] = None
 
@@ -72,8 +77,8 @@ def create_place(request):
             canvas.owner = request.user
             canvas.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
-        # else:
-        #     print(form.errors)
+        else:
+             print(form.errors)
 
     # This is needed to allow the form to automagically display in two columns
     context_dict['form'] = list(zip_longest(*[iter(form)]*2))
@@ -87,8 +92,8 @@ def edit_place(request, place_name_slug):
     # first, make sure there's a canvas
     if Canvas.objects.filter(slug=place_name_slug).exists():
         canvas = Canvas.objects.get(slug=place_name_slug)
-        # check if the currently logged in user is the owner
 
+        # check if the currently logged in user is the owner
         if request.user == canvas.owner:
             # if everything is correct and the settings can be edited
 
@@ -102,8 +107,9 @@ def edit_place(request, place_name_slug):
 
             if request.method == 'POST':
                 form = CanvasEditForm(request.POST)
-                
+                context_dict['form'] = form
                 if form.is_valid():
+                    # update the existing canvas entry, rather than creating a new one
                     canvas = Canvas.objects.get(slug=place_name_slug)
                     canvas.cooldown = form.cleaned_data['cooldown']
                     canvas.visibility = form.cleaned_data['visibility']
@@ -122,7 +128,7 @@ def edit_place(request, place_name_slug):
 
 @login_required
 def access_place(request, place_name_slug):
-    # view for the form that adds/removes entries in the canvas access table which dictates if a user can acess a canvas
+    # view for the form that adds/removes entries in the canvas access table which dictates if a user can access a canvas
     # context dict: 'form' is the form, 'error' is a general error, 'form_error' is an error with the form to be put out
     # with the form, 'current_access' is a list of strings that are the usernames that currently have access
 
@@ -138,7 +144,7 @@ def access_place(request, place_name_slug):
             # if everything is correct and the access can be edited
 
             # this generates a list of users that currently have access and stores it in the context dict under 'current_access'
-            current_users_objects= CanvasAccess.objects.filter(canvas=canvas)
+            current_users_objects = CanvasAccess.objects.filter(canvas=canvas)
             current_users = []
             for use in current_users_objects:
                 current_users.append(use.user.username)
@@ -153,25 +159,26 @@ def access_place(request, place_name_slug):
             context_dict['form'] = form
             if request.method == 'POST':
                 form = CanvasAccessForm(request.POST)
-                if form.is_valid():
-                    # check if the provided username maps to a valid user
-                    if User.objects.filter(username=form.cleaned_data['username']).exists():
-                        newuser = User.objects.get(username=form.cleaned_data['username'])
-                        # if the username and canvas mapping don't already exist then make a new one, if it already exists then delete it
-                        if not CanvasAccess.objects.filter(user=newuser).filter(canvas=canvas).exists():
-                            newcanvasaccess = form.save(commit=False)
-                            newcanvasaccess.user = newuser
-                            newcanvasaccess.canvas = canvas
-                            newcanvasaccess.save()
+                context_dict['form'] = form
 
+                if form.is_valid():
+                    # get the user to be changed
+                    newuser = User.objects.get(username=form.cleaned_data['username'])
+                    # if the username and canvas mapping don't already exist then make a new one, if it already exists
+                    # then delete it, if it's the owner then put an error in the context dict
+                    if not CanvasAccess.objects.filter(user=newuser).filter(canvas=canvas).exists():
+                        newcanvasaccess = form.save(commit=False)
+                        newcanvasaccess.user = newuser
+                        newcanvasaccess.canvas = canvas
+                        newcanvasaccess.save()
+
+                    else:
+                        if request.user == newuser:
+                            context_dict['form_error'] = "You cannot remove your own access to a canvas"
                         else:
-                            if request.user == newuser:
-                                context_dict['form_error'] = "You cannot remove your own access to a canvas"
-                            else:
-                                CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
-                        return redirect(reverse('ourplace:edit_place_access', args=[canvas.slug]))
-                    # else:
-                    #     context_dict['form_error'] = "User not found."
+                            CanvasAccess.objects.get(user = newuser, canvas=canvas).delete()
+                    return redirect(reverse('ourplace:edit_place_access', args=[canvas.slug]))
+
                 else:
                     print(form.errors)
         else:
@@ -184,7 +191,7 @@ def access_place(request, place_name_slug):
 def view_place(request, place_name_slug):
     # if there is a canvas and the user can view it, it will be in the context dict, if not, but the canvas is public
     # then the thumbnail is added to the context dict, else, there will be an empty canvas entry
-    context_dict= {}
+    context_dict = {}
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
         if request.user.is_authenticated:
@@ -204,6 +211,7 @@ def view_place(request, place_name_slug):
     except Canvas.DoesNotExist:
         context_dict['canvas'] = None
 
+    # colour palette
     palette = palettes.palette1
     context_dict['palette'] = palette
 
@@ -241,11 +249,15 @@ def search(request):
 
 def download_bitmap(request, place_name_slug):
     response = {}
+
     try:
         canvas = Canvas.objects.get(slug=place_name_slug)
-        bitmap_bytes = base64.b64decode(canvas.bitmap)
-        bitmap_array = pickle.loads(bitmap_bytes)
-        response['bitmap'] = bitmap_array.tolist()
+        # make sure the request has access to the canvas
+        if canvas.visibility == Canvas.PUBLIC or (request.user.is_authenticated and CanvasAccess.objects.filter(user=request.user).exists()):
+            bitmap_bytes = base64.b64decode(canvas.bitmap)
+            bitmap_array = pickle.loads(bitmap_bytes)
+            response['bitmap'] = bitmap_array.tolist()
+
     except Canvas.DoesNotExist:
         raise Http404("Place not found..")
 
