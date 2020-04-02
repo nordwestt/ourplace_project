@@ -63,4 +63,3 @@ def add_canvas(name):
 if __name__=='__main__':
     print('Starting Ourplace population script...') 
     populate()
-
