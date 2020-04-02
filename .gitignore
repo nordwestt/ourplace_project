@@ -4,3 +4,5 @@ Thumbs.db
 .DS_Store
 *.pyc
 *.sqlite3
+ourplace/migrations/
+media/thumbnails/

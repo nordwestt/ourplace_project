@@ -1,1 +1,60 @@
 {% extends "ourplace/base.html" %}
+{% load ourplace_template_tags %}
+{# Required variables: list of users own canvas's - users_places, list of popular canvases - popular_places #}
+
+{% block page_title %}
+  {% if has_searched %}
+  - Search - {{ search_string }}
+  {% else %}
+  - Browse
+  {% endif %}
+{% endblock %}
+
+{% block body_block %}
+  {% if has_searched %}
+  <div class="row mb-2">
+      <div class="col">
+          <h1>Search results for: <small>{{ search_string }}</small></h1>
+      </div>
+  </div>
+    {% if num_results > 0 %}
+      {% display_carousel search_results user %}
+    {% else %}
+    <div class="row">
+      <div class="col">
+        <h3>No results...</h3>
+      </div>
+    </div>
+    {% endif %}
+  {% endif %}
+  {% if user.is_authenticated %}
+  <div class="row mt-2">
+      <div class="col">
+          <h1>Your Places</h1>
+      </div>
+  </div>
+  {% if num_user_places > 0 %}
+    {% display_carousel users_places user %}
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h3>You have no places, <a href="{% url 'ourplace:create_place' %}">Create One?</a></h>
+        </div>
+    </div>
+  {% endif %}
+  {% if private_places_with_user_access %}
+    <div class="row mt-2">
+        <div class="col">
+            <h1>Shared with You</h1>
+        </div>
+    </div>
+    {% display_carousel private_places_with_user_access user %}
+  {% endif %}
+  {% endif %}
+  <div class="row">
+    <div class="col">
+      <h1>Popular</h1>
+    </div>
+  </div>
+  {% display_carousel popular_places user %}
+{% endblock %}

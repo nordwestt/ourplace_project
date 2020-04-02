@@ -1,1 +1,29 @@
 {% extends "ourplace/base.html" %}
+
+{% load staticfiles %}
+
+{% block page_title %}
+  - Home
+{% endblock %}
+
+{% block extra_scripts %}
+  <link rel="stylesheet" href="{% static 'css/canvas_style.css' %}">
+{% endblock %}
+
+{% block body_block %}
+  <div class="row">
+      <div class="col">
+          <h1>Most Viewed Place: </h1>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col">
+          <h3 class="text-break">{{ popular_canvas.title }} by {{ popular_canvas.owner}} <small class="text-muted">{{ popular_canvas.views }} views</small></h3>
+      </div>
+  </div>
+  <div class="row flex-fill">
+      <div class="col h-100">
+          <img src="{{ MEDIA_URL }}{{ popular_canvas.thumbnail }}" class="h-100 crisp_edges d-block m-auto" />
+      </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'ourplace/base.html' %}
+
+{% block title_block %}
+Register
+{% endblock %}
+
+{% block body_block %}
+<form class="login-form" method="post" action=".">
+  {% csrf_token %}
+  <div class="form-row justify-content-center">
+      <div class="col-sm"><h1>Register</h1></div>
+  </div>
+  {% if form.errors %}
+  <div class="form-row justify-content-center">
+    <div class="col-sm">
+      Errors:
+      {{ form.errors }}
+    </div>
+  </div>
+  {% endif %}
+  <div class="form-row form-group justify-content-center">
+    <div class="col-sm-6">
+      <label for="id_username">Username</label>
+      <input type="text" name="username" class="form-control" id="id_username" required="" autofocus="" value="{% firstof form.username.value %}" maxlength="150" aria-describedby="usernameHelp"/>
+      <small id="usernameHelp" class="form-text text-muted">150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+    </div>
+    <div class="col-sm-6">
+      <label for="id_username">Email</label>
+      <input type="email" name="email" class="form-control" id="id_email" required="" value="{% firstof form.email.value %}" />
+    </div>
+  </div>
+  <div class="form-row form-group justify-content-center">
+    <div class="col-sm-6">
+      <label for="id_password">Password</label>
+      <input type="password" id="id_password1" aria-describedby="passwordHelpBlock1" name="password1" required="" class="form-control" />
+      <small id="passwordHelpBlock1" class="form-text text-muted">Your password cannot be similar to your email or username, must be at least 8 characters long and a mix of characters and numbers.</small>
+    </div>
+    <div class="col-sm-6">
+      <label for="id_password">Password</label>
+      <input type="password" id="id_password2" aria-describedby="passwordHelpBlock2" name="password2" required="" class="form-control" />
+      <small id="passwordHelpBlock2" class="form-text text-muted">Write your password again to verify.</small>
+
+    </div>
+  </div>
+  <div class="form-row justify-content-center">
+      <div class="col-sm">
+          <button type="submit" class="btn btn-primary">Register</button>
+      </div>
+  </div>
+</form>
+
+
+{% endblock %}

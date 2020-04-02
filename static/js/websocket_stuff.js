@@ -1,28 +1,35 @@
 
+var roomName =  document.getElementById("room_name_slug").innerHTML;
+testAddr = "ws://echo.websocket.org"
 
+var ws_protocol;
 
-var canvasSocket = new WebSocket(
-    'ws://' + window.location.host +
-    '/ws/canvas/' + roomName + '/');
+if (window.location.protocol == "https:") {
+  ws_protocol = "wss://";
+} else {
+  ws_protocol = "ws://";
+}
+
+realAddr = ws_protocol + window.location.host + '/ws/place/' + roomName + '/';
+
+const canvasSocket = new WebSocket(realAddr);
 
 canvasSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-
     var x = data['x'];
     var y = data['y'];
-    var colour = data['colour'];
-
-    drawPixel(x,y,colour);
+    var colour_id = data['colour'];
+    drawUpdatePixel(x,y,colour_id);
 };
 
 canvasSocket.onclose = function(e) {
     console.error('Canvas socket closed unexpectedly');
 };
 
-function SendUpdate(event){
+function SendUpdate(x, y, colour){
     canvasSocket.send(JSON.stringify({
-        'x': x,
-        'y': y,
+        'x':x,
+        'y':y,
         'colour':colour
     }));
 }

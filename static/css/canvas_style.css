@@ -1,29 +1,25 @@
-html, body {
-  height: 100%;
-  padding:0;
-  margin:0;
-}
 
-div{
-  float:left;
-}
 
-#div_title {
-  margin-left: 400px;
-}
 
 #div_main {
+  float: left;
   clear: both;
 }
 
 #div_canvas {
   box-shadow: 10px 10px 10px grey;
-  margin-top: 18px;
-  margin-left: 120px;
+  image-rendering: -moz-crisp-edges; /* Firefox for android 4 < version < 65 */
+  image-rendering: crisp-edges; /* Acts as fall back for when pixelated doesn't work. */
   image-rendering: pixelated;
   cursor: pointer;
+  margin: auto;
+
+  /* Note: MS Edge doesn't support any form of pixelated edges through CSS (30/02/20) */
 }
 
+#canvas{
+  margin-left: auto;
+}
 
 .page_title {
   color: cyan;
@@ -37,16 +33,19 @@ div{
   position: fixed;
   width: 24vh;
   height: 4vh;
-  margin-left: 2%;
+  margin-left: 0%;
 
 }
 
-.row{
+.rowx{
+  float: left;
   height: 25%;
   width: 100%;
+  margin:auto;
 }
 
-.column{
+.columnx{
+  float: left;
   width:25%;
   height:100%;
 }
@@ -55,19 +54,19 @@ div{
   position: absolute;
   margin: auto;
   margin-left: 10%;
-  margin-top: 3%;
   color: whitesmoke;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   outline-style:none;
+  background-color: transparent;
 }
 
 #timer{
   margin: auto;
   float:right;
-  margin-top: 3%;
   margin-right: 10%;
   color: whitesmoke;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  background-color: transparent;
 }
 
 #selected_colour{
@@ -93,7 +92,10 @@ div{
 }
 
 
-
+.div footer {
+  position: fixed;
+  bottom: 10px;
+}
 
 .button {
     border: none;
@@ -108,36 +110,17 @@ div{
     width: 4vh;
     height: 80%;
     border-radius: 20%;
-    box-shadow: 3px 3px 6px grey,3px -3px 6px grey, -3px 3px 7px grey, -3px -3px 7px grey;
+    box-shadow: 3px 3px 8px grey;
   }
 
 .button:hover{
-    background-color: white; 
+    background-color: white;
     color: black;
     border: 2px solid rgb(255, 255, 255);
   }
 
-#greenBtn {background-color: rgb(38, 180, 61);} 
-#blueBtn {background-color: rgb(0, 140, 186);} 
-#redBtn {background-color: rgb(186, 0, 0);} 
-#purpleBtn {background-color: rgb(84, 85, 170);} 
-#blackBtn {background-color: rgb(43, 43, 43);}
-#whiteBtn {background-color: rgb(240, 240, 240);}
-#orangeBtn {background-color: rgb(245, 180, 0);}
-#yellowBtn {background-color: rgb(238, 255, 0);}
-#cyanBtn {background-color: rgb(0, 221, 192);}
-#pinkBtn {background-color: rgb(221, 0, 203);}
-#greyBtn {background-color: rgb(114, 114, 114);}
-
-
-
-
-
-
-
-
-
-
-
-
-
+.crisp_edges {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}

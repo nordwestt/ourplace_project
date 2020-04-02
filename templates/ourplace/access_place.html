@@ -1,0 +1,58 @@
+{% extends "ourplace/base.html" %}
+{% load ourplace_template_tags %}
+
+{% block page_title %}
+  - Access Permissions {% if not error %} - {{ canvas_title }}{% endif %}
+{% endblock %}
+
+{% block body_block %}
+
+{% if error %}
+<div class="row">
+    <div class="col">
+        <h1>{{ error }}</h1>
+    </div>
+</div>
+{% else %}
+<div class="row">
+  <div class="col">
+    <h1 class="text-truncate">Edit Access to {{ canvas_title }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+      <a href="{% url 'ourplace:view_place' canvas_slug %}">View Place</a> or
+      <a href="{% url 'ourplace:edit_place' canvas_slug %}">Edit Other Settings</a>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <h3>Users with access:</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <ul>
+      {% for user_with_acc in current_access %}
+        <li>{{ user_with_acc }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <h3>Add or Remove User:</h3>
+  </div>
+</div>
+{% if form_error %}
+  <div class="row">
+    <div class="col">
+      <p class="text-danger">{{ form_error }}</p>
+    </div>
+  </div>
+{% endif %}
+
+{% styled_form form %}
+{% endif %}
+
+{% endblock %}

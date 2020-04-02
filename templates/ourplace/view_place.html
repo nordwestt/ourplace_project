@@ -1,1 +1,91 @@
 {% extends "ourplace/base.html" %}
+{% load staticfiles %}
+
+{% block page_title %}
+  - {% if canvas %}Drawing in {{ canvas.title }}{% elif canvas_thumbnail %}Viewing {{ canvas.title }} {% else %}Place Does Not Exist{% endif %}
+{% endblock %}
+
+{% block body_block %}
+{% if canvas %}
+<div class="row">
+    <div class="col">
+      <h1 class="text-break">{{ canvas.title }}<small class="text-muted"> by {{ canvas.owner }}</small></h1>
+      {% if canvas.owner == user %}
+        <p>Edit canvas <a href="{% url 'ourplace:edit_place' canvas.slug %}">properties</a>{% if canvas.visibility == 'C' %}
+            or <a href="{% url 'ourplace:edit_place_access' canvas.slug %}">access rights</a>.
+          {% else %}.
+      {% endif %}
+        </p>
+      {% endif %}
+        <h1 id="room_name_slug" style="display: none;">{{ canvas.slug }}</h1>
+        <h1 id="room_size" style="display: none;">{{ canvas.size }}</h1>
+        <h1 id="cooldown" style="display: none;">{{ canvas.cooldown }}</h1>
+    </div>
+</div>
+<div class="row" id="canvas_row">
+    <div class="col">
+      <div id="div_main">
+          <div id="div_canvas">
+              <canvas id="canvas"></canvas>
+          </div>
+
+
+          <div id="colour_box">
+              <div id="selected_colour">
+                  <p id="colour_string">Colour</p>
+                  <p id="timer"></p>
+              </div>
+              <div id="div_buttons">
+
+
+                  {% for colour in palette %}
+
+
+                      {% if forloop.counter0|divisibleby:4  %}
+                          {% if forloop.first %}
+                              <div class="rowx">
+                          {% else %}
+                              </div><div class="rowx">
+                          {% endif %}
+                      {% endif %}
+
+                      <div class="columnx">
+                          <button class="button" id="{{ forloop.counter0 }}" style="background-color: {{ colour }};"></button>
+                      </div>
+
+
+                      {% if forloop.last %}</div>{% endif %}
+                  {% endfor %}
+
+
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+{% elif canvas_thumbnail %}
+<div class="row">
+    <div class="col">
+        <h1 class="text-break">{{ canvas_thumbnail.title }}<small class="text-muted"> by {{ canvas_thumbnail.owner }}</small></h1>
+    </div>
+</div>
+<div class="row flex-fill">
+    <div class="col h-100">
+        <img src="{{ MEDIA_URL }}{{ canvas_thumbnail.thumbnail }}" class="h-100 crisp_edges d-block m-auto" />
+    </div>
+</div>
+{% else %}
+<h1>Canvas not found :(</h1>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if canvas_thumbnail or canvas %}
+  <link rel="stylesheet" href="{% static 'css/canvas_style.css' %}">
+  {% if canvas %}
+    <script type="text/javascript" src="{% static 'js/websocket_stuff.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/canvas_setup.js' %}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+  {% endif %}
+{% endif %}
+{% endblock %}

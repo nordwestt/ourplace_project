@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-print("The base dir is: "+BASE_DIR)
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -50,8 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'ourplace',
     'channels',
+    'registration'
 ]
 
 MIDDLEWARE = [
@@ -135,20 +137,37 @@ USE_TZ = True
 
 STATICFILES_DIRS = [STATIC_DIR, ]
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR, ]
-
 
 # Channel layers
 # http://channels.readthedocs.org/en/latest/concepts.html#what-is-a-channel
 
+# Needed for redis to work in docker
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+
+redis_server = ("SG-ourplace-32809.servers.mongodirector.com", 6379)
+
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-        },
-        "ROUTING": "ourplace.routing.channel_routing",
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        #"CONFIG": {
+        #    "hosts": [(REDIS_HOST, 6379)],
+        #},
+        #"ROUTING": "ourplace.routing.channel_routing",
     },
 }
 
 ASGI_APPLICATION = "ourplace.routing.application"
+
+# stuff for django registration redux:
+# If True, users can register.
+REGISTRATION_OPEN = True
+# If True, the user will be automatically logged in after registering.
+REGISTRATION_AUTO_LOGIN = True
+# The URL that Django redirects users to after logging in.
+LOGIN_REDIRECT_URL = 'ourplace:index'
+# The page users are directed to if they are not logged in.
+# This was set in a previous chapter. The registration package uses this, too.
+LOGIN_URL = 'auth_login'
+
+# Sites framework stuff - to allow for auto generated sitemap
+SITE_ID = 1

@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<div class="row pt-3">
+  {% for place in place_list %}
+    <div class="col-md-3" style="min-width: 255px;">
+      <a href="{% url 'ourplace:view_place' place.slug %}">
+        <h3 class="text-truncate">{{ place.title }}</h3>
+        <div class="text-muted">
+          {% if user.is_authenticated and user == place.owner %}
+            You!
+          {% else %}
+            <a href="{% url 'ourplace:user' place.owner %}">{{ place.owner }}</a>
+          {% endif %}
+        </div>
+        <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" width="250px" style="image-rendering: crisp-edges;"/>
+      </a>
+      <p>{{ place.views }} views
+      {% if place.owner == user %}
+        (<a href="{% url 'ourplace:edit_place' place.slug %}">edit</a>)
+      {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+</div>
