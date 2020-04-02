@@ -49,8 +49,8 @@ canvas.width = CANVAS_WIDTH;
 ctx.height = CANVAS_HEIGHT;
 ctx.width = CANVAS_WIDTH;
 
-var colour_value = "rgb(0, 0, 0)";
-var colour_id = 16;
+var colour_value = "rgb(255, 255, 255)";
+var colour_id = 0;
 
 function loadDoc() {
     var xhttp = new XMLHttpRequest();
@@ -127,6 +127,7 @@ function drawPixel(x, y, colour){
 }
 
 function colourIdToVal(id){
+    if(id<0||id>15) return;     
     var btn = document.getElementById(id);
     return btn.style.backgroundColor;
 }
@@ -306,6 +307,15 @@ $(document).ready(function(){
                 //alert("x and y: "+x+", "+y);
                 highlight_x = x;
                 highlight_y = y;
+            }
+        }
+        else{
+            if(highlight_x!=-1&&highlight_y!=-1){
+                my_data = ctx.getImageData(old_x_mod, old_y_mod, 1, 1).data;
+                colour_check = "rgb("+my_data[0]+","+my_data[1]+","+my_data[2]+")";
+                if(colour_check==highlight_color){
+                    drawPixel(old_x_mod/3,old_y_mod/3,old_colour);
+                }
             }
         }
 
