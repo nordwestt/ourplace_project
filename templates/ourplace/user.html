@@ -21,10 +21,31 @@
       <div class="list-group-item float-right ml-3">Number of places: {{ num_target_users_places }}</div>
     </div>
 </div>
-{% if user.is_authenticated %}
-  {% display_carousel target_users_places user %}
-{% else %}
-  {% display_carousel target_users_places user %}
+<div class="row border-bottom py-2">
+    <div class="col">
+        <h3>
+          {% if target_user == user %}
+            Your Public Places
+          {% else %}
+            {{ target_user.username }}'s Public Places
+          {% endif %}
+        </h3>
+    </div>
+</div>
+{% display_carousel target_users_places user %}
+{% if target_users_private_places_with_current_user_access %}
+<div class="row border-bottom py-2">
+    <div class="col">
+        <h3>
+          {% if target_user == user %}
+            Your Private Places
+          {% else %}
+            {{ target_user.username }}'s Private Places Shared With You
+          {% endif %}
+        </h3>
+    </div>
+</div>
+{% display_carousel target_users_private_places_with_current_user_access user %}
 {% endif %}
 {% endif %}
 {% endblock %}

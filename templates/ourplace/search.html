@@ -12,9 +12,9 @@
 
 {% block body_block %}
   {% if has_searched %}
-  <div class="row mb-2">
+  <div class="row my-2 border-bottom">
       <div class="col">
-          <h1>Search results for: <small>{{ search_string }}</small></h1>
+          <h2>Search results for: <small>{{ search_string }}</small></h2>
       </div>
   </div>
     {% if num_results > 0 %}
@@ -28,9 +28,9 @@
     {% endif %}
   {% endif %}
   {% if user.is_authenticated %}
-  <div class="row mt-2">
+  <div class="row my-2 border-bottom">
       <div class="col">
-          <h1>Your Places</h1>
+          <h2>Your Places</h2>
       </div>
   </div>
   {% if num_user_places > 0 %}
@@ -43,17 +43,17 @@
     </div>
   {% endif %}
   {% if private_places_with_user_access %}
-    <div class="row mt-2">
+    <div class="row my-2 border-bottom">
         <div class="col">
-            <h1>Shared with You</h1>
+            <h2>Shared with You</h2>
         </div>
     </div>
     {% display_carousel private_places_with_user_access user %}
   {% endif %}
   {% endif %}
-  <div class="row">
+  <div class="row my-2 border-bottom">
     <div class="col">
-      <h1>Popular</h1>
+      <h2>Popular</h2>
     </div>
   </div>
   {% display_carousel popular_places user %}

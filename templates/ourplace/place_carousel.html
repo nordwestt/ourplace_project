@@ -1,8 +1,8 @@
 {% load staticfiles %}
 
-<div class="row pt-3">
+<div class="row">
   {% for place in place_list %}
-    <div class="col-md-3" style="min-width: 255px;">
+    <div class="col-md-3 my-3" style="min-width: 255px;">
       <a href="{% url 'ourplace:view_place' place.slug %}">
         <h3 class="text-truncate">{{ place.title }}</h3>
         <div class="text-muted">
@@ -14,7 +14,7 @@
         </div>
         <img src="{{ MEDIA_URL }}{{ place.thumbnail }}" width="250px" class="border" style="image-rendering: crisp-edges;"/>
       </a>
-      <p>{{ place.views }} views
+      <p class="mt-1">{{ place.views }} views
       {% if place.owner == user %}
         (<a href="{% url 'ourplace:edit_place' place.slug %}">edit</a>)
       {% endif %}
