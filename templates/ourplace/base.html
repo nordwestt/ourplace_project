@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% load staticfiles %}
-<html class="h-100" lang="en">
+<html class="h-100 d-flex flex-column" lang="en">
 <head>
     <title>Our Place {% block page_title %}{% endblock %}</title>
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
     {% block extra_head_tags %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column flex-fill">
   <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
     <a class="navbar-brand" href="{% url 'ourplace:index' %}">Our Place</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#top-navbar" aria-controls="top-navbar" aria-expanded="false" aria-label="Toggle navigation">

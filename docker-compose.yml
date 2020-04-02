@@ -2,6 +2,10 @@ version: "3.7"
 
 services:
   ourplace:
+    volumes:
+      - type: bind
+        source: ./media
+        target: /media
     build:
       context: .
       dockerfile: Dockerfile

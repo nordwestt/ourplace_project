@@ -26,4 +26,4 @@ If you already have Docker (and optionally compose) installed this method will b
 If you have `docker-compose` [installed](https://docs.docker.com/compose/install/) you can skip steps 2 & 3, instead do `docker-compose build` and `docker-compose up -d`.
 
 ## Acknowledgements
-This project would not work without [Bootstrap](https://getbootstrap.com/) - in particular the Yeti theme from [Bootswatch](https://bootswatch.com/), [JQuery](https://jquery.com/) and [Django](https://www.djangoproject.com/).
+This project would not work without [Bootstrap](https://getbootstrap.com/) - in particular the Yeti theme from [Bootswatch](https://bootswatch.com/), as well as [JQuery](https://jquery.com/) and [Django](https://www.djangoproject.com/).
