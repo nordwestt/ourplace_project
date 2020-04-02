@@ -10,7 +10,6 @@ from ourplace.models import Canvas
 
 
 class CanvasConsumer(WebsocketConsumer):
-    # groups = ["broadcast"]
 
     def connect(self):
         self.place_name = self.scope['url_route']['kwargs']['place_name_slug']
@@ -41,8 +40,6 @@ class CanvasConsumer(WebsocketConsumer):
             }
         )
 
-        print("x, y: " + str(x) + ', ' + str(y))
-        print("colour: " + str(colour))
 
     def canvas_update(self, event):
         x, y = event['x'], event['y']

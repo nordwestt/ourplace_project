@@ -19,16 +19,16 @@ class UserProfileForm(forms.ModelForm):
 
 class CanvasForm(forms.ModelForm):
     title = forms.CharField(max_length=Canvas.TITLE_MAX_LENGTH, label = "Title", widget=forms.TextInput(attrs=class_attrs))
-    size = forms.IntegerField(initial=10, label="Size", widget=forms.NumberInput(attrs=class_attrs))
-    colour_palette = forms.IntegerField(initial=0, label="Colour Palette", widget=forms.NumberInput(attrs=class_attrs))
-    cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
+    size = forms.IntegerField(initial=10, label="Size (pixels)", widget=forms.NumberInput(attrs=class_attrs))
+    # colour_palette = forms.IntegerField(initial=0, label="Colour Palette", widget=forms.NumberInput(attrs=class_attrs))
+    cooldown = forms.IntegerField(initial=60, label="Cooldown Time (seconds)", widget=forms.NumberInput(attrs=class_attrs))
     visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices = Canvas.VISIBILITY_CHOICES))
     class Meta:
         model = Canvas
-        fields = ('title', 'size', 'colour_palette', 'cooldown', 'visibility')
+        fields = ('title', 'size', 'cooldown', 'visibility') # removed  'colour_palette', from the form
 
 class CanvasEditForm(forms.ModelForm):
-    cooldown = forms.IntegerField(initial=60, label="Cooldown Time", widget=forms.NumberInput(attrs=class_attrs))
+    cooldown = forms.IntegerField(initial=60, label="Cooldown Time (seconds)", widget=forms.NumberInput(attrs=class_attrs))
     visibility = forms.CharField(initial=Canvas.PRIVATE, label="Visibility", widget=forms.Select(attrs=class_attrs, choices=Canvas.VISIBILITY_CHOICES))
     class Meta:
         model = Canvas
