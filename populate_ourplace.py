@@ -1,16 +1,16 @@
-import os
-import numpy
-import math
-import pickle
 import base64
+import math
+import os
+import pickle
+
+import numpy
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 'ourplace_project.settings')
 import django
 django.setup()
 from ourplace.models import Canvas, UserProfile, CanvasAccess
-from ourplace.consumers import CanvasConsumer
 from django.contrib.auth.models import User
-from django.utils import timezone
 from PIL import Image
 import static.constants.colours as colours
 def populate():
@@ -88,17 +88,17 @@ def populate():
 def imageToCanvas(canvas, imageLink):
 
     #filling out a blank canvas
-    palette = [] # starting by making a palette 
+    palette = [] # starting by making a palette
     indexfinder = {} #and a dictionary that maps the values in it to an index in colours.palette1
-    for i in range(len(colours.palette1)): 
+    for i in range(len(colours.palette1)):
         colour = colours.palette1[i][4:-1].split(", ") #grab the list of strings of ints
-        colourtuple= (int(colour[0]), int(colour[1]), int(colour[2])) #put them in to a tuple of ints 
+        colourtuple= (int(colour[0]), int(colour[1]), int(colour[2])) #put them in to a tuple of ints
         palette.append(colourtuple)# assign it to the list
         indexfinder[colourtuple] = i #and assign it to the dict with its index
-    
-    
+
+
     #now we have our palette we can open the image
-    imageLocation = os.path.join("population images", imageLink)
+    imageLocation = os.path.join("population_images", imageLink)
     im=Image.open(imageLocation)
     im=im.convert('RGB')
     width, height = im.size
@@ -131,4 +131,3 @@ def distance(c1, c2): #to calculate how close one colour is from the other
 if __name__=='__main__':
     print('Starting Ourplace population script...')
     populate()
-

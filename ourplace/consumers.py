@@ -1,17 +1,16 @@
+import base64
 import json
 import pickle
-import base64
+
 import numpy
-from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from channels.generic.websocket import WebsocketConsumer
+
 from ourplace.models import Canvas
-import static.constants.colours as colours
-from PIL import Image, ImageOps
-from io import BytesIO
-from django.core.files import File
+
 
 class CanvasConsumer(WebsocketConsumer):
-    #groups = ["broadcast"]
+    # groups = ["broadcast"]
 
     def connect(self):
         self.place_name = self.scope['url_route']['kwargs']['place_name_slug']
@@ -24,7 +23,6 @@ class CanvasConsumer(WebsocketConsumer):
         )
 
         self.accept()
-
 
     def receive(self, text_data):
 
@@ -39,13 +37,12 @@ class CanvasConsumer(WebsocketConsumer):
                 'type': 'canvas_update',
                 'colour': colour,
                 'x': x,
-                'y':y
+                'y': y
             }
         )
 
-        print("x, y: "+str(x)+', '+str(y))
-        print("colour: "+str(colour))
-
+        print("x, y: " + str(x) + ', ' + str(y))
+        print("colour: " + str(colour))
 
     def canvas_update(self, event):
         x, y = event['x'], event['y']
@@ -56,22 +53,21 @@ class CanvasConsumer(WebsocketConsumer):
             bitmap_bytes = base64.b64decode(canvas.bitmap)
             bitmap_array = pickle.loads(bitmap_bytes)
             identical_copy = numpy.copy(bitmap_array)
-            #bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
+            # bitmap_array = pickle.loads(bitmap_bytes, mmap_mode="w+")
             identical_copy[x][y] = colour
             bitmap_bytes = base64.b64encode(pickle.dumps(identical_copy))
             setattr(canvas, "bitmap", bitmap_bytes)
             canvas.save()
-            print("canvas updated!"+canvas.title)
-        except Canvas.DoesNotExist: 
+            print("canvas updated!" + canvas.title)
+        except Canvas.DoesNotExist:
             print("Canvas not found...")
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'colour': colour,
-            'x' : x,
+            'x': x,
             'y': y
         }))
-
 
     def disconnect(self, close_code):
         # Leave place group
@@ -79,21 +75,3 @@ class CanvasConsumer(WebsocketConsumer):
             self.place_group_name,
             self.channel_name
         )
-
-    def update_bitmap(self, x, y, colour_val):
-
-        try:
-            canvas = Canvas.objects.get(slug=place_name_slug)
-            bitmap_bytes = base64.b64decode(canvas.bitmap)
-            bitmap_array = pickle.loads(bitmap_bytes)
-
-            bitmap_array[x][y] = colour;
-            np_bytes = pickle.dumps(bitmap_array)
-            canvas.bitmap = base64.b64encode(np_bytes)
-            bitmap_bytes = base64.b64decode(canvas.bitmap)
-            bitmap_array = pickle.loads(bitmap_bytes)
-            response['bitmap']   = bitmap_bytes
-        except Canvas.DoesNotExist:
-            raise Http404("Place not found..")
-
-        return HttpResponse(json.dumps(response), content_type="application/json")

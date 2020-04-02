@@ -1,6 +1,6 @@
 
 var roomName =  document.getElementById("room_name_slug").innerHTML;
-testAddr = "ws://echo.websocket.org"
+testAddr = "ws://echo.websocket.org";
 
 var ws_protocol;
 

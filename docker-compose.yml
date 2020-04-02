@@ -6,9 +6,4 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8000:80
-    environment:
-      - REDIS_HOST=redis
-
-  redis:
-    image: redis:rc-alpine
+      - 8000:8000

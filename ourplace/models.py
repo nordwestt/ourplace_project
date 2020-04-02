@@ -1,16 +1,16 @@
-from django.db import models
-from django.utils import timezone
-from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User
-import pickle
 import base64
-import numpy
-from django.utils import timezone
-from ourplace.storage import OverwriteStorage
-from PIL import Image
-import static.constants.colours as colours
+import pickle
 from io import BytesIO
+
+import numpy
+from PIL import Image
+from django.contrib.auth.models import User
 from django.core.files import File
+from django.db import models
+from django.template.defaultfilters import slugify
+
+import static.constants.colours as colours
+from ourplace.storage import OverwriteStorage
 
 
 class UserProfile(models.Model):

@@ -110,7 +110,7 @@ function changeZoom(event){
 
 function drawUserPixel(x, y, colour){
     drawPixel(x,y,colour);
-    SendUpdate(x,y,colour_id)
+    SendUpdate(x,y,colour_id);
     resetTimer();
 }
 

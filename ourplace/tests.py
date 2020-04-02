@@ -1,5 +1,5 @@
 from django.test import TestCase
-from rango.models import Category
+from django.models import Category
 from django.urls import reverse
 
 

@@ -1,19 +1,29 @@
 # Ourplace - A Collaborative Canvas
 Ourplace is a collaborative canvas that can be used to relax with friends and let our your creative spirit.
-## Using Docker To Deploy
-1. Follow the install guide for your system on the [Docker Website](https://docs.docker.com/install/), if you are running Linux you will also need to install [Docker Compose](https://docs.docker.com/compose/install/).
-2. Clone this repository (into a sensible directory) with `git clone https://github.com/2400757n/ourplace_project.git`
-   - For now you also need to do `git checkout backend-working` because we haven't merged this into master yet.
-3. Run `docker-compose build` to create a docker image.
-4. Run `docker-compose up -d` and head to http://localhost:8000/
 
-## Manual Deployment
-If you are too cool for docker then you will need to set up a Redis server. If you are running Linux then install it from your preferred package manager and start it from your preferred service manager(?).
+## Deploying
+**Requirements:** Python 3.7
+1. Clone this repository using `git clone https://github.com/2400757n/ourplace_project.git` and navigate into the new directory.
+2. Make a virtual environment with your method of choice and activate it, we suggest [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+3. Run `pip install -r requirements.txt`
+4. Once pip has finished, run:
+```
+python manage.py makemigrations ourplace
+python manage.py migrate
+python populate_ourplace.py
+python manage.py runserver
+```
+5. Go to http://localhost/
 
-If you are running windows then you can either:
-1. Use Docker (it _just_ works)
-2. Install Ubuntu WSL from the [Microsoft Store](https://www.microsoft.com/en-gb/p/ubuntu/9nblggh4msv6) and `apt install redis-server` then `sudo service redis-server start`.
-3. Install [Memurai](https://www.memurai.com/get-memurai) and follow the setup.
+
+## Using Docker
+If you already have Docker (and optionally compose) installed this method will be faster and easier. If you don't, you can get it [here](https://docs.docker.com/install/).
+
+1. Clone this repository with `git clone https://github.com/2400757n/ourplace_project.git` and navigate to it.
+2. Run `docker build -t ourplace .` to create a docker image.
+3. Run `docker run -dp 8000:8000 ourplace` and head to http://localhost:8000/
+
+If you have `docker-compose` [installed](https://docs.docker.com/compose/install/) you can skip steps 2 & 3, instead do `docker-compose build` and `docker-compose up -d`.
 
 ## Acknowledgements
-This project would not work without [Bootstrap](https://getbootstrap.com/) - in particular the Yeti them from [Bootswatch](https://bootswatch.com/), [JQuery](https://jquery.com/) and [Django](https://www.djangoproject.com/).
+This project would not work without [Bootstrap](https://getbootstrap.com/) - in particular the Yeti theme from [Bootswatch](https://bootswatch.com/), [JQuery](https://jquery.com/) and [Django](https://www.djangoproject.com/).
