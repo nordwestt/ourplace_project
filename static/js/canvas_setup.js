@@ -327,7 +327,5 @@ $(document).ready(function(){
 
     });
 
-    $("#colour_string").css("background-color","transparent");
-    $("#timer").css("background-color","transparent");
 
    });
