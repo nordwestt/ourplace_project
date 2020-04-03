@@ -33,6 +33,8 @@ class CanvasForm(forms.ModelForm):
             self.add_error('cooldown', 'Cooldown must not be negative.')
         if cd.get('size') > 512:
             self.add_error('size', 'Size must not be greater than 512')
+        if cd.get('size') < 1:
+            self.add_error('size', 'Size must not be less than 1')
         if Canvas.objects.filter(slug=slugify(cd.get('title'))).exists():
             self.add_error('title', 'Canvas with this Title already exists.')
 

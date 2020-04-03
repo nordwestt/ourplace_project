@@ -75,6 +75,7 @@ def create_place(request):
         if form.is_valid():
             canvas = form.save(commit=False)
             canvas.owner = request.user
+            canvas.size = form.cleaned_data['size'] + 2
             canvas.save()
             return redirect(reverse('ourplace:view_place', args=[canvas.slug]))
         else:
