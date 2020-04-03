@@ -19,8 +19,8 @@ def populate():
     users = [
         {'username':'Andrew', 'email':'scotsman@hotmail.co.uk', 'password':'SCOTLAND'},
         {'username':'Mark', 'email':'toottoot@gmail.com', 'password':"trumpetplayer"},
-        {'username':'Murphy', 'email':'god@gmail.com', 'password':'admin'},
-        {'username':'John', 'email':'johndoe@outlook.com', 'password':'genercic'},
+        {'username':'Murphy', 'email':'forkbombed@gmail.com', 'password':'madhacker'},
+        {'username':'John', 'email':'johndoe@outlook.com', 'password':'generic'},
         {'username':'Joe', 'email':'everyday@joe.com', 'password':'password'},
         {'username':'Matthew', 'email':'chef@hotmail.com', 'password':'alpecin'},
         {'username':'James', 'email':'jangus1@gmail.com', 'password':'twin'},
@@ -32,7 +32,7 @@ def populate():
 
     canvases = [ #if you want to add another image put it in the population images directory then add 'image':'image.png' to the canvas. Make sure the input image is the right size
         {'title':'BSOD', 'size':20, 'owner':'Matthew', 'colour_palette':1, 'visibility':'O','views':190, 'image':'bsod.png'},
-        {'title':'The Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong Canvas', 'size':50, 'owner':'Mark', 'colour_palette':1, 'visibility':'O','views':5, 'image':'THe Long Space.png'},
+        {'title':'The Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong Canvas', 'size':50, 'owner':'Mark', 'colour_palette':1, 'visibility':'O','views':5, 'image':'The Long Space.png'},
         {'title':'Big Open Space', 'size':100, 'owner':'Thomas', 'colour_palette':1, 'visibility':'O','views':20, 'image':'Big Open Space.png'},
         {'title':'CS Space', 'size':50, 'owner':'Murphy','colour_palette':0, 'visibility':'C','views':2, 'image':'CS Space.png'},
         {'title':'The Beach', 'size':10, 'owner':'Andrew','colour_palette':0, 'visibility':'O', 'image':'beach.png','views':100},
