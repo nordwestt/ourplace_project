@@ -236,7 +236,7 @@ def search(request):
             private_canvas_accesses = CanvasAccess.objects.filter(user=request.user)
             private_canvases = []
             for access in private_canvas_accesses:
-                if access.canvas.owner != request.user:
+                if access.canvas.owner != request.user and access.canvas.visibility == Canvas.PRIVATE:
                     private_canvases.append(access.canvas)
             context_dict['private_places_with_user_access'] = private_canvases
             # and the length
