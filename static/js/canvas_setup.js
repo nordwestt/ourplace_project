@@ -54,18 +54,6 @@ ctx.width = CANVAS_WIDTH;
 var colour_value = "rgb(255, 255, 255)";
 var colour_id = 0;
 
-function loadDoc() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var data = JSON.parse(this.responseText);
-        var bitmap = data['bitmap'];
-       document.getElementById("demo").innerHTML = this.responseText;
-      }
-    };
-    xhttp.open("GET", "ajax_info.txt", true);
-    xhttp.send();
-  }
 
 function getCookie(key){
     key += "=";
@@ -107,14 +95,12 @@ function resetTimer(){
     unlockTime = new Date();
     unlockTime.setTime(unlockTime.getTime()+timer);
     document.cookie = "expires="+unlockTime.toString();
-    //document.cookie = "colour_id="+colour_id.toString();
 }
 
 document.getElementById("timer").innerHTML = "0m 0s";
 
 function loadCookies(){
     var cookie_time = getCookie("expires");
-
 
     if(cookie_time!=""){
         var old_cooldown = getCookie("cooldown");
@@ -173,22 +159,11 @@ function paintCanvas(x, y){
     x = x/zoomScale;
     y = y/zoomScale;
 
-    // check if inside border of canvas
     if(x>3&&y>3&&x<CANVAS_WIDTH-3&&y<CANVAS_HEIGHT-3){
         drawUserPixel((x-(x%3))/3,(y-(y%3))/3,colour_value);
     }
 }
 
-function testCanvasDrawing(){
-    var imgData = ctx.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
-    for (var i = 0; i < imgData.data.length; i += 4) {
-        imgData.data[i+0] = 255;
-        imgData.data[i+1] = 255;
-        imgData.data[i+2] = 255;
-        imgData.data[i+3] = 255;
-    }
-    ctx.putImageData(imgData, 0, 0);
-}
 
 function createDrawingFromArray(){
     var roomName = document.getElementById("room_name_slug").innerHTML;
@@ -206,11 +181,6 @@ function createDrawingFromArray(){
 }
 
 
-
-var testCanvasData = Uint8ClampedArray.from([200,100,150,50]);
-//var imgData = ctx.createImageData(1,1);
-//imgData.data = testCavnasData;
-
 var clicks = 0;
 
 function bootstrapAlert(message) {
@@ -224,9 +194,7 @@ function canvasClick(event){
     var coordY = event.clientY-bounds.top;
 
     if(timeLeft<=0){
-        // if(confirm("You are about to paint the canvas")){
-            paintCanvas(coordX, coordY);
-        // }
+        paintCanvas(coordX, coordY);
     }
     else{
         bootstrapAlert("Still waiting for countdown...");
@@ -276,7 +244,6 @@ $(document).ready(function(){
     $('#div_canvas').css("height", CANVAS_HEIGHT);
     $('#div_canvas').css("widt", CANVAS_WIDTH);
 
-    //$('#div_canvas').click(paintCanvas);
 
     $('button').click(function(){
         colour_id =$(this).attr('id');
@@ -364,4 +331,3 @@ $(document).ready(function(){
     $("#timer").css("background-color","transparent");
 
    });
-//ctx.scale(2,2)
