@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from django.urls import resolve, reverse
 from ourplace.models import UserProfile,Canvas,CanvasAccess
 from django.contrib.auth.models import User
+import ourplace.consumers as consumers
+from ourplace.forms import CanvasEditForm, CanvasAccessForm, CanvasForm, UserProfileForm, UserForm
 import os
 import re
 
@@ -52,6 +54,14 @@ class CanvasMethodTests(TestCase):
             response = self.client.get(i)
             # check response is 200 ok
             self.assertEqual(response.status_code, 200)
+    def test_pages_vieable_when_logged_in(self):
+        login = self.client.login(username='test', password='test')
+        viewable_pages=['/account/', '/place/test-default/edit/', '/place/test-default/access/','/place/']
+        for i in viewable_pages:
+            # Get request 
+            response = self.client.get(i)
+            # check response is 302 for redirection
+            self.assertEqual(response.status_code, 200)
     def test_correct_pages_not_viewable_while_not_logged_in(self):
         non_viewable_pages=['/account/', '/place/test-default/edit/', '/place/test-default/access/','/place/']
         for i in non_viewable_pages:
@@ -64,17 +74,36 @@ class CanvasMethodTests(TestCase):
         response = self.client.get(reverse('ourplace:account'))
         self.assertRedirects(response, '/accounts/login/?next=/account/')
 
+    def test_access_form_labels(self):
+        form = CanvasAccessForm()
+        self.assertTrue(form.fields['username'].label == 'Username')
 
+    def test_canvas_edit_form_labels(self):
+        form=CanvasEditForm()
+        self.assertTrue(form.fields['cooldown'].label == 'Cooldown Time (seconds)')
+        self.assertTrue(form.fields['visibility'].label == 'Visibility')
+    
 
+    def test_canvas_form_labels(self):
+        form = CanvasForm()
+        self.assertTrue(form.fields['title'].label == 'Title')
+        self.assertTrue(form.fields['size'].label == 'Size (pixels)')
+        self.assertTrue(form.fields['cooldown'].label == 'Cooldown Time (seconds)')
+        self.assertTrue(form.fields['visibility'].label == 'Visibility')
+    
+    def test_canvas_form_has_correct_initial_values(self):
+        login = self.client.login(username='test', password='test')
+        response = self.client.get('/place/test-default/edit/')
+        self.assertEqual(response.status_code, 200)
+        form=CanvasForm()
+        self.assertEqual(form['cooldown'].initial, 60)
+        self.assertEqual(form['visibility'].initial, Canvas.PRIVATE)  
 
-# class IndexViewTests(TestCase):
-#     def test_index_view_with_no_categories(self):
-#         """
-#         If no categories exist, the appropriate message should be displayed.
-#         """
-#         response = self.client.get(reverse('rango:index'))
-        
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, 'There are no categories present.')
-#         self.assertQuerysetEqual(response.context['categories'], [])
+    def test_canvas_form_has_correct_initial_values(self):
+        login = self.client.login(username='test', password='test')
+        response = self.client.get('/place/')
+        self.assertEqual(response.status_code, 200)
+        form=CanvasForm()
+        self.assertEqual(form['cooldown'].initial, 60)
+        self.assertEqual(form['visibility'].initial, Canvas.PRIVATE)
 
