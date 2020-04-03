@@ -17,33 +17,41 @@ def populate():
     #Start by creating lists of dictionaries of each entry required
 
     users = [
-        {'username':'Christ', 'email':'jchrist@heaven.god', 'password':'imcross'},
-        {'username':'Moses', 'email':'parting@water.god', 'password':"watern't"},
-        {'username':'God', 'email':'god@god.god', 'password':'admin'},
-        {'username':'John', 'email':'spreadingthe@word.god', 'password':'disciple12'},
+        {'username':'Andrew', 'email':'scotsman@hotmail.co.uk', 'password':'SCOTLAND'},
+        {'username':'Mark', 'email':'toottoot@gmail.com', 'password':"trumpetplayer"},
+        {'username':'Murphy', 'email':'forkbombed@gmail.com', 'password':'madhacker'},
+        {'username':'John', 'email':'johndoe@outlook.com', 'password':'generic'},
         {'username':'Joe', 'email':'everyday@joe.com', 'password':'password'},
-        {'username':'Matthew', 'email':'balding@hotmale.com', 'password':'alpecin'},
+        {'username':'Matthew', 'email':'chef@hotmail.com', 'password':'alpecin'},
         {'username':'James', 'email':'jangus1@gmail.com', 'password':'twin'},
         {'username':'Angus', 'email':'jangusA@gmail.com', 'password':'twin'},
         {'username':'Thomas', 'email':'thomas@yahoo.com', 'password':'securepassword'},
+        {'username':'Huawa', 'email':'huawa@outlook.com', 'password':'reallysecurepasswrd'},
+
     ]
 
     canvases = [ #if you want to add another image put it in the population images directory then add 'image':'image.png' to the canvas. Make sure the input image is the right size
-        {'title':'The Long Table', 'size':50, 'owner':'Christ', 'colour_palette':1, 'visibility':'O','views':10},
-        {'title':'The Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong Table', 'size':50, 'owner':'Moses', 'colour_palette':1, 'visibility':'O','views':5},
-        {'title':'Earth', 'size':100, 'owner':'God', 'colour_palette':1, 'visibility':'O','views':20},
-        {'title':'Heaven', 'size':200, 'owner':'God','colour_palette':0, 'visibility':'C','views':2},
-        {'title':'The Beach', 'size':10, 'owner':'God','colour_palette':0, 'visibility':'O', 'image':'beach.png','views':100},
+        {'title':'BSOD', 'size':20, 'owner':'Matthew', 'colour_palette':1, 'visibility':'O','views':190, 'image':'bsod.png'},
+        {'title':'The Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong Canvas', 'size':50, 'owner':'Mark', 'colour_palette':1, 'visibility':'O','views':5, 'image':'The Long Space.png'},
+        {'title':'Big Open Space', 'size':100, 'owner':'Thomas', 'colour_palette':1, 'visibility':'O','views':20, 'image':'Big Open Space.png'},
+        {'title':'CS Space', 'size':50, 'owner':'Murphy','colour_palette':0, 'visibility':'C','views':2, 'image':'CS Space.png'},
+        {'title':'The Beach', 'size':10, 'owner':'Andrew','colour_palette':0, 'visibility':'O', 'image':'beach.png','views':100},
         {'title':'Our House', 'size':20, 'owner':'Matthew','colour_palette':0, 'visibility':'C', 'image':'our house.png','views':60},
     ]
 
     canvasaccess = [
-        {'canvas':'Heaven', 'user':'Christ'},
-        {'canvas':'Heaven', 'user':'Moses'},
-        {'canvas':'Heaven', 'user':'John'},
+        {'canvas':'CS Space', 'user':'Mark'},
+        {'canvas':'CS Space', 'user':'Matthew'},
+        {'canvas':'CS Space', 'user':'Angus'},
+        {'canvas':'CS Space', 'user':'James'},
+        {'canvas':'CS Space', 'user':'Thomas'},
+        {'canvas':'CS Space', 'user':'Huawa'},
         {'canvas':'Our House', 'user':'James'},
         {'canvas':'Our House', 'user':'Angus'},
         {'canvas':'Our House', 'user':'Thomas'},
+        {'canvas':'Our House', 'user':'Mark'},
+        {'canvas':'Our House', 'user':'Andrew'},
+        {'canvas':'Our House', 'user':'John'},
     ]
     # adding our new items in to the databases
     # starting by deleting all the existing objets so we don't have any issues with unique fields

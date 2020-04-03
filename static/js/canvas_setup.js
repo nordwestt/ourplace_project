@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 
 
 var cooldown = document.getElementById("cooldown").innerHTML;
+document.cookie = "coolodown="+cooldown;
+
 var timer = parseInt(cooldown)*1000;
 
 var unlockTime = new Date().getTime();
@@ -112,8 +114,13 @@ document.getElementById("timer").innerHTML = "0m 0s";
 
 function loadCookies(){
     var cookie_time = getCookie("expires");
+
+
     if(cookie_time!=""){
-        unlockTime = new Date(cookie_time);
+        var old_cooldown = getCookie("cooldown");
+        if(old_cooldown==cooldown){
+            unlockTime = new Date(cookie_time);
+        }
     }
 
     var colour_id = getCookie("colour_id")
@@ -270,7 +277,6 @@ $(document).ready(function(){
     $('#div_canvas').css("widt", CANVAS_WIDTH);
 
     //$('#div_canvas').click(paintCanvas);
-
 
     $('button').click(function(){
         colour_id =$(this).attr('id');
