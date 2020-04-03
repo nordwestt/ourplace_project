@@ -21,7 +21,7 @@
   {% else %}
   <div class="row">
       <div class="col">
-          <h3 class="text-break">{{ popular_canvas.title }} by {{ popular_canvas.owner}} <small class="text-muted">{{ popular_canvas.views }} views</small></h3>
+          <h3 class="text-break">{{ popular_canvas.title }} by <a href="{% url 'ourplace:user' popular_canvas.owner %}" class="text-muted">{{ popular_canvas.owner}}</a> <small class="text-muted">{{ popular_canvas.views }} views</small></h3>
       </div>
   </div>
   <div class="row flex-fill">

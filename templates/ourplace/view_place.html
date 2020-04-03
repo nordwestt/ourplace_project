@@ -67,7 +67,7 @@
 {% elif canvas_thumbnail %}
 <div class="row">
     <div class="col">
-        <h1 class="text-break">{{ canvas.title }}<small class="text-muted"> <a href="{% url 'ourplace:user' canvas.owner %}" class="text-muted">by {{ canvas.owner }}</a></small></h1>
+        <h1 class="text-break">{{ canvas_thumbnail.title }}<small class="text-muted"> <a href="{% url 'ourplace:user' canvas_thumbnail.owner %}" class="text-muted">by {{ canvas_thumbnail.owner }}</a></small></h1>
     </div>
 </div>
 <div class="row flex-fill">
