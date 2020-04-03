@@ -60,7 +60,7 @@ class CanvasMethodTests(TestCase):
         for i in viewable_pages:
             # Get request 
             response = self.client.get(i)
-            # check response is 302 for redirection
+            # check response is 200 ok
             self.assertEqual(response.status_code, 200)
     def test_correct_pages_not_viewable_while_not_logged_in(self):
         non_viewable_pages=['/account/', '/place/test-default/edit/', '/place/test-default/access/','/place/']
@@ -73,6 +73,7 @@ class CanvasMethodTests(TestCase):
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('ourplace:account'))
         self.assertRedirects(response, '/accounts/login/?next=/account/')
+
 
     def test_access_form_labels(self):
         form = CanvasAccessForm()
