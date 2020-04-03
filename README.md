@@ -5,15 +5,15 @@ Ourplace is a collaborative canvas that can be used to relax with friends and le
 **Requirements:** Python 3.7
 1. Clone this repository using `git clone https://github.com/2400757n/ourplace_project.git` and navigate into the new directory.
 2. Make a virtual environment with your method of choice and activate it, we suggest [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
-3. Run `pip install -r requirements.txt`
-4. Once pip has finished, run:
+3. Run the following in your virtual environment:
 ```
+pip install -r requirements.txt
 python manage.py makemigrations ourplace
 python manage.py migrate
 python populate_ourplace.py
 python manage.py runserver
 ```
-5. Go to http://localhost/
+4. Go to http://localhost:8000/
 
 
 ## Using Docker
